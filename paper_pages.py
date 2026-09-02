@@ -341,10 +341,18 @@ def s_pain(b, base):
             f'<div class="grid g{b.get("cols",3)}">{out}</div>{line}</div></section>')
 
 
+STAR_SVG = '''<svg width="46" height="46" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.5 L14.4 9.2 L20.5 9.7 L15.9 13.7 L17.3 19.7 L12 16.5 L6.7 19.7 L8.1 13.7 L3.5 9.7 L9.6 9.2 Z" fill="none" stroke="var(--color-accent)" stroke-width="1.8" stroke-linejoin="round"/></svg>'''
+
+
 def s_sunkcards(b, base):
     out = ""
     for item in b["items"]:
-        cls = "sunkcard wide" if len(item) == 3 and item[2] == "wide" else "sunkcard"
+        kind = item[2] if len(item) == 3 else ""
+        if kind == "highlight":
+            out += (f'<div class="highlight">{STAR_SVG}<div><h3>{esc(item[0])}</h3>'
+                    f'<p>{esc(item[1])}</p></div></div>')
+            continue
+        cls = "sunkcard wide" if kind == "wide" else "sunkcard"
         out += f'<div class="{cls}"><h3>{esc(item[0])}</h3><p>{esc(item[1])}</p></div>'
     h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
     return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
@@ -363,6 +371,16 @@ def s_scards(b, base):
             f'<div class="g3 statcards3">{out}</div></div></section>')
 
 
+
+def s_contrast(b, base):
+    left = "".join(f'<p class="{"strong" if strong else ""}">{esc(t)}</p>' for t, strong in b["left"])
+    right = "".join(f'<p class="{"big" if big else ""}">{esc(t)}</p>' for t, big in b["right"])
+    h = f'<h2 class="h2 h2-wide">{esc(b["h"])}</h2>' if b.get("h") else ""
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="contrast"><div class="col">{left}</div>'
+            f'<div class="col dark">{right}</div></div></div></section>')
+
+
 BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards,
           "numbered": s_numbered, "flagstats": s_flagstats, "audience": s_audience,
           "ticks": s_ticks, "quote": s_quote, "cases": s_cases, "faq": s_faq,
@@ -372,7 +390,8 @@ BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards
           "numlist": s_numlist, "checks": s_checks, "statcards": s_statcards,
           "softcards": s_softcards, "ctarow": s_ctarow, "dotcards": s_dotcards,
           "splitstat": s_splitstat, "prose": s_prose, "nbar": s_nbar,
-          "pain": s_pain, "sunkcards": s_sunkcards, "center": s_center, "scards": s_scards}
+          "pain": s_pain, "sunkcards": s_sunkcards, "center": s_center, "scards": s_scards,
+          "contrast": s_contrast}
 
 PROOF_BAR = {"t": "darkbar", "items": [
     "SOC 2 and HIPAA compliant, ready for immediate deployment",
@@ -711,4 +730,111 @@ PAGES["who-we-serve/idd-residential.html"] = dict(title="I/DD & Residential", no
         ("Do we have to change pharmacies or packaging?", "No changes to your existing pharmacy relationships or medication packaging."),
         ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR systems."),
     ]},
+])
+
+
+PAGES["who-we-serve/home-health.html"] = dict(title="Home Health", notes=[
+    "Transcribed from the artboard “Impruvon — Home Health”.",
+    "The argument is reframing, not features: the visibility gap is treated as a technology problem, not a geography problem. The dark card carries that turn.",
+], sections=[
+    {"t": "head", "kicker": "WHO WE SERVE · HOME HEALTH",
+     "h1": "Distance isn't the reason you have less visibility. Technology is.",
+     "lede": "If care happens in a hundred different homes, your records shouldn't live in a hundred different places.",
+     "cta": ("Book a demo", DEMO)},
+    {"t": "twocol", "h": "How does an eMAR work for home health?", "body": [
+        "In home health the medication record travels with the caregiver. Impruvon runs on the phone or tablet they already carry, guides each med pass step by step, and syncs at the point of care, so the office sees medication administration status across every person served, in every location, as it happens."]},
+    {"t": "contrast", "h": "A quiet tradeoff most providers have accepted.",
+     "left": [("Care delivered in the home means less oversight than care delivered in a facility. A caregiver supporting multiple people across multiple locations does their best, but the documentation trails behind them. A paper log in one home. A note texted at the end of a shift. A med change that reaches one location but not the next.", False),
+              ("By the time information gets back to the office, it's already history.", True)],
+     "right": [("The visibility gap isn't a geography problem. It's a technology problem, and it's solvable.", False),
+               ("Stop asking for better reports at the end of the week. Start asking why you can't see every person served, in every home, right now.", True)]},
+    {"t": "sunkcards", "bg": "sec-sunk", "h": "Every home. Every person. One view.", "items": [
+        ("Real-time analytics dashboard", "Medication administration status across every person served, in every location, at all times. No end-of-shift reconstruction, no blind spots between visits."),
+        ("Guided, step-by-step workflows", "Support every caregiver in the moment, clinical background or not, so the safe choice is the automatic choice in every home, on every visit."),
+        ("One centralized record per person", "Documentation happens at the point of care and syncs instantly, so a caregiver walking into their third home of the day has the current picture, not last week's."),
+        ("24/7 pharmacy connectivity", "Orders, refills and treatment changes flow into the platform in real time, wherever care is delivered."),
+        ("Smart medication storage adapted for home settings", "Right medication, right person, right time, even without staff on site.", "wide"),
+    ]},
+    {"t": "nbar", "items": [
+        ("1M+", "Medications administered"), ("50K+", "Medication errors eliminated"),
+        ("25K+", "Nursing hours saved"), ("75K+", "DSP hours saved"), ("75+", "Pharmacy partners")]},
+    {"t": "faq", "h": "Questions we get from home health agencies.", "items": [
+        ("Does it work on a phone?", "Yes. Android, iOS and web browsers, with automated single sign-on."),
+        ("Does the record update between visits?", "Documentation happens at the point of care and syncs instantly, so the next caregiver has the current picture."),
+        ("Do we have to change pharmacies?", "No changes to your existing pharmacy relationships or medication packaging."),
+    ]},
+    {"t": "closing", "light": True, "h": "See the platform in action."},
+])
+
+
+PAGES["who-we-serve/behavioral-mental-health.html"] = dict(title="Behavioral & Mental Health", notes=[
+    "Transcribed from the artboard “Impruvon — Behavioral & Mental Health”.",
+    "The whole page argues one distinction: passing an audit is an event, being defensible is a standard. That is why the proof block is flagged — those figures come from the I/DD elevator pitch and are being reused on a behavioural health page.",
+], sections=[
+    {"t": "head", "kicker": "WHO WE SERVE · BEHAVIORAL & MENTAL HEALTH",
+     "h1": "Passing your audit and being defensible aren't the same thing.",
+     "lede": "One is a scheduled event you prepare for. The other is a standard you either live in, or don't.",
+     "cta": ("Book a demo", DEMO)},
+    {"t": "twocol", "h": "What does medication management look like in behavioral health?", "body": [
+        "Behavioral and mental health providers manage some of the most complex psychiatric medication regimens in community-based care, under some of the heaviest documentation requirements, with a budget and workforce in constant flux. Impruvon keeps the eMAR, clinical tasks and vitals in one platform, so the record is current and defensible at any moment, not just before a review."]},
+    {"t": "twocol", "bg": "", "h": "Compliance treated as an event.", "body": [
+        "Most behavioral health providers treat compliance like an event: the audit is coming, so the team scrambles, pulling records from the eMAR, pharmacy records, the vitals log, the paper binder, reconstructing a defensible story from systems that were never designed to tell one together.",
+        "Real scrutiny doesn't arrive on schedule. It arrives with an adverse event, a licensing review, a lawsuit. Exactly the moments when the gaps between your systems stop being invisible and start being liability."]},
+    {"t": "twocol", "bg": "sec-deep", "h": "If you stay ready, you never have to get ready.", "body": [
+        "Audit readiness shouldn't be a fire drill. It should be the byproduct of how documentation happens every shift, on every med pass, automatically."]},
+    {"t": "sunkcards", "h": "Compliance built in, not bolted on.", "items": [
+        ("One platform", "eMAR, clinical tasks and vitals together. No documentation gaps between systems, no reconstruction before a review."),
+        ("Guided med passes", "PRN tracking and narcotic counting remove guesswork from complex psychiatric regimens. The safe choice is the automatic choice, whoever is on shift."),
+        ("Always current, always defensible", "Real-time digital documentation and an analytics dashboard replace error-prone paper processes."),
+        ("Role-based interfaces", "Reduce training burden for a high-turnover workforce. New staff are safe and productive from day one."),
+        ("SOC 2 and HIPAA compliant", "Ready for immediate deployment."),
+        ("Supervised self-administration", "Helps clients build toward managing their own psychiatric medications where clinically appropriate. Independence with oversight."),
+    ]},
+    {"t": "flagstats", "h": "Proven results.", "items": [
+        ("48%", "reduction in medication errors"), ("39%", "improvement in compliance rates"),
+        ("69%", "improvement in audit-ready documentation")],
+     "note": "Sourced from the I/DD elevator pitch, used here on a behavioural health page. Keep, or drop and lead with the quote."},
+    {"t": "quote", "bg": "sec-sunk",
+     "text": "The overall system, reduction in documentation errors and medication errors are the biggest outcomes. They're the outcomes that we needed to see, and we've seen that since implementing Impruvon.",
+     "by": "Chelsea Curran, Executive Director, Coastal Autism Academy"},
+    {"t": "faq", "h": "Questions we get from behavioral health providers.", "items": [
+        ("Are you SOC 2 and HIPAA compliant?", "Yes. SOC 2 and HIPAA compliant, ready for immediate deployment."),
+        ("Does it handle complex psychiatric regimens?", "Guided med passes, PRN reason and effectiveness tracking, and narcotic counting are built into the med pass."),
+        ("How does it help with a high-turnover workforce?", "Role-based interfaces reduce training burden. New staff are safe and productive from day one."),
+        ("Can clients self-administer?", "Where clinically appropriate, supervised self-administration lets clients build toward managing their own medications, with oversight retained."),
+    ]},
+    {"t": "closing", "light": True, "h": "See the platform in action."},
+])
+
+
+PAGES["who-we-serve/foster-care.html"] = dict(title="Foster Care", notes=[
+    "Transcribed from the artboard “Impruvon — Foster Care”.",
+    "The distinct risk here is the move: every placement change is a handoff, so the page argues that a predictable moment of risk can be engineered for rather than absorbed.",
+], sections=[
+    {"t": "head", "kicker": "WHO WE SERVE · FOSTER CARE",
+     "h1": "A child's medication history shouldn't depend on a caseworker's memory.",
+     "lede": "Every placement change is a handoff. Right now, it's also a gamble.",
+     "cta": ("Book a demo", DEMO)},
+    {"t": "twocol", "h": "What makes medication management different in foster care?", "body": [
+        "Foster care agencies manage the same medication challenges as any I/DD or behavioral health provider: complex regimens, psychiatric medications, med errors, paper MARs, state compliance requirements. But they carry one risk those providers don't. The child moves. And every time they do, the medication record has to survive the move too."]},
+    {"t": "contrast", "h": "What arrives with the child, and what doesn't.",
+     "left": [("Most agencies treat what happens next as an unavoidable side effect of the system: a paper folder that arrives incomplete, a caseworker recalling doses from memory, a foster parent with no clinical training starting over with whatever information made the trip. Details fall through the cracks, and everyone does their best.", False)],
+     "right": [("Information loss at placement transitions isn't bad luck. It's a design flaw. Every placement change is a predictable moment of risk, and a predictable moment can be engineered for.", False),
+               ("A child's medication history shouldn't be the most fragile thing they carry between homes.", True)]},
+    {"t": "sunkcards", "bg": "sec-sunk", "h": "The record follows the child, not the paperwork.", "items": [
+        ("Records that follow the child across placements", "The receiving caregiver starts with the complete, current picture on day one, not a partial paper file."),
+        ("Guided, simple workflows", "Foster parents aren't clinicians, and they shouldn't have to be. Step-by-step med passes make the safe choice the automatic choice in every home."),
+        ("Real-time visibility for the agency", "Caseworkers and administrators see medication administration status across every child in care, without waiting on paper logs or phone calls."),
+        ("Documentation ready for state child welfare reporting and audits", "Compliance is the byproduct of every med pass, not a scramble before a review."),
+        ("Support for youth building toward self-sufficiency", "Supervised self-administration helps older youth learn to manage their own medications before they age out, not after.", "highlight"),
+    ]},
+    {"t": "nbar", "items": [
+        ("1M+", "Medications administered"), ("50K+", "Medication errors eliminated"),
+        ("25K+", "Nursing hours saved"), ("75K+", "DSP hours saved"), ("75+", "Pharmacy partners")]},
+    {"t": "faq", "h": "Questions we get from foster care agencies.", "items": [
+        ("Do foster parents need clinical training?", "No. Step-by-step med passes guide any caregiver through every administration. Foster parents aren't clinicians and don't need to be."),
+        ("What happens to the record when a child changes placement?", "The record is centralized and portable. The receiving caregiver starts with the complete, current picture on day one, not a partial paper file."),
+        ("Can older youth manage their own medication?", "Supervised self-administration helps older youth learn to manage their own medications before they age out."),
+    ]},
+    {"t": "closing", "light": True, "h": "See the platform in action."},
 ])

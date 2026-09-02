@@ -463,3 +463,22 @@ CSS += """
 .scard span{font-size:18px;line-height:28px}
 @media (max-width:900px){ .g3.statcards3{grid-template-columns:1fr} .centertext{font-size:19px;line-height:31px} }
 """
+
+CSS += """
+.contrast{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.contrast .col{display:flex;flex-direction:column;gap:22px}
+.contrast .col p{font-size:19px;line-height:32px;color:var(--color-ink-muted)}
+.contrast .col p.strong{color:var(--color-ink);font-weight:500}
+.contrast .dark{background:var(--color-surface-deep);border-radius:18px;padding:36px 34px}
+.contrast .dark p{color:#EAF1F2D9}
+.contrast .dark p.big{font-size:22px;line-height:34px;font-weight:500;color:var(--color-surface)}
+@media (max-width:900px){ .contrast{grid-template-columns:1fr} }
+"""
+
+CSS += """
+.highlight{display:flex;align-items:center;gap:28px;background:var(--color-accent-soft);
+  border:2px solid var(--color-accent);border-radius:16px;padding:38px 36px;grid-column:1/-1}
+.highlight svg{flex-shrink:0}
+.highlight h3{font-size:23px;line-height:31px;margin-bottom:10px}
+.highlight p{font-size:18px;line-height:28px}
+"""
