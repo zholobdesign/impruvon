@@ -998,12 +998,26 @@ def main():
         f.write("User-agent: *\nDisallow: /\n")
     with open(os.path.join(ROOT, "README.md"), "w", encoding="utf-8") as f:
         f.write(README)
-    build_pages()
+    # pages now come from the Paper artboards; see paper_pages.py
     paper_home.write(OUT, render_chrome_nav, render_chrome_foot, esc, DEMO)
     done = paper_pages.write_all(OUT, render_chrome_nav, render_chrome_foot)
-    red = open(os.path.join(ROOT,'redirect_snippet.html'),encoding='utf-8').read()
-    for legacy in ('platform/pharmacy-integration.html','platform/ehr-integration.html'):
-        open(os.path.join(OUT,legacy),'w',encoding='utf-8').write(red)
+    def redirect(path, target, label):
+        full = os.path.join(OUT, path)
+        os.makedirs(os.path.dirname(full), exist_ok=True)
+        open(full, 'w', encoding='utf-8').write(
+            '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            '<meta name="robots" content="noindex,nofollow">'
+            f'<meta http-equiv="refresh" content="0; url={target}">'
+            f'<title>{label} — Impruvon</title></head>'
+            '<body style="font:16px system-ui;padding:40px">Moved to '
+            f'<a href="{target}">{label}</a>.</body></html>')
+
+    redirect('platform/pharmacy-integration.html', 'integrations.html', '/platform/integrations')
+    redirect('platform/ehr-integration.html', 'integrations.html', '/platform/integrations')
+    redirect('resources/caregivers/index.html', '../index.html', '/resources')
+    redirect('resources/guides/index.html', '../index.html', '/resources')
+    redirect('resources/customers/index.html', '../case-studies/', '/resources/case-studies')
+    paper_pages.write_sitemap(OUT, render_chrome_nav, render_chrome_foot)
     print('transcribed from Paper:', len(done)+1, 'pages')
     n = sum(len([x for x in fs if x.endswith(".html")]) for _, _, fs in os.walk(OUT))
     print(f"built {n} pages -> {OUT}")

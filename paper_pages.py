@@ -241,14 +241,22 @@ def s_steps(b, base):
 
 
 def s_faqcards(b, base):
-    rows = "".join(f'<div class="faqcard"><div class="q">{esc(q)}</div><div class="a">{esc(a)}</div></div>'
-                   for q, a in b["items"])
+    rows = ""
+    for item in b["items"]:
+        cls = "faqcard flag" if len(item) == 3 and item[2] == "flag" else "faqcard"
+        rows += f'<div class="{cls}"><div class="q">{esc(item[0])}</div><div class="a">{esc(item[1])}</div></div>'
+    extra = ""
+    if b.get("after"):
+        lbl, tgt = b.get("cta", ("Book a demo", DEMO))
+        extra = (f'<div class="smallcta"><h2>{esc(b["after"])}</h2>'
+                 f'<a class="pill pill-lg" href="{_link(base, tgt)}">{esc(lbl)}</a></div>')
     h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
     label, target = b.get("cta", ("Book a demo", DEMO))
     return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner stack-44">{h}'
             f'<div class="faqcards">{rows}</div>'
-            f'<a class="pill pill-lg" style="align-self:flex-start" href="{_link(base, target)}">{esc(label)}</a>'
-            f'</div></section>')
+            + (extra if b.get("after") else
+               f'<a class="pill pill-lg" style="align-self:flex-start" href="{_link(base, target)}">{esc(label)}</a>')
+            + '</div></section>')
 
 
 
@@ -278,8 +286,9 @@ def s_numlist(b, base):
         rows = "".join(f'<div class="r"><b>{esc(n)}</b><span>{esc(t)}</span></div>' for n, t in col)
         cols += f'<div class="numlist">{rows}</div>'
     h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    grid = cols if len(b["cols"]) == 1 else f'<div class="grid g2">{cols}</div>'
     return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
-            f'<div class="grid g2">{cols}</div></div></section>')
+            f'{grid}</div></section>')
 
 
 def s_checks(b, base):
@@ -303,8 +312,9 @@ def s_statcards(b, base):
 def s_softcards(b, base):
     out = "".join(f'<div class="softcard"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in b["items"])
     h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    flag = f'<div class="flag-box">{esc(b["flag"])}</div>' if b.get("flag") else ""
     return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
-            f'<div class="grid g2">{out}</div></div></section>')
+            f'<div class="grid g{b.get("cols",2)}">{out}</div>{flag}</div></section>')
 
 
 def s_ctarow(b, base):
@@ -423,6 +433,189 @@ def s_flagtable(b, base):
             f'<tbody>{rows}</tbody></table></div></div></div></section>')
 
 
+
+def s_filters(b, base):
+    fs = "".join(f'<div class="f"><span class="lbl">{esc(l)}</span>'
+                 f'<span class="sel">{esc(v)} <i>&#9662;</i></span></div>' for l, v in b["items"])
+    return (f'<section class="sec" style="padding-top:0;padding-bottom:44px"><div class="sec-inner filters">'
+            f'{fs}<div class="search">{esc(b.get("search","Search resources"))}</div></div></section>')
+
+
+def s_rescards(b, base):
+    cards = ""
+    for c in b["items"]:
+        tags = "".join(f'<span class="tag{"" if i == 0 else " alt"}">{esc(t)}</span>'
+                       for i, t in enumerate(c["tags"]))
+        meta = f'<div class="meta">{esc(c["meta"])}</div>' if c.get("meta") else ""
+        cards += (f'<div class="rescard"><div><div class="tags">{tags}</div>'
+                  f'<h3>{esc(c["title"])}</h3>{meta}</div>'
+                  f'<div class="go">{esc(c["cta"])} &rarr;</div></div>')
+    band = ""
+    if b.get("band"):
+        h, p, l, t = b["band"]
+        band = (f'<div class="darkband"><div><h3>{esc(h)}</h3><p>{esc(p)}</p></div>'
+                f'<a class="go" href="{_link(base, t)}">{esc(l)} &rarr;</a></div>')
+    return (f'<section class="sec" style="padding-top:0;padding-bottom:90px"><div class="sec-inner stack-44">'
+            f'<div class="flagtable"><div class="note">{esc(b["note"])}</div>'
+            f'<div class="rescards">{cards}</div></div>{band}</div></section>')
+
+
+
+def s_cases_rows(b, base):
+    out = ""
+    for c in b["items"]:
+        cls = "caserow flag" if c.get("flag") else "caserow"
+        tags = "".join(f'<span class="tag">{esc(t)}</span>' for t in c["tags"])
+        go = (f'<a class="go" href="{_link(base, c["link"])}">{esc(c["cta"])} &rarr;</a>'
+              if c.get("link") else f'<span class="go">{esc(c["cta"])}</span>')
+        out += (f'<div class="{cls}"><div class="metric"><b>{esc(c["metric"])}</b>'
+                f'<span>{esc(c["metric_label"])}</span></div>'
+                f'<div class="body"><div class="tags">{tags}</div><h3>{esc(c["title"])}</h3>'
+                f'<p>{esc(c["text"])}</p>{go}</div></div>')
+    rule = ""
+    if b.get("rule"):
+        rule = (f'<div class="ruleblock"><b>{esc(b["rule"][0])}</b>'
+                f'<p>{esc(b["rule"][1])}</p></div>')
+    return (f'<section class="sec" style="padding-top:0;padding-bottom:90px">'
+            f'<div class="sec-inner" style="display:flex;flex-direction:column;gap:24px">{out}{rule}</div></section>')
+
+
+
+def s_casehead(b, base):
+    crumbs = " / ".join(esc(c) for c in b["crumbs"])
+    meta = "".join(f'<div class="m"><b>{esc(k)}</b><span>{esc(v)}</span></div>' for k, v in b["meta"])
+    note = f'<div class="notebox">{esc(b["note"])}</div>' if b.get("note") else ""
+    return (f'<section class="sec" style="padding-top:80px;padding-bottom:56px"><div class="sec-inner stack-44">'
+            f'<div><div class="crumbs">{crumbs}</div>'
+            f'<h1 class="phead-h1" style="font-size:52px;line-height:62px;margin-top:20px">{esc(b["h1"])}</h1>'
+            f'<p class="phead-lede">{esc(b["lede"])}</p></div>'
+            f'<div class="casemeta">{meta}</div>{note}</div></section>')
+
+
+def s_labelsplit(b, base):
+    paras = "".join(f'<p>{esc(t)}</p>' for t in b.get("body", []))
+    bullets = ""
+    if b.get("bullets"):
+        items = "".join(f'<div class="i"><i></i><span>{esc(t)}</span></div>' for t in b["bullets"])
+        bullets = f'<div class="coralist">{items}</div>'
+    note = f'<div class="notebox">{esc(b["note"])}</div>' if b.get("note") else ""
+    return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner labelsplit">'
+            f'<div class="l"><div class="lab">{esc(b["label"])}</div><h2>{esc(b["h"])}</h2></div>'
+            f'<div class="r">{paras}{bullets}{note}</div></div></section>')
+
+
+def s_numsteps(b, base):
+    out = "".join(f'<div class="numstep"><div class="n">{i+1}</div><h3>{esc(t)}</h3><p>{esc(d)}</p></div>'
+                  for i, (t, d) in enumerate(b["items"]))
+    note = f'<div class="notebox">{esc(b["note"])}</div>' if b.get("note") else ""
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">'
+            f'<div><div class="lab" style="font-size:12px;font-weight:500;letter-spacing:.12em;'
+            f'color:var(--color-accent-hover);margin-bottom:16px">{esc(b["label"])}</div>'
+            f'<h2 class="h2" style="font-size:36px;line-height:46px">{esc(b["h"])}</h2></div>'
+            f'<div class="numsteps">{out}</div>{note}</div></section>')
+
+
+def s_results(b, base):
+    out = ""
+    for v, t, flag in b["items"]:
+        cls = "rc flag" if flag else "rc"
+        out += f'<div class="{cls}"><b>{esc(v)}</b><p>{esc(t)}</p></div>'
+    q = ""
+    if b.get("quote"):
+        text, name, title, warn = b["quote"]
+        q = (f'<div class="quoteflag"><div class="q">&ldquo;{esc(text)}&rdquo;</div>'
+             f'<div class="by"><b>{esc(name)}</b><span>{esc(title)}</span></div>'
+             f'<div class="warn">{esc(warn)}</div></div>')
+    return (f'<section class="sec sec-deep"><div class="sec-inner stack-44">'
+            f'<div><div style="font-size:12px;font-weight:500;letter-spacing:.12em;color:var(--color-seafoam);'
+            f'margin-bottom:16px">{esc(b["label"])}</div>'
+            f'<h2 class="h2" style="font-size:36px;line-height:46px">{esc(b["h"])}</h2></div>'
+            f'<div class="rescard3">{out}</div>{q}</div></section>')
+
+
+def s_closing2(b, base):
+    btns = "".join(
+        f'<a class="pill pill-lg{"" if i == 0 else " pill-ghost"}" href="{_link(base, t)}">{esc(l)}</a>'
+        for i, (l, t) in enumerate(b["buttons"]))
+    return (f'<section class="closing-light"><div class="sec-inner"><h2>{esc(b["h"])}</h2>'
+            f'<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px">{btns}</div>'
+            f'</div></section>')
+
+
+
+def s_storyflag(b, base):
+    paras = "".join(f'<p class="{cls}">{esc(t)}</p>' for t, cls in b["body"])
+    return (f'<section class="sec" style="padding-top:0;padding-bottom:100px"><div class="sec-inner">'
+            f'<div class="storyflag"><div class="note">{esc(b["note"])}</div>{paras}</div></div></section>')
+
+
+
+def s_flagcards(b, base):
+    cards = "".join(f'<div class="softcard" style="background:var(--color-surface)">'
+                    f'<h3 style="font-size:20px;line-height:28px">{esc(t)}</h3><p>{esc(d)}</p></div>'
+                    for t, d in b["items"])
+    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    return (f'<section class="sec {b.get("bg","sec-deep")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="flagtable"><div class="note">{esc(b["note"])}</div>'
+            f'<div class="grid g2">{cards}</div></div></div></section>')
+
+
+def s_pairsplit(b, base):
+    return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner labelsplit">'
+            f'<div class="l"><p style="font-size:21px;line-height:34px;color:var(--color-ink-muted)">'
+            f'{esc(b["left"])}</p></div>'
+            f'<div class="r"><p style="font-size:26px;line-height:40px;font-weight:500;color:var(--color-ink)">'
+            f'{esc(b["right"])}</p></div></div></section>')
+
+
+
+def s_routes(b, base):
+    out = ""
+    for c in b["items"]:
+        cls = "routecard new" if c.get("new") else "routecard"
+        tag = f'<div class="newtag">{esc(c["new"])}</div>' if c.get("new") else ""
+        inner = f'{tag}<h3>{esc(c["title"])}</h3><p>{esc(c["text"])}</p>'
+        if c.get("link"):
+            out += f'<a class="{cls}" href="{_link(base, c["link"])}">{inner}</a>'
+        else:
+            out += f'<div class="{cls}">{inner}</div>'
+    return (f'<section class="sec" style="padding-top:0;padding-bottom:90px">'
+            f'<div class="sec-inner"><div class="grid g3">{out}</div></div></section>')
+
+
+def s_contactform(b, base):
+    fields = ""
+    for row in b["fields"]:
+        cells = "".join(f'<div class="fld"><label>{esc(f)}</label><div class="input"></div></div>' for f in row)
+        fields += f'<div class="frow">{cells}</div>'
+    fields += ('<div class="fld"><label>Message</label>'
+               '<div class="input" style="height:120px"></div></div>')
+    rows = "".join(f'<div class="row"><b>{esc(k)}</b><span>{esc(v)}</span></div>' for k, v in b["contacts"])
+    side = (f'<div class="contactside"><div class="note">{esc(b["note"])}</div>'
+            f'<div><h3>{esc(b["org"])}</h3><p class="addr">{esc(b["address"])}</p></div>'
+            f'<div class="rule"></div><div style="display:flex;flex-direction:column;gap:12px">{rows}</div></div>')
+    return (f'<section class="sec sec-sunk"><div class="sec-inner formwrap">'
+            f'<div class="form" style="background:var(--color-surface);border:0">{fields}'
+            f'<span class="pill pill-lg" style="align-self:flex-start">Send</span></div>{side}</div></section>')
+
+
+
+def s_joblist(b, base):
+    jobs = "".join('<div class="job"><div><b>[Role title]</b>'
+                   '<span>[Team] &middot; [Location] &middot; [Type]</span></div><i>&rarr;</i></div>'
+                   for _ in range(b.get("count", 3)))
+    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="joblist"><div class="note">{esc(b["note"])}</div>'
+            f'<div style="display:flex;flex-direction:column;gap:12px">{jobs}</div></div></div></section>')
+
+
+def s_stub(b, base):
+    return (f'<section class="sec"><div class="sec-inner stack-44">'
+            f'<h2 class="h2">{esc(b["h"])}</h2>'
+            f'<div class="stub"><b>NO ARTBOARD YET</b><p>{esc(b["text"])}</p></div></div></section>')
+
+
 BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards,
           "numbered": s_numbered, "flagstats": s_flagstats, "audience": s_audience,
           "ticks": s_ticks, "quote": s_quote, "cases": s_cases, "faq": s_faq,
@@ -433,7 +626,12 @@ BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards
           "softcards": s_softcards, "ctarow": s_ctarow, "dotcards": s_dotcards,
           "splitstat": s_splitstat, "prose": s_prose, "nbar": s_nbar,
           "pain": s_pain, "sunkcards": s_sunkcards, "center": s_center, "scards": s_scards,
-          "contrast": s_contrast, "flagprose": s_flagprose, "flagtable": s_flagtable}
+          "contrast": s_contrast, "flagprose": s_flagprose, "flagtable": s_flagtable,
+          "filters": s_filters, "rescards": s_rescards, "caserows": s_cases_rows,
+          "casehead": s_casehead, "labelsplit": s_labelsplit, "numsteps": s_numsteps,
+          "results": s_results, "closing2": s_closing2, "storyflag": s_storyflag,
+          "flagcards": s_flagcards, "pairsplit": s_pairsplit,
+          "routes": s_routes, "contactform": s_contactform, "joblist": s_joblist, "stub": s_stub}
 
 PROOF_BAR = {"t": "darkbar", "items": [
     "SOC 2 and HIPAA compliant, ready for immediate deployment",
@@ -1019,3 +1217,343 @@ PAGES["compare/index.html"] = dict(title="Compare",
      "lede": "If you need one system for billing, EVV, case management and medication together, an all-in-one platform will serve you better. We do one thing.",
      "cta": ("Book a demo", DEMO)},
 ])
+
+
+PAGES["pricing/index.html"] = dict(title="Pricing", notes=[
+    "Transcribed from the artboard “Impruvon — Pricing”.",
+    "A pricing page with no numbers. It exists because buyers search for eMAR pricing — with no page that traffic goes to competitors and review sites; with this page it converts.",
+    "Every line describing the model is a draft. Four questions settle the whole page: how the subscription is counted, whether MedBox is sold or leased, whether implementation is one-time, and whether support is included.",
+], sections=[
+    {"t": "head", "h1": "How Impruvon is priced.",
+     "lede": "There are no numbers on this page, because a six-home provider and a statewide network pay very differently. What we can tell you is exactly what the price is built from, so nothing on the call is a surprise."},
+    {"t": "sunkcards", "bg": "sec-sunk", "h": "What you pay for.", "items": [
+        ("Software subscription", "An annual subscription to eMAR+, priced by the number of individuals you serve. Everything in the platform is included: guided med passes, clinical workflows, reporting and dashboards."),
+        ("MedBox hardware", "Smart medication storage is optional and priced separately, per unit. You choose how many homes to equip, and when."),
+        ("Implementation", "A one-time setup covering configuration, pharmacy connection, EHR integration and staff training."),
+        ("Support", "In-person and virtual customer support, included with your subscription."),
+    ]},
+    {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
+     "note": "EVERY LINE ABOVE IS A DRAFT · FOUR QUESTIONS, ONE TEN-MINUTE CALL",
+     "body": [("1 · Is the subscription counted per resident, per home, per user or another way   2 · Is MedBox sold or leased   3 · Is implementation one-time or part of the subscription   4 · Is support included or separate", True)]},
+    {"t": "softcards", "cols": 3, "h": "What doesn't cost extra.",
+     "flag": "Confirm there is no separate charge for connecting a pharmacy.", "items": [
+        ("Barcode scanning", "In-app barcode scanning. No external scanners required."),
+        ("Pharmacy integration", "No changes to your pharmacy relationships or medication packaging."),
+        ("Platform updates", "Included."),
+    ]},
+    {"t": "faqcards", "bg": "sec-sunk", "h": "Questions about pricing.",
+     "after": "Get a price for your setup.", "items": [
+        ("Why aren't there prices on this page?", "Because a six-home provider and a statewide network pay very differently, and a single number here would be wrong for both."),
+        ("Is there a minimum?", "[___]", "flag"),
+        ("Is there a contract term?", "[___]", "flag"),
+        ("Do state-directed programs cost the provider anything?", "[___] · Asked on the State-Directed page too, where we promise a single network standard.", "flag"),
+    ]},
+])
+
+
+CASES = "resources/case-studies/index.html"
+
+PAGES["resources/index.html"] = dict(title="Resources",
+    badge="URL MUST CHANGE ON FILTERING, OTHERWISE CRAWLERS SEE ONE PAGE", notes=[
+    "Transcribed from the artboard “Impruvon — Resources”.",
+    "One hub with filters by setting and by role, replacing a dated blog feed. Filtering must change the URL, otherwise search engines only ever see one page.",
+    "No real materials exist yet. The cards are the content plan, not published work. Launch condition on the artboard: at least three real items, otherwise publish only case studies and keep this hub dark.",
+], sections=[
+    {"t": "head", "h1": "Medication safety, explained.",
+     "lede": "Reports, articles, webinars and events for the people responsible for medication in community-based care."},
+    {"t": "filters", "items": [("SETTING", "All settings"), ("ROLE", "All roles")]},
+    {"t": "rescards",
+     "note": "No real materials exist yet. The cards below are the content plan, not published work. Condition for launch: at least three real items, otherwise publish only case studies and keep this hub dark.",
+     "band": ("Case studies live on their own page.",
+              "23,000+ medications with zero errors at Charles Lea Center, and more.",
+              "See case studies", CASES),
+     "items": [
+        {"tags": ["REPORT", "COMPLIANCE"], "title": "[Annual medication safety report, community-based care]", "cta": "Download"},
+        {"tags": ["BLOG", "COMPLIANCE"], "title": "How to prepare for a medication audit", "cta": "Read"},
+        {"tags": ["BLOG", "I/DD"], "title": "Paper MAR vs eMAR: what actually changes", "cta": "Read"},
+        {"tags": ["WEBINAR", "LEADERSHIP"], "title": "[Webinar title]", "meta": "[Date] · [Duration] · On demand", "cta": "Watch"},
+        {"tags": ["EVENT", "STATE-DIRECTED"], "title": "[Conference or booth, name]", "meta": "[Date] · [City, State]", "cta": "Meet us there"},
+        {"tags": ["BLOG", "DIRECT SUPPORT"], "title": "The five rights of medication administration, in practice", "cta": "Read"},
+        {"tags": ["BLOG", "LEADERSHIP"], "title": "What to look for in an eMAR for group homes", "cta": "Read"},
+        {"tags": ["BLOG", "COMPLIANCE"], "title": "How to reduce medication errors in residential care", "cta": "Read"},
+        {"tags": ["REPORT", "STATE-DIRECTED"], "title": "[State briefing summary, Massachusetts]", "cta": "Download"},
+     ]},
+    {"t": "closing", "light": True, "h": "See how it works on your setup."},
+])
+
+
+PAGES[CASES] = dict(title="Case Studies", notes=[
+    "Transcribed from the artboard “Impruvon — Case Studies”.",
+    "Two cards, and only one of them is real. Vista Care is named as a customer everywhere else on the site, but there is no story, no numbers and no approved quote — so the card is shown with the link disabled rather than filled with invented content.",
+    "Publishing rule from the artboard: every case study needs written customer sign-off on the name, the numbers and the quote. Without sign-off the provider is described generically and no logo is shown.",
+], sections=[
+    {"t": "head", "h1": "Proof, from providers like yours.",
+     "lede": "What changed after the switch — in error rates, audit results and staff hours."},
+    {"t": "caserows", "rule": ("PUBLISHING RULE",
+        "Every case study needs a written customer sign-off on the name, the numbers and the quote. Without sign-off the provider is described generically — “a South Carolina I/DD provider” — and the logo is not shown."),
+     "items": [
+        {"metric": "23,000+", "metric_label": "medications administered with zero errors",
+         "tags": ["I/DD & RESIDENTIAL", "SOUTH CAROLINA"],
+         "title": "Charles Lea Center replaced paper MARs across every residential site",
+         "text": "A provider supporting adults with I/DD moved from paper to eMAR+ and MedBox, and rebuilt how errors are caught before they reach a person.",
+         "cta": "Read the case study", "link": "resources/case-studies/charles-lea.html"},
+        {"metric": "[metric]", "metric_label": "headline result to be supplied by the client",
+         "tags": ["MULTI-STATE PROVIDER", "PAGE NOT BUILT"], "flag": True,
+         "title": "Vista Care",
+         "text": "Named as a customer, but there is no story, no numbers and no approved quote yet. Card is shown here so the layout holds two cases; the link stays disabled until the client sends the material and signs off on publishing the name.",
+         "cta": "Link disabled"},
+     ]},
+    {"t": "closing", "light": True, "h": "See what the numbers look like on your caseload."},
+])
+
+
+PAGES["resources/case-studies/charles-lea.html"] = dict(title="Case Study Template", notes=[
+    "Transcribed from the artboard “Impruvon — Case: Charles Lea Center”. This doubles as the template every future case study follows.",
+    "Only the 23,000+ figure is client-supplied. The challenge bullets are a plausible reconstruction, the second and third result metrics are placeholders, and the quote is not approved. All three are marked yellow rather than invented silently.",
+    "The 23,000+ figure cannot be published without the time period it covers.",
+], sections=[
+    {"t": "casehead", "crumbs": ["Resources", "Case studies", "Charles Lea Center"],
+     "h1": "23,000+ medications administered. Zero errors.",
+     "lede": "How Charles Lea Center moved every residential site off paper MARs — and what it changed for the people they support.",
+     "meta": [("ORGANIZATION", "Charles Lea Center"), ("SETTING", "I/DD, residential"),
+              ("STATE", "South Carolina"), ("USING", "eMAR+ and MedBox")],
+     "note": "Confirm with the client: number of sites, number of people supported, number of staff using the system, and the time period the 23,000+ figure covers. Without a period the number cannot be published."},
+    {"t": "labelsplit", "label": "THE CHALLENGE", "h": "Paper MARs hid the errors until the audit found them.",
+     "body": ["Every site kept its own binder. A missed dose looked identical to a dose that was given but not initialled, and nobody knew which one it was until a nurse drove out to check."],
+     "bullets": [
+        "No way to see, from the office, whether a medication pass had actually happened.",
+        "Errors surfaced weeks later, in a chart review, when nothing could be done about them.",
+        "New DSPs learned the medication process from whoever was on shift, not from a system.",
+        "Audit prep meant collecting binders from every site and re-reading them by hand."],
+     "note": "These four points are a plausible reconstruction, not client-supplied. Replace with what the Charles Lea team actually said in the interview."},
+    {"t": "numsteps", "label": "WHAT THEY DID", "h": "Three moves, in order.",
+     "note": "Confirm the rollout sequence and how long it took. If eMAR+ and MedBox went in together rather than in stages, this section becomes two steps, not three.",
+     "items": [
+        ("Replaced the binders with eMAR+", "Every pass now records who administered what, when, and against which order — visible from the office in real time."),
+        ("Put MedBox in the homes", "The right compartment opens for the right person at the right time, so the wrong medication is hard to reach in the first place."),
+        ("Moved audit prep into the system", "The record a surveyor asks for is exported, not assembled — the same data the team uses day to day."),
+     ]},
+    {"t": "results", "label": "RESULTS", "h": "What changed.", "items": [
+        ("23,000+", "medications administered with zero errors", False),
+        ("[X%]", "second metric — audit result, or time saved on documentation. Client to supply.", True),
+        ("[X hrs]", "third metric — nurse or DSP hours returned per week. Client to supply.", True),
+     ], "quote": ("Quote from the Charles Lea team about what changed for staff and for the people they support.",
+                  "Shannon Childress", "Title to confirm · Charles Lea Center",
+                  "The name appeared in the client material without a source, a title or an approved quote. Do not publish until the person has seen the exact wording and agreed to it in writing.")},
+    {"t": "closing2", "h": "Run the same numbers on your programs.",
+     "buttons": [("Book a demo", DEMO), ("See all case studies", CASES)]},
+])
+
+
+PAGES["about/our-story.html"] = dict(title="Our Story", badge="WAITING ON CEO SIGN-OFF", notes=[
+    "Transcribed from the artboard “Impruvon — Our Story”.",
+    "The founder's account discloses a personal loss in his family. The client flagged this section themselves. The wording is reproduced exactly as supplied and must not be edited by us — not by a single word — until the CEO and leadership confirm the exact text and the level of detail.",
+], sections=[
+    {"t": "head", "h1": "Every preventable error started with a system that wasn't built to prevent it.",
+     "lede": "Impruvon exists because one family learned that lesson the hardest way possible."},
+    {"t": "storyflag",
+     "note": "THE CLIENT FLAGGED THIS SECTION THEMSELVES · IT DISCLOSES A PERSONAL LOSS IN THE FOUNDER'S FAMILY · EXACT WORDING AND LEVEL OF DETAIL TO BE CONFIRMED WITH THE CEO AND LEADERSHIP · NOT TO BE EDITED BY US, NOT BY A SINGLE WORD",
+     "body": [
+        ("Founder Justin Amoyal lost his brother Ben from a preventable overdose while living in a supported residential setting. Not because anyone failed to care, but because the systems around him were never engineered to catch it in time.", "lead"),
+        ("That loss became a question that stayed with us. Hospitals had spent decades building infrastructure to stop medication errors before they reach a patient. Why hadn't community-based care been given the same tools?", "body"),
+        ("The answer became a company.", "kicker2"),
+     ]},
+    {"t": "twocol", "bg": "sec-deep", "h": "From loss to mission.", "body": [
+        "Impruvon was built on a simple, unwavering belief: medication errors in residential and community-based care aren't inevitable. They're the predictable result of asking non-clinical caregivers to do clinical-grade work with paper-era tools. And predictable problems can be engineered away."]},
+    {"t": "twocol", "bg": "", "h": "What we exist to do.", "body": [
+        "We exist to set the standard for medication management by creating a seamless, safe and connected ecosystem where every care team is equipped and every individual's needs are supported.",
+        "We envision a world where medication errors are eliminated, compliance is effortless, and where underserved individuals who cannot advocate for themselves receive the best possible care."]},
+    {"t": "nbar", "items": [
+        ("1M+", "medications administered"), ("50K+", "medication errors eliminated"),
+        ("75+", "pharmacy partners across 20+ states"), ("MA", "state-directed eMAR in Massachusetts")]},
+    {"t": "closing", "light": True, "h": "See what we stand for.",
+     "cta": ("Our commitment", "about/our-commitment.html")},
+])
+
+
+PAGES["about/our-commitment.html"] = dict(title="Our Commitment", notes=[
+    "Transcribed from the artboard “Impruvon — Our Commitment”.",
+    "The four pillars exist in three different editions across the client's files. Recommendation on the artboard: treat the Product Overview wording as canonical, and keep the Careers variant as a deliberate first-person restatement.",
+    "The word “projected” on the 1,800% figure was added by us and must stay — the same number appears elsewhere as an achieved result and as “ROI > 1500%”.",
+], sections=[
+    {"t": "head", "h1": "A caregiver's first shift should be exactly as safe as their thousandth.",
+     "lede": "Most safety plans start with “hire better people, train them harder.” We started somewhere else."},
+    {"t": "pairsplit",
+     "left": "Different clinical experience levels among staff, workforce shortages, and individuals with complex needs like polypharmacy and long-term medication use are just a few of the realities that challenge that promise.",
+     "right": "Impruvon was designed for exactly this: putting the safeguard in the workflow, not in the person."},
+    {"t": "twocol", "bg": "", "h": "What sets us apart.", "body": [
+        "Impruvon was built from the ground up for the workflow rhythms, staffing and budget constraints, and regulatory requirements of residential and community-based care.",
+        "Our integrated software-hardware platform connects guided workflows, smart medication storage and real-time pharmacy integration, giving providers complete visibility and control without changing the pharmacies, packaging or EHR systems they already use."]},
+    {"t": "flagcards", "h": "Four commitments, one platform.",
+     "note": "These four pillars exist in three editions in the client file. Here “Simplify every step” and “Gain audit peace of mind”; on Product Overview “Simplify every workflow” and “Ensure audit readiness”; on Careers a first-person variant. Recommendation: Product Overview as canonical, Careers kept as a deliberate restatement.",
+     "items": [
+        ("Simplify every step", "Medication management should work the way your care teams work, not the other way around."),
+        ("Gain audit peace of mind", "Meeting compliance and regulatory requirements should be built into your workflow, not an afterthought."),
+        ("Connect every touchpoint", "Great care doesn't happen in silos. Your platform shouldn't either."),
+        ("Empower every person", "Medication management should build confidence and resilience for individuals and the teams who support them."),
+     ]},
+    {"t": "flagstats", "bg": "", "h": "Results at a glance.", "items": [
+        ("48%", "Reduction in medication errors"), ("39%", "Improvement in compliance rates"),
+        ("50,000+", "Medication errors eliminated to date"),
+        ("1,800%", "Projected ROI in the Massachusetts state-directed model")],
+     "note": "Flagged by the client. Figures come from an I/DD-specific deck and need confirmation of scope and permission for external use. The word “projected” was added by us and must stay: the same figure appears elsewhere as an achieved result and as “ROI > 1500%”."},
+    {"t": "closing", "light": True, "h": "See how we serve your organization.",
+     "cta": ("Who we serve", "who-we-serve/index.html")},
+])
+
+
+PAGES["about/contact.html"] = dict(title="Contact", badge="BLOCKS THE RELEASE OF THE WHOLE SITE", notes=[
+    "Transcribed from the artboard “Impruvon — Contact”.",
+    "None of the contact details exist in any client material. On a B2B site selling compliance to state agencies, a contact page without an address or a phone number damages trust more than anything else on the site. This is the item that blocks release.",
+    "Pharmacy partnership is a fifth enquiry type added during design: 75+ pharmacies are a stated asset, but there was no route for a pharmacy to reach out.",
+], sections=[
+    {"t": "head", "h1": "Let's talk.", "lede": "Tell us what you need, and we'll get you to the right team."},
+    {"t": "routes", "items": [
+        {"title": "Book a demo", "text": "See the platform in action.", "link": DEMO},
+        {"title": "Customer support", "text": "Get help with your Impruvon account."},
+        {"title": "Pharmacy partnership", "text": "Connect your pharmacy to the Impruvon network.", "new": "NEW · FIFTH TYPE"},
+        {"title": "Press and media", "text": "Media inquiries and press resources."},
+        {"title": "General inquiry", "text": "Everything else."},
+    ]},
+    {"t": "contactform",
+     "fields": [["Name", "Organization"], ["Role", "State or region"], ["Inquiry type"]],
+     "note": "NONE OF THESE DETAILS EXIST IN ANY CLIENT MATERIAL · A CONTACT PAGE WITHOUT AN ADDRESS OR A PHONE NUMBER, ON A B2B SITE SELLING COMPLIANCE TO STATE AGENCIES, DAMAGES TRUST MORE THAN ANYTHING ELSE ON THE SITE",
+     "org": "Impruvon Health", "address": "[Street address] · [City, State ZIP]",
+     "contacts": [("General", "[hello@impruvon.com]"), ("Support", "[support@impruvon.com]"),
+                  ("Press", "[press@impruvon.com]"), ("Phone", "[(000) 000-0000]")]},
+])
+
+
+PAGES["about/careers.html"] = dict(title="Careers", notes=[
+    "Transcribed from the artboard “Impruvon — Careers”.",
+    "The four principles here are the first-person restatement of the four commitments — kept deliberately, not treated as a duplicate.",
+    "An ATS feed is required. If there is no feed or zero open roles, do not publish this page: an empty careers page hurts more than no careers page.",
+], sections=[
+    {"t": "head", "h1": "You can do more than provide care. You can redesign how it's delivered."},
+    {"t": "pairsplit",
+     "left": "Most people in this field are told their impact stops at the bedside, the group home, the med pass. We think that undersells what's possible.",
+     "right": "Every workflow we build, every safeguard we design, protects thousands of people who will never know our names. If you want work that scales compassion instead of just performing it, you're in the right place."},
+    {"t": "numlist", "h": "How we work.", "cols": [[
+        ("01", "We simplify every workflow, including our own internal ones."),
+        ("02", "We ensure audit readiness, because “good enough” isn't a standard we build to."),
+        ("03", "We connect every touchpoint, across teams, not just across the product."),
+        ("04", "We empower every person, our co-workers included."),
+    ]]},
+    {"t": "joblist", "h": "Open roles.",
+     "note": "ATS FEED REQUIRED · IF THERE IS NO FEED OR ZERO OPEN ROLES, DO NOT PUBLISH THIS PAGE · AN EMPTY CAREERS PAGE HURTS MORE THAN NO CAREERS PAGE"},
+])
+
+
+PAGES["trust/index.html"] = dict(title="Trust & Compliance", notes=[
+    "Linked from the footer on every artboard, but not designed yet — there is no artboard for it in the Paper file.",
+    "Recommended before release: SOC 2 type and report request flow, HIPAA BAA process, data residency and retention, SSO and role-based access, and the state approvals that can be named.",
+], sections=[
+    {"t": "head", "h1": "Trust and compliance.",
+     "lede": "Security, certifications and the answers procurement asks for."},
+    {"t": "stub", "h": "Not designed yet.",
+     "text": "Every footer on the site links here, so the page has to exist before release. Content needed from the client: SOC 2 type, HIPAA BAA process, data residency and retention, SSO and role-based access, and which state approvals can be named."},
+    {"t": "closing", "light": True, "h": "See the platform in action."},
+])
+
+
+PAGES["about/index.html"] = dict(title="Company", notes=[
+    "The header's Company link needs a destination. There is no Company hub artboard, so this page routes onward until the client decides whether Company should be a hub or a direct link to Our Story.",
+], sections=[
+    {"t": "head", "h1": "Company.", "lede": "Who we are, what we stand for, and how to reach us."},
+    {"t": "routes", "items": [
+        {"title": "Our story", "text": "Why Impruvon exists.", "link": "about/our-story.html"},
+        {"title": "Our commitment", "text": "Four commitments, one platform.", "link": "about/our-commitment.html"},
+        {"title": "Trust & compliance", "text": "Security and certifications.", "link": "trust/index.html"},
+        {"title": "Careers", "text": "Open roles and how we work.", "link": "about/careers.html"},
+        {"title": "Contact", "text": "Support, press, partnerships and general enquiries.", "link": "about/contact.html"},
+    ]},
+])
+
+
+PAGES["login/index.html"] = dict(title="Log in", notes=[
+    "Utility link in the header. Points to the product application, not part of the marketing site.",
+], sections=[
+    {"t": "head", "h1": "Log in.", "lede": "Existing customers sign in to the Impruvon application."},
+    {"t": "stub", "h": "Application, not marketing.",
+     "text": "This link leaves the marketing site and opens the Impruvon product. Shown here so the client can see where it sits in the header."},
+])
+
+
+SITEMAP_GROUPS = [
+    ("Home", [("Homepage", "index.html")]),
+    ("Platform", [("Platform", "platform/index.html"), ("eMAR+", "platform/emar.html"),
+                  ("MedBox", "platform/medbox.html"), ("Integrations", "platform/integrations.html"),
+                  ("HRST Automation", "platform/hrst-automation.html")]),
+    ("Who We Serve", [("Who We Serve", "who-we-serve/index.html"),
+                      ("I/DD & Residential", "who-we-serve/idd-residential.html"),
+                      ("Behavioral & Mental Health", "who-we-serve/behavioral-mental-health.html"),
+                      ("Home Health", "who-we-serve/home-health.html"),
+                      ("Foster Care", "who-we-serve/foster-care.html"),
+                      ("State-Directed Programs", "who-we-serve/state-directed.html")]),
+    ("Decide", [("Compare", "compare/index.html"), ("Pricing", "pricing/index.html"),
+                ("Trust & Compliance", "trust/index.html")]),
+    ("Resources", [("Resources", "resources/index.html"),
+                   ("Case Studies", CASES),
+                   ("Case study template", "resources/case-studies/charles-lea.html")]),
+    ("Company", [("Company", "about/index.html"), ("Our Story", "about/our-story.html"),
+                 ("Our Commitment", "about/our-commitment.html"), ("Careers", "about/careers.html"),
+                 ("Contact", "about/contact.html")]),
+    ("Convert", [("Book a Demo", DEMO), ("Request a State Briefing", BRIEF), ("Log in", "login/index.html")]),
+]
+
+BLOCKERS = [
+    "Contact details — address, phone, support and press email. Blocks release of the whole site.",
+    "Our Story — the founder's account of a personal loss needs CEO and leadership sign-off, word for word.",
+    "States — Massachusetts only, or Massachusetts and Missouri.",
+    "Results figures — 48/39/69% come from an I/DD deck; confirm scope and permission for external use.",
+    "The $371M / 1,800% figure — “projected” must stay everywhere, and the “ROI > 1500%” edition must go.",
+    "Charles Lea — the period the 23,000+ covers, plus a written sign-off on the name, numbers and quote.",
+    "Vista Care — named everywhere but has no story, numbers or approved quote.",
+    "Pricing — how the subscription is counted, MedBox sold or leased, implementation, support.",
+    "Careers — an ATS feed, or the page does not ship.",
+    "Resources — at least three real materials, or publish only case studies.",
+    "State briefing — confirm the conversion exists and who handles it.",
+]
+
+
+def write_sitemap(out, nav, foot):
+    groups = ""
+    for title, items in SITEMAP_GROUPS:
+        links = "".join(f'<a href="{l[1]}">{esc(l[0])} &rarr;</a>' for l in items)
+        groups += (f'<div class="col"><h4 style="color:var(--color-ink-faint)">{esc(title)}</h4>'
+                   f'<div class="linklist">{links}</div></div>')
+    blockers = "".join(f"<li>{esc(x)}</li>" for x in BLOCKERS)
+    body = (f'<section class="sec"><div class="sec-inner stack-44">'
+            f'<h2 class="h2">Every page in the prototype.</h2>'
+            f'<div class="grid g3">{groups}</div></div></section>'
+            f'<section class="sec sec-sunk"><div class="sec-inner stack-44">'
+            f'<h2 class="h2">What the client still has to decide.</h2>'
+            f'<div class="storyflag"><div class="note">OPEN ITEMS</div>'
+            f'<ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:10px">'
+            f'{blockers}</ul></div></div></section>')
+    doc = f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Sitemap — Impruvon (prototype)</title>
+<link rel="stylesheet" href="assets/style.css">
+</head><body>
+<div class="annot">
+  <span class="aurl">PROTOTYPE &middot; SITEMAP</span>
+  <span class="aleg"><span class="swatch"></span>Yellow = needs client confirmation before build</span>
+  <span class="aleg"><button id="notesToggle" type="button">Show notes</button>
+    <a href="index.html">Home</a></span>
+</div>
+{nav("", "sitemap.html")}
+<main>
+  <section class="sec phead"><div class="sec-inner">
+    <div class="kicker">PROTOTYPE</div>
+    <h1 class="phead-h1">Sitemap.</h1>
+    <p class="phead-lede">Every page transcribed from the Paper file, and everything still waiting on the client.</p>
+  </div></section>
+  {body}
+</main>
+{foot("")}
+<script src="assets/proto.js"></script>
+</body></html>"""
+    io.open(os.path.join(out, "sitemap.html"), "w", encoding="utf-8").write(doc)

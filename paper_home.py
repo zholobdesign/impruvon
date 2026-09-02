@@ -197,12 +197,12 @@ def write(out, nav, foot, esc, demo):
 <section class="sec sec-sunk" id="s08"><div class="sec-inner stack-48">
   <h2 class="h2">Proven results.</h2>
   <div class="grid g2">
-    <a class="ccard" href="{b}resources/customers/charles-lea.html">
+    <a class="ccard" href="{b}resources/case-studies/charles-lea.html">
       <div class="eyebrow">CHARLES LEA CENTER</div>
       <div class="big">23,000+</div>
       <p>medications administered with zero errors.</p>
       <div class="go">Read the case study &rarr;</div></a>
-    <a class="ccard" href="{b}resources/customers/index.html">
+    <a class="ccard" href="{b}resources/case-studies/index.html">
       <div class="eyebrow">VISTA CARE</div>
       <div class="big">75%</div>
       <p>reduction in medication errors across 18 sites in 6 states.</p>
