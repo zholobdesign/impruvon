@@ -198,7 +198,6 @@ CHROME_LINKS = [
     ]),
     ("Pricing", "pricing/index.html", []),
     ("Resources", "resources/index.html", [
-        ("All resources", "resources/index.html"),
         ("Supporting DSPs", "resources/caregivers/index.html"),
         ("Guides for administrators", "resources/guides/index.html"),
         ("Case studies", "resources/case-studies/index.html"),
