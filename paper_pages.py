@@ -302,6 +302,67 @@ def s_ctarow(b, base):
             f'<a class="go" href="{_link(base, t)}">{esc(l)} &rarr;</a></div></section>')
 
 
+
+def s_dotcards(b, base):
+    out = "".join(f'<div class="dotcard"><i></i><span>{esc(t)}</span></div>' for t in b["items"])
+    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="grid g2">{out}</div></div></section>')
+
+
+def s_splitstat(b, base):
+    cells = ('<div class="div"></div>').join(
+        f'<div class="cell"><b>{esc(v)}</b><span>{esc(l)}</span></div>' for v, l in b["stats"])
+    return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner splitstat">'
+            f'<div class="t"><h2>{esc(b["h"])}</h2><p>{esc(b["text"])}</p></div>'
+            f'<div class="statbox">{cells}</div></div></section>')
+
+
+def s_prose(b, base):
+    sub = f'<p class="sub">{esc(b["sub"])}</p>' if b.get("sub") else ""
+    body = "".join(f'<p class="body">{esc(x)}</p>' for x in b.get("body", []))
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner prose">'
+            f'<h2>{esc(b["h"])}</h2>{sub}{body}</div></section>')
+
+
+
+def s_nbar(b, base):
+    cells = "".join(f'<div class="n"><b>{esc(v)}</b><span>{esc(l)}</span></div>' for v, l in b["items"])
+    return f'<section class="nbar {b.get("bg","sec-sunk")}"><div class="sec-inner" style="display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;width:100%">{cells}</div></section>'
+
+
+
+def s_pain(b, base):
+    out = "".join(f'<div class="pcard"><div class="rule"></div><h3>{esc(t)}</h3><p>{esc(d)}</p></div>'
+                  for t, d in b["items"])
+    h = f'<h2 class="h2 h2-wide">{esc(b["h"])}</h2>' if b.get("h") else ""
+    line = f'<div class="darkline">{esc(b["line"])}</div>' if b.get("line") else ""
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="grid g{b.get("cols",3)}">{out}</div>{line}</div></section>')
+
+
+def s_sunkcards(b, base):
+    out = ""
+    for item in b["items"]:
+        cls = "sunkcard wide" if len(item) == 3 and item[2] == "wide" else "sunkcard"
+        out += f'<div class="{cls}"><h3>{esc(item[0])}</h3><p>{esc(item[1])}</p></div>'
+    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="grid g2">{out}</div></div></section>')
+
+
+def s_center(b, base):
+    return (f'<section class="sec {b.get("bg","sec-sunk")}" style="padding-top:96px;padding-bottom:96px">'
+            f'<div class="sec-inner"><p class="centertext">{esc(b["text"])}</p></div></section>')
+
+
+def s_scards(b, base):
+    out = "".join(f'<div class="scard"><b>{esc(v)}</b><span>{esc(t)}</span></div>' for v, t in b["items"])
+    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="g3 statcards3">{out}</div></div></section>')
+
+
 BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards,
           "numbered": s_numbered, "flagstats": s_flagstats, "audience": s_audience,
           "ticks": s_ticks, "quote": s_quote, "cases": s_cases, "faq": s_faq,
@@ -309,7 +370,9 @@ BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards
           "form": s_form, "links": s_links, "splithero": s_splithero,
           "spectable": s_spectable, "duo": s_duo, "steps": s_steps, "faqcards": s_faqcards, "bigfeat": s_bigfeat,
           "numlist": s_numlist, "checks": s_checks, "statcards": s_statcards,
-          "softcards": s_softcards, "ctarow": s_ctarow}
+          "softcards": s_softcards, "ctarow": s_ctarow, "dotcards": s_dotcards,
+          "splitstat": s_splitstat, "prose": s_prose, "nbar": s_nbar,
+          "pain": s_pain, "sunkcards": s_sunkcards, "center": s_center, "scards": s_scards}
 
 PROOF_BAR = {"t": "darkbar", "items": [
     "SOC 2 and HIPAA compliant, ready for immediate deployment",
@@ -369,7 +432,7 @@ PAGES["platform/index.html"] = dict(title="Platform", notes=[
     {"t": "cards", "h": "Four pillars, one platform.", "cols": 2, "items": [
         {"title": "eMAR+", "text": "Guided smart med pass, in-app barcode scanning, PRN reason and effectiveness tracking, narcotic counting, with treatments, vitals and daily documentation in the same record.", "link": "platform/emar.html", "cta": "See eMAR+"},
         {"title": "MedBox", "text": "Smart medication storage with precise, individual-level dispensing, whether staff are administering or individuals are self-administering with supervision.", "link": "platform/medbox.html", "cta": "See MedBox"},
-        {"title": "Integrations", "text": "24/7 bidirectional pharmacy integration with 75+ partners, plus your existing EHR.", "link": "platform/pharmacy-integration.html", "cta": "See integrations"},
+        {"title": "Integrations", "text": "24/7 bidirectional pharmacy integration with 75+ partners, plus your existing EHR.", "link": "platform/integrations.html", "cta": "See integrations"},
         {"title": "HRST Automation", "text": "Complete all of your HRST inputs with a single click.", "link": "platform/hrst-automation.html", "cta": "See HRST automation"},
     ]},
     {"t": "flagstats", "h": "Results at a glance.", "items": [
@@ -495,7 +558,7 @@ PAGES["platform/emar.html"] = dict(title="eMAR+", notes=[
     ]},
     {"t": "cards", "h": "eMAR+ doesn't work alone.", "cols": 2, "items": [
         {"title": "MedBox", "text": "Optional double-locking smart MedBoxes give access to only the correct medications, at the correct times. Every dispense lands in the same record.", "link": "platform/medbox.html", "cta": "See MedBox"},
-        {"title": "Pharmacy and EHR", "text": "Real-time pharmacy integration and connection to your existing EHR, so nothing is transcribed by hand.", "link": "platform/pharmacy-integration.html", "cta": "See integrations"},
+        {"title": "Pharmacy and EHR", "text": "Real-time pharmacy integration and connection to your existing EHR, so nothing is transcribed by hand.", "link": "platform/integrations.html", "cta": "See integrations"},
     ]},
     {"t": "statcards", "h": "Proven results.", "items": [
         ("23,000+", "medications administered with zero errors, Charles Lea Center",
@@ -537,4 +600,115 @@ PAGES["platform/hrst-automation.html"] = dict(title="HRST Automation", notes=[
      "text": "HRST requirements come with I/DD services. If you run group homes, ICFs or HCBS waiver programs, this is the screening your team completes again and again.",
      "link": ("See I/DD & Residential", "who-we-serve/idd-residential.html")},
     {"t": "closing", "h": "See HRST automation in a demo."},
+])
+
+
+PAGES["platform/integrations.html"] = dict(title="Integrations", notes=[
+    "Transcribed from the artboard “Impruvon — Integrations”. The artboard merges pharmacy and EHR into one page at /platform/integrations; the earlier separate URLs now redirect here.",
+    "“Integration-friendly” is a wedge against competitors who are seen as closed, so this page exists to be found and linked, not buried as an anchor.",
+], sections=[
+    {"t": "head", "kicker": "PLATFORM · INTEGRATIONS",
+     "h1": "Every hour a prescription sits unsynced is an hour of risk.",
+     "lede": "Real-time connectivity closes that window, with no changes to your existing pharmacy relationships.",
+     "cta": ("See integrations in a demo", DEMO)},
+    {"t": "twocol", "h": "What does Impruvon integrate with?", "body": [
+        "24/7 bidirectional integration means new orders, refills and discontinuations flow directly between your pharmacy and your platform in real time. No more manual transcription from paper MARs or TARs, no more wasted time faxing documents, no more disputes over deliveries, and no changes to pharmacy or medication packaging needed."]},
+    {"t": "dotcards", "h": "Benefits of pharmacy integration.", "items": [
+        "Automated prescription and refill reminders — always have the PRNs you need, no unexpected shortages",
+        "Smart order review and approval for medications and treatments",
+        "Real-time awareness of all orders and statuses",
+        "Streamlined pharmacy communications — new orders, refills, discontinues",
+    ]},
+    {"t": "splitstat", "h": "Connected with 75+ pharmacy partners nationally.",
+     "text": "Trusted by providers, state agencies and pharmacies across 20+ states, a statewide network effect that benefits everyone in it.",
+     "stats": [("75+", "pharmacy partners"), ("20+", "states")]},
+    {"t": "prose", "h": "When systems don't talk to each other, no one has the full picture.",
+     "sub": "Not because anyone missed a step, but because the systems were never connected in the first place.",
+     "body": ["Impruvon connects with your existing EHR systems, eliminating the duplicate documentation and multi-system logins that burden care teams. Staff work in one place, and data flows where it needs to go."]},
+    {"t": "duo", "items": [
+        ("Beyond the EHR.",
+         "Telehealth integrations with platforms like StationMD ensure physicians conducting remote evaluations have access to accurate, real-time records, instead of relying on a DSP to report from memory.", False),
+        ("HRST is an integration too.",
+         "Medications, diagnoses and allergies pulled from the source: the pharmacy filling your medications.", False),
+    ]},
+    {"t": "faq", "h": "Questions we get about integrations.", "items": [
+        ("Does it work with our pharmacy?", "We are connected with 75+ pharmacy partners nationally, across 20+ states. Tell us the name and we will confirm."),
+        ("Do we have to change pharmacies or packaging?", "No changes to pharmacy or medication packaging needed, and no changes to your existing pharmacy relationships."),
+        ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR systems."),
+        ("What about telehealth?", "Telehealth integrations with platforms like StationMD give physicians running remote evaluations access to accurate, real-time records."),
+    ]},
+    {"t": "closing", "h": "See integrations in a demo."},
+])
+
+
+PAGES["who-we-serve/index.html"] = dict(title="Who We Serve", notes=[
+    "Transcribed from the artboard “Impruvon — Who We Serve”.",
+    "Entry by audience. Each vertical is a standalone page rather than an anchor, so it can rank on long-tail terms like “eMAR for foster care agency” and hold the compliance detail that setting needs.",
+    "State-Directed sits in a separate highlighted band because it is a different kind of visitor — a network-scale buyer with a different CTA.",
+], sections=[
+    {"t": "head", "kicker": "WHO WE SERVE", "h1": "One platform. Many realities.",
+     "lede": "Impruvon is a provider platform built for the specific regulatory and staffing realities of several distinct care settings, adaptable to the workflows of every setting we serve.",
+     "cta": ("Book a demo", DEMO)},
+    {"t": "twocol", "h": "What settings does Impruvon serve?", "body": [
+        "Impruvon is used by I/DD and residential providers, behavioral and mental health programs, home health agencies, foster care agencies, and state agencies and Medicaid health plans. What they share: medication is given by a non-clinical workforce, in dispersed settings, under state compliance requirements."]},
+    {"t": "audience", "bg": "", "h": "Explore how Impruvon is purpose-built for the setting you work in.", "items": [
+        ("I/DD & Residential Providers", "Purpose-built for the demands of group homes, ICFs and HCBS waiver programs.", "who-we-serve/idd-residential.html"),
+        ("Behavioral & Mental Health", "Built for the documentation and complexity of psychiatric care.", "who-we-serve/behavioral-mental-health.html"),
+        ("Home Health", "Real-time visibility into care delivered outside the facility.", "who-we-serve/home-health.html"),
+        ("Foster Care", "Continuity of care for every child, at every placement change.", "who-we-serve/foster-care.html")],
+     "band": ("State-Directed Programs",
+              "Prevention infrastructure for state agencies and Medicaid health plans.",
+              "Request a state briefing", "who-we-serve/state-directed.html")},
+    {"t": "twocol", "bg": "sec-deep", "h": "The safeguard goes in the workflow, not in the person.", "body": [
+        "Different settings, one problem: medication is given by people who aren't clinicians, in places without a pharmacy down the hall, under rules that demand proof. Impruvon was built from the ground up for those workflow rhythms, staffing and budget constraints, and regulatory requirements."]},
+    {"t": "nbar", "items": [
+        ("1M+", "Medications administered"), ("50K+", "Medication errors eliminated"),
+        ("25K+", "Nursing hours saved"), ("75K+", "DSP hours saved"), ("75+", "Pharmacy partners")]},
+    {"t": "closing", "light": True, "h": "See the platform in action."},
+])
+
+
+PAGES["who-we-serve/idd-residential.html"] = dict(title="I/DD & Residential", notes=[
+    "Transcribed from the artboard “Impruvon — I/DD & Residential”.",
+    "This is the highest-value vertical page: it answers the search “what is the right eMAR for a group home” in the second section, in one paragraph, before any feature list.",
+    "The dark statement after the three failure cards is the argument the champion repeats to the executive director: one problem showing up four ways.",
+], sections=[
+    {"t": "head", "kicker": "WHO WE SERVE · I/DD & RESIDENTIAL",
+     "h1": "If your system was built for nurses in a hospital, you've digitized the risk, not removed it.",
+     "lede": "Impruvon is purpose-built for group homes, ICFs and HCBS waiver programs, and for the DSPs who actually give the medication.",
+     "cta": ("Book a demo", DEMO)},
+    {"t": "twocol", "h": "What is the right eMAR for a group home?", "body": [
+        "The right eMAR for a group home is one your DSPs will actually use on a busy evening shift. Impruvon guides every med pass step by step, scans the barcode in the app, and keeps treatments, vitals and daily documentation in the same record. Charles Lea Center recorded 23,000+ medications administered with zero errors."]},
+    {"t": "pain", "h": "Both of the usual answers leave the same gap.",
+     "line": "Clinical, financial, compliance, staffing. That's not four problems. It's one problem showing up four ways.",
+     "items": [
+        ("More training on the paper process.", "A paper MAR can't catch an error before it happens."),
+        ("Or an eMAR retrofitted from acute care.", "It assumes a workforce you don't have, so your DSPs work around it, and the risk moves back onto your best people."),
+        ("Either way, the cost compounds quietly.", "The failed audit. The citation on your record. The med error that becomes an incident report, or a hospitalization. The referral source that stops calling. The DSP who burns out and walks, taking months of training with them."),
+     ]},
+    {"t": "twocol", "bg": "sec-deep", "h": "Designed for the people delivering care.", "body": [
+        "At the center is your workforce. DSPs are more than just staff on a schedule. They're the care your residents count on and the business you run. Some bring clinical backgrounds, many don't, and for many English is a second language. When tools assume everyone is a nurse, the burden lands on your best people and the risk lands on everyone.",
+        "You can't train, budget, document or hire your way out of that separately. You engineer it out at the source, with a system designed for the people who actually use it."]},
+    {"t": "sunkcards", "h": "Built for the way you actually work.", "items": [
+        ("Guided med passes", "Barcode scanning, PRN tracking and narcotic counting remove guesswork at every step."),
+        ("Real-time pharmacy integration", "Orders, refills and treatment changes flow directly into the platform, eliminating manual entry and transcription errors."),
+        ("Smart MedBoxes", "Physical access control. Right medication, right person, right time."),
+        ("HRST automation", "Eliminates duplicate data entry and predicts risk instead of reacting to it."),
+        ("Real-time analytics dashboard", "Medication administration status across every resident, in every location, at all times. No end-of-shift reconstruction, no blind spots.", "wide"),
+    ]},
+    {"t": "center", "text": "Representing 2 to 3% of the U.S. population, adults with intellectual and developmental disabilities suffer higher rates and greater severity of polypharmacy-related adverse events than those without I/DD, a risk escalating alongside rising polypharmacy trends in young adults."},
+    {"t": "scards", "h": "Proven results.", "items": [
+        ("23,000+", "medications administered with zero errors, Charles Lea Center"),
+        ("75%", "reduction in medication errors across 18 sites in 6 states, Vista Care"),
+        ("20–25 min", "saved per resident, per medication pass"),
+    ]},
+    {"t": "quote", "light": True,
+     "text": "Impruvon is a game changer, it really is as good as it sounds. I can literally administer all of the meds on my shift in less than half the time it used to take.",
+     "by": "DSP, I/DD residential / group home, Washington D.C."},
+    {"t": "faqcards", "bg": "sec-sunk", "h": "Questions we get from I/DD providers.", "items": [
+        ("Will our DSPs use it?", "Step-by-step prompts walk any caregiver through every administration, and role-specific interfaces mean each person sees exactly what they need. Easy to learn and use for DSPs and nurses alike."),
+        ("Does it handle narcotic counts and PRNs?", "Yes. Narcotic counting and PRN reason and effectiveness tracking are part of the med pass, not a separate system."),
+        ("Do we have to change pharmacies or packaging?", "No changes to your existing pharmacy relationships or medication packaging."),
+        ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR systems."),
+    ]},
 ])

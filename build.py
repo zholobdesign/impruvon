@@ -188,7 +188,7 @@ CHROME_LINKS = [("Platform", "platform/index.html"), ("Who We Serve", "who-we-se
 
 FOOT_COLS = [
     ("PLATFORM", [("eMAR+", "platform/emar.html"), ("MedBox", "platform/medbox.html"),
-                  ("Integrations", "platform/pharmacy-integration.html"),
+                  ("Integrations", "platform/integrations.html"),
                   ("HRST Automation", "platform/hrst-automation.html")]),
     ("WHO WE SERVE", [("I/DD & Residential", "who-we-serve/idd-residential.html"),
                       ("Home Health", "who-we-serve/home-health.html"),
@@ -1001,6 +1001,9 @@ def main():
     build_pages()
     paper_home.write(OUT, render_chrome_nav, render_chrome_foot, esc, DEMO)
     done = paper_pages.write_all(OUT, render_chrome_nav, render_chrome_foot)
+    red = open(os.path.join(ROOT,'redirect_snippet.html'),encoding='utf-8').read()
+    for legacy in ('platform/pharmacy-integration.html','platform/ehr-integration.html'):
+        open(os.path.join(OUT,legacy),'w',encoding='utf-8').write(red)
     print('transcribed from Paper:', len(done)+1, 'pages')
     n = sum(len([x for x in fs if x.endswith(".html")]) for _, _, fs in os.walk(OUT))
     print(f"built {n} pages -> {OUT}")
