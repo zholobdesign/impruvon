@@ -658,3 +658,30 @@ CSS += """
 .stub b{font-size:12px;font-weight:500;letter-spacing:.12em;color:var(--flag-ink)}
 .stub p{font-size:17px;line-height:27px;color:var(--flag-ink)}
 """
+
+CSS += """
+/* ---------- nav dropdowns ---------- */
+.nav .links{gap:0}
+.navitem{position:relative}
+.navitem > a.top{display:inline-flex;align-items:center;gap:7px;font-size:15px;line-height:18px;
+  color:var(--color-ink);padding:12px 15px;border-radius:8px}
+.navitem > a.top.on{font-weight:700}
+.navitem > a.top:hover{background:var(--color-surface-sunk)}
+.caret{width:7px;height:7px;border-right:1.6px solid var(--color-ink-faint);
+  border-bottom:1.6px solid var(--color-ink-faint);transform:rotate(45deg) translate(-1px,-1px);
+  transition:transform .12s ease}
+.navitem.has-sub:hover .caret,.navitem.has-sub:focus-within .caret{
+  transform:rotate(225deg) translate(-2px,-2px);border-color:var(--color-accent)}
+.sub{position:absolute;top:100%;left:50%;transform:translateX(-50%);z-index:70;padding-top:10px;
+  opacity:0;visibility:hidden;transition:opacity .12s ease}
+.navitem.has-sub:hover .sub,.navitem.has-sub:focus-within .sub{opacity:1;visibility:visible}
+.subinner{background:var(--color-surface);border:1px solid var(--color-line);border-radius:14px;padding:8px;
+  min-width:268px;box-shadow:0 18px 40px rgba(44,62,80,.16);display:flex;flex-direction:column}
+.subinner a{display:block;padding:11px 14px;border-radius:9px;font-size:15px;line-height:20px;color:var(--color-ink)}
+.subinner a:hover{background:var(--color-accent-soft);color:var(--color-accent-hover)}
+@media (max-width:900px){
+  .nav .links{gap:2px 10px}
+  .navitem > a.top{padding:8px 8px;font-size:14px}
+  .caret,.sub{display:none}
+}
+"""

@@ -182,9 +182,33 @@ BLOCKS = {"text": b_text, "list": b_list, "cards": b_cards, "media": b_media,
 
 
 
-CHROME_LINKS = [("Platform", "platform/index.html"), ("Who We Serve", "who-we-serve/index.html"),
-                ("Pricing", "pricing/index.html"), ("Resources", "resources/index.html"),
-                ("Company", "about/index.html")]
+CHROME_LINKS = [
+    ("Platform", "platform/index.html", [
+        ("eMAR+", "platform/emar.html"),
+        ("MedBox", "platform/medbox.html"),
+        ("Integrations", "platform/integrations.html"),
+        ("HRST Automation", "platform/hrst-automation.html"),
+    ]),
+    ("Who We Serve", "who-we-serve/index.html", [
+        ("I/DD & Residential", "who-we-serve/idd-residential.html"),
+        ("Behavioral & Mental Health", "who-we-serve/behavioral-mental-health.html"),
+        ("Home Health", "who-we-serve/home-health.html"),
+        ("Foster Care", "who-we-serve/foster-care.html"),
+        ("State-Directed Programs", "who-we-serve/state-directed.html"),
+    ]),
+    ("Pricing", "pricing/index.html", []),
+    ("Resources", "resources/index.html", [
+        ("All resources", "resources/index.html"),
+        ("Case studies", "resources/case-studies/index.html"),
+    ]),
+    ("Company", "about/index.html", [
+        ("Our Story", "about/our-story.html"),
+        ("Our Commitment", "about/our-commitment.html"),
+        ("Trust & Compliance", "trust/index.html"),
+        ("Careers", "about/careers.html"),
+        ("Contact", "about/contact.html"),
+    ]),
+]
 
 FOOT_COLS = [
     ("PLATFORM", [("eMAR+", "platform/emar.html"), ("MedBox", "platform/medbox.html"),
@@ -199,13 +223,20 @@ FOOT_COLS = [
 
 
 def render_chrome_nav(base, path):
-    links = ""
-    for label, target in CHROME_LINKS:
-        on = " class=\"on\"" if path.startswith(target.split("/")[0]) else ""
-        links += f'<a href="{base}{target}"{on}>{esc(label)}</a>'
+    items = ""
+    for label, target, kids in CHROME_LINKS:
+        section = target.split("/")[0]
+        on = " on" if path.startswith(section) else ""
+        caret = '<i class="caret" aria-hidden="true"></i>' if kids else ""
+        sub = ""
+        if kids:
+            sub = ('<div class="sub"><div class="subinner">' + "".join(
+                f'<a href="{base}{t}">{esc(l)}</a>' for l, t in kids) + '</div></div>')
+        items += (f'<div class="navitem{" has-sub" if kids else ""}">'
+                  f'<a class="top{on}" href="{base}{target}">{esc(label)}{caret}</a>{sub}</div>')
     return (f'<header class="nav"><a class="brand" href="{base}index.html">'
             f'<span class="mark"></span>Impruvon</a>'
-            f'<nav class="links">{links}</nav>'
+            f'<nav class="links">{items}</nav>'
             f'<div class="right"><a class="login" href="{base}login/index.html">Log in</a>'
             f'<a class="pill" href="{base}{DEMO}">Book a demo</a></div></header>')
 
