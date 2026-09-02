@@ -199,6 +199,8 @@ CHROME_LINKS = [
     ("Pricing", "pricing/index.html", []),
     ("Resources", "resources/index.html", [
         ("All resources", "resources/index.html"),
+        ("Supporting DSPs", "resources/caregivers/index.html"),
+        ("Guides for administrators", "resources/guides/index.html"),
         ("Case studies", "resources/case-studies/index.html"),
     ]),
     ("Company", "about/index.html", [
@@ -1048,8 +1050,6 @@ def main():
 
     redirect('platform/pharmacy-integration.html', 'integrations.html', '/platform/integrations')
     redirect('platform/ehr-integration.html', 'integrations.html', '/platform/integrations')
-    redirect('resources/caregivers/index.html', '../index.html', '/resources')
-    redirect('resources/guides/index.html', '../index.html', '/resources')
     redirect('resources/customers/index.html', '../case-studies/', '/resources/case-studies')
     paper_pages.write_sitemap(OUT, render_chrome_nav, render_chrome_foot)
     print('transcribed from Paper:', len(done)+1, 'pages')

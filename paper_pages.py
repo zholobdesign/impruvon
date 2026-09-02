@@ -617,6 +617,29 @@ def s_stub(b, base):
             f'<div class="stub"><b>NO ARTBOARD YET</b><p>{esc(b["text"])}</p></div></div></section>')
 
 
+
+def s_tracks(b, base):
+    out = ""
+    for c in b["items"]:
+        out += (f'<a class="track" href="{_link(base, c["link"])}">'
+                f'<div><div class="who">{esc(c["who"])}</div><h3>{esc(c["title"])}</h3>'
+                f'<p>{esc(c["text"])}</p></div>'
+                f'<div class="go">{esc(c["cta"])} &rarr;</div></a>')
+    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="tracks">{out}</div></div></section>')
+
+
+def s_arthead(b, base):
+    crumbs = " / ".join(esc(c) for c in b["crumbs"])
+    meta = "".join(f'<span>{esc(m)}</span>' for m in b.get("meta", []))
+    return (f'<section class="sec" style="padding-top:80px;padding-bottom:56px"><div class="sec-inner stack-44">'
+            f'<div><div class="crumbs">{crumbs}</div>'
+            f'<h1 class="phead-h1" style="font-size:48px;line-height:58px;margin-top:20px">{esc(b["h1"])}</h1>'
+            f'<p class="phead-lede">{esc(b["lede"])}</p></div>'
+            f'<div class="artmeta">{meta}</div></div></section>')
+
+
 BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards,
           "numbered": s_numbered, "flagstats": s_flagstats, "audience": s_audience,
           "ticks": s_ticks, "quote": s_quote, "cases": s_cases, "faq": s_faq,
@@ -632,7 +655,7 @@ BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards
           "casehead": s_casehead, "labelsplit": s_labelsplit, "numsteps": s_numsteps,
           "results": s_results, "closing2": s_closing2, "storyflag": s_storyflag,
           "flagcards": s_flagcards, "pairsplit": s_pairsplit,
-          "routes": s_routes, "contactform": s_contactform, "joblist": s_joblist, "stub": s_stub}
+          "routes": s_routes, "contactform": s_contactform, "joblist": s_joblist, "stub": s_stub, "tracks": s_tracks, "arthead": s_arthead}
 
 PROOF_BAR = {"t": "darkbar", "items": [
     "SOC 2 and HIPAA compliant, ready for immediate deployment",
@@ -1256,18 +1279,27 @@ CASES = "resources/case-studies/index.html"
 
 PAGES["resources/index.html"] = dict(title="Resources",
     badge="URL MUST CHANGE ON FILTERING, OTHERWISE CRAWLERS SEE ONE PAGE", notes=[
-    "Transcribed from the artboard “Impruvon — Resources”.",
-    "One hub with filters by setting and by role, replacing a dated blog feed. Filtering must change the URL, otherwise search engines only ever see one page.",
+    "Headline, filters and card grid transcribed from the artboard “Impruvon — Resources”. The three-track split above them is a structural change we are proposing, not something on the artboard.",
+    "Why split: a DSP looking up “what do I do when a resident refuses a med” and a DoN looking up “medication audit checklist” are different readers with different next steps. One dated feed serves neither, and the CTA has to differ by track.",
+    "Filtering must change the URL, otherwise search engines only ever see one page.",
     "No real materials exist yet. The cards are the content plan, not published work. Launch condition on the artboard: at least three real items, otherwise publish only case studies and keep this hub dark.",
 ], sections=[
     {"t": "head", "h1": "Medication safety, explained.",
      "lede": "Reports, articles, webinars and events for the people responsible for medication in community-based care."},
+    {"t": "tracks", "h": "Three tracks, three different readers.", "items": [
+        {"who": "FOR DSPs AND CAREGIVERS", "title": "Supporting DSPs",
+         "text": "How-to guides, short videos and real stories for the people who actually give the medications.",
+         "cta": "Open the track", "link": "resources/caregivers/index.html"},
+        {"who": "FOR DoNs, QIDPs AND EXECUTIVE DIRECTORS", "title": "Guides for administrators",
+         "text": "Audit preparation, compliance by state, staffing and the cost of medication errors.",
+         "cta": "Open the track", "link": "resources/guides/index.html"},
+        {"who": "FOR BUYERS COMPARING VENDORS", "title": "Case studies",
+         "text": "What changed at real organisations, with numbers, names and a source.",
+         "cta": "Open the track", "link": CASES},
+    ]},
     {"t": "filters", "items": [("SETTING", "All settings"), ("ROLE", "All roles")]},
     {"t": "rescards",
      "note": "No real materials exist yet. The cards below are the content plan, not published work. Condition for launch: at least three real items, otherwise publish only case studies and keep this hub dark.",
-     "band": ("Case studies live on their own page.",
-              "23,000+ medications with zero errors at Charles Lea Center, and more.",
-              "See case studies", CASES),
      "items": [
         {"tags": ["REPORT", "COMPLIANCE"], "title": "[Annual medication safety report, community-based care]", "cta": "Download"},
         {"tags": ["BLOG", "COMPLIANCE"], "title": "How to prepare for a medication audit", "cta": "Read"},
@@ -1493,7 +1525,11 @@ SITEMAP_GROUPS = [
                       ("State-Directed Programs", "who-we-serve/state-directed.html")]),
     ("Decide", [("Compare", "compare/index.html"), ("Pricing", "pricing/index.html"),
                 ("Trust & Compliance", "trust/index.html")]),
-    ("Resources", [("Resources", "resources/index.html"),
+    ("Resources", [("Resources hub", "resources/index.html"),
+                   ("Supporting DSPs", "resources/caregivers/index.html"),
+                   ("Guide article template", "resources/caregivers/five-rights.html"),
+                   ("Guides for administrators", "resources/guides/index.html"),
+                   ("Administrator article template", "resources/guides/medication-audit-checklist.html"),
                    ("Case Studies", CASES),
                    ("Case study template", "resources/case-studies/charles-lea.html")]),
     ("Company", [("Company", "about/index.html"), ("Our Story", "about/our-story.html"),
@@ -1513,6 +1549,8 @@ BLOCKERS = [
     "Pricing — how the subscription is counted, MedBox sold or leased, implementation, support.",
     "Careers — an ATS feed, or the page does not ship.",
     "Resources — at least three real materials, or publish only case studies.",
+    "Resources structure — the three-track split (caregivers / administrators / case studies) is our proposal, not on the artboards. Confirm before build.",
+    "Caregiver stories — a written consent and photo release template is needed before the first interview.",
     "State briefing — confirm the conversion exists and who handles it.",
 ]
 
@@ -1558,3 +1596,131 @@ def write_sitemap(out, nav, foot):
 <script src="assets/proto.js?v={ASSET_V}"></script>
 </body></html>"""
     io.open(os.path.join(out, "sitemap.html"), "w", encoding="utf-8").write(doc)
+
+
+PROPOSED = "NOT IN THE PAPER FILE · PROPOSED TRACK STRUCTURE"
+
+PAGES["resources/caregivers/index.html"] = dict(title="Supporting DSPs", badge=PROPOSED, notes=[
+    "Proposed page. There is no artboard for it — the Paper file has Resources as a single filtered hub.",
+    "Why it exists: a DSP is not a buyer, but this track is proof to the decision-maker that Impruvon helps their staff succeed, which answers the biggest hidden objection — “will non-medical staff actually use it?” It works twice: organic traffic, and evidence for the champion.",
+    "The URL folder is /caregivers/ because foster parents and home health aides are not DSPs, and the folder has to hold all five settings. The H1 still speaks to DSPs, who are the primary reader.",
+    "Primary CTA here is NOT Book a demo — this reader cannot buy. It is “Send this to your administrator”, with the demo CTA left to the footer.",
+    "⚠ Stories about people served involve a vulnerable population: written consent, first names or pseudonyms, a separate photo release and a HIPAA review before anything is published.",
+], sections=[
+    {"t": "head", "kicker": "RESOURCES · SUPPORTING DSPs",
+     "h1": "Supporting DSPs and caregivers.",
+     "lede": "Straight answers for the people who actually give the medications. No jargon, no login, no cost."},
+    {"t": "cards", "h": "How-to guides.", "cols": 3, "bg": "sec-sunk", "items": [
+        {"title": "What are the five rights of medication administration?", "text": "The check behind every safe pass.", "link": "resources/caregivers/five-rights.html", "cta": "Read"},
+        {"title": "A resident refused their medication — what now?", "text": "What to do, and what to document."},
+        {"title": "How to count narcotics at shift change", "text": "The count, the discrepancy, the escalation."},
+        {"title": "Documenting a PRN and whether it worked", "text": "Reason, dose, effect — and why the effect matters."},
+        {"title": "Your first med pass: what to expect", "text": "For new hires, start to finish."},
+        {"title": "Preparing for a medication audit, shift by shift", "text": "What an auditor looks at, in plain terms."},
+    ]},
+    {"t": "cards", "h": "User stories.", "cols": 3, "items": [
+        {"title": "“My first week on the floor”", "text": "A new DSP on learning the pass without a clinical background."},
+        {"title": "“I take my own meds now”", "text": "A person served who moved to supervised self-administration."},
+        {"title": "“We stopped keeping a binder”", "text": "One house's move from paper MAR to a live record."},
+    ]},
+    {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
+     "note": "CONSENT REQUIRED BEFORE ANY USER STORY IS PUBLISHED",
+     "body": [("Stories about people served involve a vulnerable population. Every one needs written consent, first names or pseudonyms, a separate photo release and a HIPAA review. Set up the release template before the first interview, not after.", False)]},
+    {"t": "softcards", "cols": 2, "h": "Short video tutorials.", "items": [
+        ("60 to 90 seconds each", "One task per video: a guided pass, a narcotic count, a refusal, a PRN."),
+        ("Transcript on the page", "Without a transcript AI search cannot cite the video, and a DSP on a quiet shift cannot read it."),
+    ]},
+    {"t": "closing2", "h": "Working somewhere that still runs on paper?",
+     "buttons": [("Send this to your administrator", "about/contact.html"),
+                 ("Get new guides by email", "about/contact.html")]},
+])
+
+
+PAGES["resources/caregivers/five-rights.html"] = dict(title="Five Rights", badge=PROPOSED, notes=[
+    "Article template for the caregiver track. Structure: answer first, H2s as questions, a real FAQ in HTML, three to five internal links, one CTA, an updated date and JSON-LD.",
+    "Targets “five rights of medication administration” from the semantic core — a TOFU term a DSP actually searches at 18:00 from a phone.",
+], sections=[
+    {"t": "arthead", "crumbs": ["Resources", "Supporting DSPs", "Five rights"],
+     "h1": "What are the five rights of medication administration?",
+     "lede": "Right person, right medication, right dose, right route, right time. Check all five, every single pass — and here is what each one means when you are standing in front of someone.",
+     "meta": ["Updated [date]", "4 min read", "For DSPs and caregivers"]},
+    {"t": "numlist", "h": "The five, one at a time.", "bg": "sec-sunk", "cols": [[
+        ("01", "Right person — confirm who you are giving it to before anything else. A photo in the record, a wristband or a barcode is safer than recognition, especially on a first shift or in a house you are covering."),
+        ("02", "Right medication — read the label against the record, not against memory. Look-alike and sound-alike names are the most common source of the wrong drug reaching the right person."),
+        ("03", "Right dose — check the number and the unit. Half a tablet and one tablet are different doses; 50 mg and 500 mg are different medications in practice."),
+    ], [
+        ("04", "Right route — by mouth, topical, injection, inhaled. The route is part of the order. If the person cannot take it the ordered way, that is a call to the nurse, not a decision to make on your own."),
+        ("05", "Right time — inside the window the order allows. Early is not safer than late; both are documented, and both matter for medications where timing drives effectiveness."),
+    ]]},
+    {"t": "twocol", "bg": "", "h": "What happens when the system checks with you?", "body": [
+        "A guided med pass walks these five in order and will not let the record close until each one is confirmed. With MedBox, only the correct drawer opens at the correct time, so the check happens physically as well as on screen."]},
+    {"t": "faq", "bg": "sec-sunk", "h": "Questions caregivers ask.", "items": [
+        ("What if I realise afterwards that one of the five was wrong?", "Report it immediately, follow your agency's incident procedure and document what happened. A reported error is a fixable error."),
+        ("Are there more than five rights?", "Many agencies teach additional checks — right documentation, right reason, right response. The five are the core; follow your own agency's policy."),
+    ]},
+    {"t": "links", "h": "Related.", "items": [
+        ("How eMAR+ guides each pass", "platform/emar.html"),
+        ("How MedBox enforces the check physically", "platform/medbox.html"),
+        ("All caregiver guides", "resources/caregivers/index.html"),
+    ]},
+    {"t": "closing2", "h": "Still running this on paper?",
+     "buttons": [("Send this to your administrator", "about/contact.html"),
+                 ("How Impruvon works", "platform/index.html")]},
+])
+
+
+PAGES["resources/guides/index.html"] = dict(title="Guides for Administrators", badge=PROPOSED, notes=[
+    "Proposed page. There is no artboard for it.",
+    "This is the half of the content plan a caregiver hub cannot absorb: these articles target the champion (DoN, QIDP) and the executive director, and this reader can start a purchase — so the CTA here is Book a demo.",
+], sections=[
+    {"t": "head", "kicker": "RESOURCES · FOR ADMINISTRATORS",
+     "h1": "Guides for administrators.",
+     "lede": "Audit preparation, compliance, staffing and cost — for the people who answer to the state and to the board."},
+    {"t": "cards", "h": "Guides.", "cols": 3, "bg": "sec-sunk", "items": [
+        {"title": "How do you prepare for a medication audit?", "text": "What an auditor asks for, and how to have it ready.", "link": "resources/guides/medication-audit-checklist.html", "cta": "Read"},
+        {"title": "Paper MAR vs eMAR", "text": "What each can and cannot prove."},
+        {"title": "How to reduce medication errors in group homes", "text": "The interventions that actually move the number."},
+        {"title": "What DSP turnover really costs", "text": "Training, agency cover, risk — in dollars."},
+        {"title": "Barcode medication administration, explained", "text": "How it works and where it fails."},
+        {"title": "Choosing an eMAR for I/DD providers", "text": "The questions to ask every vendor."},
+    ]},
+    {"t": "closing", "light": True, "h": "See how it works on your setup."},
+])
+
+
+PAGES["resources/guides/medication-audit-checklist.html"] = dict(title="Medication Audit Checklist", badge=PROPOSED, notes=[
+    "Article template for the administrator track — same structure as the caregiver article, different reader and a different CTA.",
+], sections=[
+    {"t": "arthead", "crumbs": ["Resources", "Guides", "Medication audit checklist"],
+     "h1": "How do you prepare for a medication audit?",
+     "lede": "Stop preparing. Stay ready. Here is what an auditor asks for, what a paper MAR can and cannot prove, and how to have every answer without reconstructing weeks of records.",
+     "meta": ["Updated [date]", "6 min read", "For DoNs, QIDPs and executive directors"]},
+    {"t": "ticks", "bg": "sec-sunk", "h": "What an auditor will ask for.", "items": [
+        "Proof that each ordered dose was given, refused or held — with a time",
+        "Who administered it, and that they were authorised to",
+        "Narcotic counts and any discrepancies, with resolution",
+        "PRN administrations with a documented reason and effect",
+        "Current orders matching what the pharmacy actually dispensed",
+        "Incident reports and the corrective action that followed",
+    ]},
+    {"t": "twocol", "bg": "", "h": "Why paper cannot answer some of these.", "body": [
+        "Initials in a box prove someone wrote in the box. They do not prove when, or that the five rights were checked, or that the order on file matched the pharmacy's.",
+        "A gap in a paper MAR is discovered at the audit — weeks after the moment when it could have been fixed."]},
+    {"t": "ticks", "bg": "sec-sunk", "h": "The shift-level habits that make audits boring.", "items": [
+        "Document at the point of care, never at the end of the shift",
+        "Escalate a discrepancy the same shift it appears",
+        "Reconcile pharmacy orders weekly, not monthly",
+        "Run your own mock audit quarterly, on a random week",
+    ]},
+    {"t": "faq", "h": "Questions administrators ask.", "items": [
+        ("How far back will an audit look?", "It varies by state and programme. Assume the current certification period and keep the full period retrievable."),
+        ("What is the most common citation?", "Documentation gaps — a dose with no record — rather than a wrong drug reaching a person."),
+    ]},
+    {"t": "links", "h": "Related.", "items": [
+        ("How eMAR+ produces 1-click regulatory reports", "platform/emar.html"),
+        ("HRST automation", "platform/hrst-automation.html"),
+        ("Trust & compliance", "trust/index.html"),
+        ("All administrator guides", "resources/guides/index.html"),
+    ]},
+    {"t": "closing", "light": True, "h": "See it on a real med pass."},
+])

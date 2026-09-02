@@ -685,3 +685,16 @@ CSS += """
   .caret,.sub{display:none}
 }
 """
+
+CSS += """
+.tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.track{display:flex;flex-direction:column;justify-content:space-between;gap:22px;border:1px solid var(--color-line);
+  border-radius:18px;padding:34px 32px;background:var(--color-surface)}
+.track .who{font-size:12px;font-weight:500;letter-spacing:.1em;line-height:16px;color:var(--color-accent-hover)}
+.track h3{font-size:25px;letter-spacing:-.01em;line-height:32px;margin-top:12px}
+.track p{font-size:17px;line-height:27px;color:var(--color-ink-muted);margin-top:12px}
+.track .go{font-size:16px;font-weight:500;color:var(--color-accent-hover)}
+a.track:hover{border-color:var(--color-accent)}
+.artmeta{display:flex;gap:24px;flex-wrap:wrap;font-size:15px;line-height:22px;color:var(--color-ink-faint)}
+@media (max-width:900px){ .tracks{grid-template-columns:1fr} }
+"""
