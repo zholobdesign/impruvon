@@ -102,7 +102,11 @@ footer.site{border-top:1px solid var(--line);padding:32px 20px;background:var(--
   .cards-2,.cards-3,.cards-4{grid-template-columns:1fr}
   h1{font-size:27px}
   main{padding:20px 16px 48px}
-  .navitem .sub{position:static;display:block;border:0;box-shadow:none;padding:0 0 0 12px;min-width:0}
-  .navitem .sub a{padding:4px 0;font-size:13px;color:var(--mut)}
+  .navitem .sub{display:none}
+  header.site{gap:10px}
+  .mainnav{gap:2px 14px;order:3;width:100%}
+  .navitem>a{font-size:14px}
+  .navcta{margin-left:auto}
+  .navcta .quiet{font-size:13px}
 }
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
