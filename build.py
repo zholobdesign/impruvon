@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generates the Impruvon clickable structure prototype (static HTML)."""
-import os, shutil, html
+import os, shutil, html, hashlib
 from paper_theme import CSS, JS
 import paper_home, paper_pages
 
@@ -1023,6 +1023,9 @@ def main():
         f.write(CSS)
     with open(os.path.join(OUT, "assets", "proto.js"), "w", encoding="utf-8") as f:
         f.write(JS)
+    version = hashlib.sha1((CSS + JS).encode("utf-8")).hexdigest()[:8]
+    paper_pages.ASSET_V = version
+    paper_home.ASSET_V = version
     with open(os.path.join(OUT, ".nojekyll"), "w") as f:
         f.write("")
     with open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8") as f:

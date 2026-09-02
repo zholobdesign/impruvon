@@ -1,6 +1,8 @@
 """Exact transcription of the 'Impruvon — Homepage prototype' artboard."""
 import io, os
 
+ASSET_V = ""  # set by build.py from the CSS hash
+
 NUMBERS = [("1M+", "Medications administered"), ("50K+", "Medication errors eliminated"),
            ("25K+", "Nursing hours saved"), ("75K+", "DSP hours saved"),
            ("75+", "Pharmacy partners")]
@@ -99,7 +101,7 @@ def write(out, nav, foot, esc, demo):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Homepage — Impruvon (prototype)</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v={ASSET_V}">
 </head><body>
 <div class="annot">
   <span class="aurl">PROTOTYPE &middot; HOMEPAGE &middot; /</span>
@@ -236,7 +238,7 @@ def write(out, nav, foot, esc, demo):
 
 </main>
 {foot(b)}
-<script src="assets/proto.js"></script>
+<script src="assets/proto.js?v={ASSET_V}"></script>
 </body></html>"""
 
     io.open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(doc)

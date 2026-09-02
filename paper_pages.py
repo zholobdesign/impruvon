@@ -6,6 +6,7 @@ the vocabulary mirrors the patterns that actually appear on the artboards.
 import io, os, html
 
 DEMO = "book-a-demo/index.html"
+ASSET_V = ""  # set by build.py from the CSS hash
 
 
 def esc(s):
@@ -656,7 +657,7 @@ def render(path, title, sections, notes, nav, foot, badge=""):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>{esc(title)} — Impruvon (prototype)</title>
-<link rel="stylesheet" href="{base}assets/style.css">
+<link rel="stylesheet" href="{base}assets/style.css?v={ASSET_V}">
 </head><body>
 <div class="annot">
   <span class="aurl">PROTOTYPE &middot; {esc(title.upper())} &middot; {esc(url)}</span>{f'<span class="badge">{esc(badge)}</span>' if badge else ""}
@@ -667,7 +668,7 @@ def render(path, title, sections, notes, nav, foot, badge=""):
 {nav(base, path)}
 <main>{notes_html}{body}</main>
 {foot(base)}
-<script src="{base}assets/proto.js"></script>
+<script src="{base}assets/proto.js?v={ASSET_V}"></script>
 </body></html>"""
 
 
@@ -1536,7 +1537,7 @@ def write_sitemap(out, nav, foot):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Sitemap — Impruvon (prototype)</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v={ASSET_V}">
 </head><body>
 <div class="annot">
   <span class="aurl">PROTOTYPE &middot; SITEMAP</span>
@@ -1554,6 +1555,6 @@ def write_sitemap(out, nav, foot):
   {body}
 </main>
 {foot("")}
-<script src="assets/proto.js"></script>
+<script src="assets/proto.js?v={ASSET_V}"></script>
 </body></html>"""
     io.open(os.path.join(out, "sitemap.html"), "w", encoding="utf-8").write(doc)
