@@ -23,7 +23,7 @@ PRODUCTS = [
      "See MedBox", "platform/medbox.html"),
     ("Integrations", "Connect every touchpoint.",
      "24/7 bidirectional pharmacy integration and your existing EHR. No changes to pharmacy or medication packaging needed.",
-     "See integrations", "platform/pharmacy-integration.html"),
+     "See integrations", "platform/integrations.html"),
     ("HRST Automation", "Ensure audit readiness.",
      "Complete all of your HRST inputs with a single click, pulled from the pharmacy filling your medications.",
      "See HRST automation", "platform/hrst-automation.html"),
