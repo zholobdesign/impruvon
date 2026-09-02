@@ -2,7 +2,7 @@
 """Generates the Impruvon clickable structure prototype (static HTML)."""
 import os, shutil, html
 from paper_theme import CSS, JS
-import paper_home
+import paper_home, paper_pages
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "docs")
@@ -1000,6 +1000,8 @@ def main():
         f.write(README)
     build_pages()
     paper_home.write(OUT, render_chrome_nav, render_chrome_foot, esc, DEMO)
+    done = paper_pages.write_all(OUT, render_chrome_nav, render_chrome_foot)
+    print('transcribed from Paper:', len(done)+1, 'pages')
     n = sum(len([x for x in fs if x.endswith(".html")]) for _, _, fs in os.walk(OUT))
     print(f"built {n} pages -> {OUT}")
 
