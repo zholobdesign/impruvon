@@ -170,6 +170,18 @@ def s_form(b, base):
             cells += (f'<div class="fld"><label>{esc(f)}{req}</label>'
                       f'<div class="{cls}"></div></div>')
         fields += f'<div class="frow">{cells}</div>'
+    if b.get("side_dark"):
+        parts = []
+        for i, (txt, strong) in enumerate(b["side_dark"]):
+            if i:
+                parts.append('<div class="rule"></div>')
+            parts.append(f'<p class="{"strong" if strong else ""}">{esc(txt)}</p>')
+        proof = '<div class="sidedark">' + "".join(parts) + "</div>"
+        label, target = b.get("cta", ("Book a demo", DEMO))
+        return (f'<section class="sec"><div class="sec-inner formwrap">'
+                f'<div class="form">{fields}'
+                f'<a class="pill pill-lg" style="align-self:flex-start" href="{_link(base, target)}">{esc(label)}</a></div>'
+                f'{proof}</div></section>')
     proof = ""
     for p in b.get("proof", []):
         if len(p) == 2 and p[0].endswith("+") or (len(p) == 2 and p[0][0].isdigit()):
@@ -306,8 +318,10 @@ def s_ctarow(b, base):
 def s_dotcards(b, base):
     out = "".join(f'<div class="dotcard"><i></i><span>{esc(t)}</span></div>' for t in b["items"])
     h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    cols = b.get("cols", 2)
+    grid = f'<div class="grid g{cols}">{out}</div>' if cols > 1 else f'<div class="grid">{out}</div>'
     return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
-            f'<div class="grid g2">{out}</div></div></section>')
+            f'{grid}</div></section>')
 
 
 def s_splitstat(b, base):
@@ -381,6 +395,34 @@ def s_contrast(b, base):
             f'<div class="col dark">{right}</div></div></div></section>')
 
 
+
+def s_flagprose(b, base):
+    paras = "".join(f'<p class="{"small" if small else ""}">{esc(t)}</p>' for t, small in b["body"])
+    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    hh = f'<h2 class="twocol-h">{esc(b["side"])}</h2>' if b.get("side") else ""
+    cls = "flagprose dashed" if b.get("dashed") else "flagprose"
+    inner = f'<div class="{cls}"><div class="note">{esc(b["note"])}</div>{paras}</div>'
+    if b.get("side"):
+        return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner twocol">'
+                f'{hh}<div class="twocol-body">{inner}</div></div></section>')
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}{inner}</div></section>')
+
+
+
+def s_flagtable(b, base):
+    head = '<th></th>' + "".join(
+        f'<th class="{"us" if i == 0 else ""}">{esc(c)}</th>' for i, c in enumerate(b["cols"]))
+    rows = ""
+    for label, mark in b["rows"]:
+        blanks = "".join("<td></td>" for _ in range(len(b["cols"]) - 1))
+        rows += f'<tr><td>{esc(label)}</td><td class="us">{esc(mark)}</td>{blanks}</tr>'
+    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner stack-44">{h}'
+            f'<div class="flagtable"><div class="note">{esc(b["note"])}</div>'
+            f'<div class="inner"><table><thead><tr>{head}</tr></thead>'
+            f'<tbody>{rows}</tbody></table></div></div></div></section>')
+
+
 BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards,
           "numbered": s_numbered, "flagstats": s_flagstats, "audience": s_audience,
           "ticks": s_ticks, "quote": s_quote, "cases": s_cases, "faq": s_faq,
@@ -391,7 +433,7 @@ BLOCKS = {"head": s_head, "twocol": s_twocol, "chain": s_chain, "cards": s_cards
           "softcards": s_softcards, "ctarow": s_ctarow, "dotcards": s_dotcards,
           "splitstat": s_splitstat, "prose": s_prose, "nbar": s_nbar,
           "pain": s_pain, "sunkcards": s_sunkcards, "center": s_center, "scards": s_scards,
-          "contrast": s_contrast}
+          "contrast": s_contrast, "flagprose": s_flagprose, "flagtable": s_flagtable}
 
 PROOF_BAR = {"t": "darkbar", "items": [
     "SOC 2 and HIPAA compliant, ready for immediate deployment",
@@ -837,4 +879,143 @@ PAGES["who-we-serve/foster-care.html"] = dict(title="Foster Care", notes=[
         ("Can older youth manage their own medication?", "Supervised self-administration helps older youth learn to manage their own medications before they age out."),
     ]},
     {"t": "closing", "light": True, "h": "See the platform in action."},
+])
+
+
+BRIEF = "request-a-state-briefing/index.html"
+
+PAGES["who-we-serve/state-directed.html"] = dict(title="State-Directed Programs", notes=[
+    "Transcribed from the artboard “Impruvon — State-Directed Programs”.",
+    "This is the highest-value page on the site: it is the network-scale entry point, and it converts to a state briefing rather than a product demo.",
+    "Three yellow blocks mark the three things that must be settled before publishing: which states can be claimed, citations for the national statistics, and consistent use of the word “projected” on the $371M figure.",
+], sections=[
+    {"t": "head", "kicker": "WHO WE SERVE · STATE-DIRECTED PROGRAMS",
+     "h1": "Your most at-risk populations carry your most preventable costs.",
+     "lede": "Every medication error avoided is a hospitalization, an ER visit and a claim that never happens.",
+     "cta": ("Request a state briefing", BRIEF)},
+    {"t": "flagprose", "side": "What is a state-directed eMAR?",
+     "note": "MASSACHUSETTS ONLY, OR MASSACHUSETTS AND MISSOURI · CONFIRM",
+     "body": [("A state-directed eMAR is one medication platform adopted across a state's provider network, so documentation, oversight and reporting follow a single standard. Impruvon currently serves as the state-directed eMAR in Massachusetts, in partnership with the Massachusetts Executive Office of Health and Human Services.", False)]},
+    {"t": "twocol", "bg": "", "h": "Oversight is a rear-view mirror.", "body": [
+        "Every state agency knows the playbook: more oversight, more reporting requirements, more audits. But by the time a violation is caught, the adverse drug event has already happened. The ER visit billed, the hospitalization underway, the incident report filed.",
+        "And no amount of enforcement fixes the underlying reality: a community-based workforce that is non-clinical, high-turnover, and stretched across thousands of homes your auditors will never see."]},
+    {"t": "flagstats", "h": "The scale of the problem is national.", "items": [
+        ("1.5 million", "Americans injured by medication errors each year"),
+        ("~800,000", "preventable drug-related injuries annually in long-term care settings alone"),
+        ("~$21 billion", "in direct medical costs across all care settings annually")],
+     "note": "Three external statistics with no attribution. State agencies and MCOs check sources — the sources are public, only the citations are missing."},
+    {"t": "twocol", "bg": "sec-deep", "h": "Prevention isn't softer than enforcement.", "body": [
+        "Every adverse drug event prevented is a hospitalization, an ER visit and a transport cost that never has to be recovered, and a fraudulent or erroneous claim that never gets filed. Prevention is cheaper, faster, and it protects the individual before the harm, not after."]},
+    {"t": "flagprose", "h": "Massachusetts.", "dashed": True, "bg": "",
+     "note": "THE WORD “PROJECTED” IS MANDATORY EVERYWHERE THIS FIGURE APPEARS · THE SAME NUMBER ALSO SITS ON OUR COMMITMENT AS AN ACHIEVED RESULT, NEXT TO “ROI > 1500%” · PICK ONE EDITION",
+     "body": [("In partnership with the Massachusetts Executive Office of Health and Human Services, Impruvon's financial model projected $371M in savings over four years for approximately 25,000 individuals with I/DD, mental health and co-occurring conditions, a projected return of roughly 1,800%, driven primarily by fewer emergency visits and adverse drug events.", False),
+              ("Impruvon currently serves as the state-directed eMAR in Massachusetts.", True)]},
+    {"t": "sunkcards", "bg": "sec-sunk", "h": "One platform. Statewide visibility.", "items": [
+        ("Enable every provider in your network", "Guided workflows make safe administration the default for a non-clinical workforce, so quality doesn't depend on which agency an individual happens to be served by."),
+        ("Real-time, centralized oversight", "Enterprise dashboards and automated audit tooling replace after-the-fact record requests with live, statewide visibility into medication administration."),
+        ("Reduce fraud, waste and abuse exposure", "Real-time digital documentation, physical access controls and narcotic counting create a verifiable record of every administration, closing the gaps where diversion and billing irregularities hide."),
+        ("Lower avoidable utilization", "Preventing adverse drug events reduces hospitalizations, ER utilization and transport costs."),
+        ("Statewide deployment support", "Provider and pharmacy outreach, enrollment, training, reporting and audit optimization, and legacy system integration.", "wide"),
+    ]},
+    {"t": "faq", "h": "Questions we get from state agencies and health plans.", "items": [
+        ("Will providers adopt it?", "Guided workflows make safe administration the default for a non-clinical workforce. Role-based interfaces reduce training burden, and new staff are safe and productive from day one."),
+        ("What does statewide deployment involve?", "Provider and pharmacy outreach, enrollment, training, reporting and audit optimization, and legacy system integration."),
+        ("How does it work with providers who already have an EHR?", "Impruvon connects with existing EHR systems rather than replacing them."),
+        ("Where is Impruvon already state-directed?", "Massachusetts, in partnership with the Executive Office of Health and Human Services, covering approximately 25,000 individuals."),
+    ]},
+    {"t": "closing", "light": True, "h": "Request a state briefing.",
+     "sub": "A working session for state and MCO teams, not a product demo.",
+     "cta": ("Request a state briefing", BRIEF)},
+])
+
+
+PAGES[BRIEF] = dict(title="Request a State Briefing",
+    badge="CONVERSION FOUND IN THE COPY, NEVER DISCUSSED ON A CALL · CONFIRM IT EXISTS AND WHO HANDLES IT",
+    notes=[
+    "Transcribed from the artboard “Impruvon — Request a State Briefing”.",
+    "A second conversion, separate from Book a demo, because a state administrator is not buying a product — they are evaluating infrastructure. The form asks different questions and routes to a different team.",
+    "Flagged: this CTA appears in the copy but was never discussed on a call. Confirm it exists and who handles it before the site goes live.",
+], sections=[
+    {"t": "head", "h1": "Request a state briefing.",
+     "lede": "A working session for state agencies and Medicaid health plans. Not a product demo."},
+    {"t": "dotcards", "bg": "sec-sunk", "cols": 1, "h": "What we cover.", "items": [
+        "How the Massachusetts state-directed program is structured",
+        "What real-time, centralized oversight looks like at network scale",
+        "What statewide deployment involves: provider and pharmacy outreach, enrollment, training, reporting and audit optimization, legacy system integration",
+        "Security and compliance questions",
+    ]},
+    {"t": "form", "cta": ("Request a state briefing", BRIEF), "fields": [
+        ["Name", "Work email"],
+        ["Agency or health plan", "Role"],
+        ["State", "Approximate individuals served"],
+     ], "side_dark": [
+        ("In partnership with the Massachusetts Executive Office of Health and Human Services, covering approximately 25,000 individuals with I/DD, mental health and co-occurring conditions.", False),
+        ("SOC 2 and HIPAA compliant, ready for immediate deployment.", True),
+     ]},
+])
+
+
+PAGES[DEMO] = dict(title="Book a Demo", notes=[
+    "Transcribed from the artboard “Impruvon — Book a Demo”.",
+    "The single conversion point for the whole site. State field is marked required because it drives lead routing — the answer decides whether this is a provider deal or a state conversation.",
+    "Flagged: demo length is not stated anywhere in the source material. If the client names a number it goes into the subheading.",
+], sections=[
+    {"t": "head", "h1": "See the platform in action.",
+     "lede": "We'll walk through a med pass the way your team would run it, and answer the compliance questions for your setting.",
+     "flag": "Demo length not stated anywhere. If the client names a number, it goes into this subheading."},
+    {"t": "form", "fields": [
+        ["Name", "Work email"],
+        ["Organization", "Role"],
+        [("State", "REQUIRED · LEAD ROUTING"), "Homes or individuals served"],
+        ["What you use today"],
+     ], "proof": [
+        ("1M+", "medications administered"),
+        ("50K+", "medication errors eliminated"),
+        ("23,000+", "medications with zero errors at Charles Lea Center"),
+        ("SOC 2 and HIPAA compliant", "Ready for immediate deployment."),
+     ]},
+    {"t": "faq", "bg": "sec-sunk", "h": "Before the call.", "items": [
+        ("Who should join the call?", "Usually whoever owns medication compliance, plus the person who signs. Both get their questions answered in the same session."),
+        ("Do we need to prepare anything?", "No."),
+        ("Is this a sales pitch?", "No. It's a walkthrough of the product on your kind of setup."),
+    ]},
+])
+
+
+PAGES["compare/index.html"] = dict(title="Compare",
+    badge="OUTSIDE HEADER AND FOOTER · NO COMPETITOR NAMES", notes=[
+    "Transcribed from the artboard “Impruvon — Compare”.",
+    "One comparison page for all competitors, not a page per competitor (team decision).",
+    "The competitor columns are deliberately empty. The rule on the artboard: if a row cannot be proven with a citation, the cell stays empty. An empty cell is honest; an unsupported “no” is a legal risk and a gift to a competitor.",
+    "The page ends by naming who Impruvon is wrong for. That is what makes the rest of it credible.",
+], sections=[
+    {"t": "head", "h1": "How to choose an eMAR for residential care.",
+     "lede": "A buyer's guide, not a sales page. Eight questions worth asking any vendor, including us."},
+    {"t": "twocol", "h": "What should you actually compare?", "body": [
+        "Most platforms in this space are all-in-one systems where medication is one module among dozens. A medication specialist goes deeper on the med pass itself. Neither is automatically right for you. The questions below tell you which one fits how your homes actually run."]},
+    {"t": "numlist", "h": "Eight questions to ask any vendor.", "cols": [
+        [("01", "Who gives the medication in your homes, and was the product designed for them?"),
+         ("02", "What happens physically to the medication between the pharmacy and the person?"),
+         ("03", "How long does it take to pull a month of records for a state reviewer?"),
+         ("04", "Does the record include treatments, vitals and daily documentation, or only doses?")],
+        [("05", "How many of your pharmacies are already connected, and does data flow both ways?"),
+         ("06", "Can you keep your current EHR?"),
+         ("07", "What happens when your state changes its documentation requirements?"),
+         ("08", "How long until your least tech-confident staff member can run a med pass alone?")],
+    ]},
+    {"t": "flagtable", "h": "How the options compare.",
+     "note": "Competitor columns are deliberately empty. Rule: if a row cannot be proven with a citation, the cell stays empty. An empty cell is honest; an unsupported “no” is a legal risk and a gift to a competitor.",
+     "cols": ["IMPRUVON", "VENDOR A", "VENDOR B", "OTHER PLATFORMS"], "rows": [
+        ("Purpose-built for residential and community-based care", "Yes"),
+        ("Medication is the whole product, not one module", "Yes"),
+        ("Smart medication storage hardware", "Yes"),
+        ("Guided med pass designed for non-clinical staff", "Yes"),
+        ("Treatments, vitals and documentation in the medication record", "Yes"),
+        ("Two-way pharmacy integration", "Yes"),
+        ("Works with your existing EHR", "Yes"),
+        ("No change to medication packaging", "Yes"),
+     ]},
+    {"t": "head", "h1": "When we're not the right fit.",
+     "lede": "If you need one system for billing, EVV, case management and medication together, an all-in-one platform will serve you better. We do one thing.",
+     "cta": ("Book a demo", DEMO)},
 ])

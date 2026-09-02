@@ -439,3 +439,29 @@ a.bcard:hover{border-color:var(--color-accent)}
 .highlight svg{flex-shrink:0}
 .highlight h3{font-size:23px;line-height:31px;margin-bottom:10px}
 .highlight p{font-size:18px;line-height:28px}
+
+.flagprose{background:var(--flag-bg);border:1px solid var(--flag-border);border-radius:14px;padding:26px 28px;
+  display:flex;flex-direction:column;gap:14px}
+.flagprose.dashed{border-style:dashed;border-color:#D9B84A;padding:34px}
+.flagprose .note{font-size:12px;font-weight:500;letter-spacing:.12em;line-height:20px;color:#8A6B12}
+.flagprose p{font-size:21px;line-height:34px}
+.flagprose p.small{font-size:19px;line-height:30px;font-weight:500}
+
+.sidedark{background:var(--color-surface-deep);border-radius:18px;padding:36px 34px;display:flex;
+  flex-direction:column;gap:26px;width:400px;flex-shrink:0}
+.sidedark p{font-size:18px;line-height:29px;color:#EAF1F2E0}
+.sidedark p.strong{color:var(--color-surface);font-weight:500}
+.sidedark .rule{height:1px;background:#EAF1F233}
+@media (max-width:900px){ .sidedark{width:100%} }
+
+.flagtable{background:var(--flag-bg);border:1px dashed #D9B84A;border-radius:16px;padding:26px;
+  display:flex;flex-direction:column;gap:18px}
+.flagtable .note{font-size:12px;font-weight:500;letter-spacing:.12em;line-height:20px;color:var(--flag-ink)}
+.flagtable .inner{background:var(--color-surface);border-radius:12px;overflow-x:auto}
+.flagtable table{min-width:900px;border-collapse:collapse;width:100%}
+.flagtable th,.flagtable td{padding:16px 20px;text-align:left;border-bottom:1px solid var(--color-line);vertical-align:middle}
+.flagtable th{font-size:12px;letter-spacing:.1em;font-weight:500;color:var(--color-ink-faint);background:transparent}
+.flagtable th.us{font-size:13px;letter-spacing:.04em;font-weight:700;color:var(--color-accent)}
+.flagtable td{font-size:16px;line-height:24px}
+.flagtable td.us{font-size:16px;font-weight:500;color:var(--color-accent)}
+.flagtable tbody tr:last-child td{border-bottom:0}
