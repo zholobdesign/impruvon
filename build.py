@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Generates the Impruvon clickable structure prototype (static HTML)."""
 import os, shutil, html
+from paper_theme import CSS, JS
+import paper_home
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "docs")
@@ -82,10 +84,51 @@ def b_cards(base, b):
     return f'<section class="block">{h}{lead}<div class="{cls}">{cards}</div></section>'
 
 
+HERO_PANEL = """
+<div class="hero-panel">
+  <div class="tabs"><span class="tab on">eMAR+</span><span class="tab">MedBox</span>
+    <span class="tab">Pharmacy</span><span class="tab">HRST</span></div>
+  <div class="appwin">
+    <div class="appside">
+      <h3 style="font-size:17px;margin-bottom:14px">Evening pass &middot; Maple House</h3>
+      <div class="approw"><span class="avat"></span><span style="flex:1">Denise R.</span><span class="pill-ok">GIVEN</span></div>
+      <div class="approw"><span class="avat"></span><span style="flex:1">James O.</span><span class="pill-ok">GIVEN</span></div>
+      <div class="approw on"><span class="avat"></span><span style="flex:1">Marcus T.</span><span class="pill-now">NOW</span></div>
+      <div class="approw"><span class="avat"></span><span style="flex:1">Aisha K.</span><span class="pill-ok" style="background:#EDF0F1;color:#5A6B78">6:15 PM</span></div>
+    </div>
+    <div class="appmain">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <span class="avat" style="width:42px;height:42px;border-radius:21px"></span>
+        <span><b style="display:block;font-size:18px;letter-spacing:-.02em">Marcus T.</b>
+        <span style="font-size:14px;color:var(--mut)">Room 2 &middot; MedBox A &middot; 6:00 PM pass</span></span>
+        <span class="pill-ok" style="margin-left:auto;background:#EEF7EF;color:#4A6B1F">BARCODE VERIFIED</span>
+      </div>
+      <div class="medcard">
+        <span style="flex:1"><b style="display:block;font-size:22px;letter-spacing:-.03em">Sertraline 50&nbsp;mg</b>
+        <span style="font-size:15px;color:var(--mut)">1 tablet &middot; by mouth &middot; with food</span></span>
+        <span style="text-align:right"><b style="display:block;font-size:11px;letter-spacing:.1em;color:var(--mut)">DRAWER</b>
+        <span style="font-size:18px;font-weight:700;color:var(--accent)">A-3 open</span></span>
+      </div>
+      <div class="rights">
+        <span class="right"><b>PERSON</b><span>Marcus T.</span></span>
+        <span class="right"><b>MEDICATION</b><span>Sertraline</span></span>
+        <span class="right"><b>DOSE</b><span>50 mg</span></span>
+        <span class="right"><b>ROUTE</b><span>By mouth</span></span>
+        <span class="right"><b>TIME</b><span>6:04 PM</span></span>
+      </div>
+      <div class="appbtn">Mark as given</div>
+    </div>
+  </div>
+</div>"""
+
+
 def b_media(base, b):
-    return (f'<section class="block"><div class="ph ph-{b.get("kind","image")}">'
-            f'<span class="ph-tag">{esc(b.get("kind","image").upper())}</span>'
-            f'<span class="ph-label">{esc(b["label"])}</span></div></section>')
+    kind = b.get("kind", "image")
+    if kind == "hero":
+        return '<section class="block">' + HERO_PANEL + '</section>'
+    return (f'<section class="block"><div class="ph ph-{kind}">'
+            f'<div class="ph-inner"><div class="ph-tag">{esc(kind.upper())}</div>'
+            f'<p class="ph-label">{esc(b["label"])}</p></div></div></section>')
 
 
 def b_stats(base, b):
@@ -138,6 +181,45 @@ BLOCKS = {"text": b_text, "list": b_list, "cards": b_cards, "media": b_media,
           "cta": b_cta, "links": b_links}
 
 
+
+CHROME_LINKS = [("Platform", "platform/index.html"), ("Who We Serve", "who-we-serve/index.html"),
+                ("Pricing", "pricing/index.html"), ("Resources", "resources/index.html"),
+                ("Company", "about/index.html")]
+
+FOOT_COLS = [
+    ("PLATFORM", [("eMAR+", "platform/emar.html"), ("MedBox", "platform/medbox.html"),
+                  ("Integrations", "platform/pharmacy-integration.html"),
+                  ("HRST Automation", "platform/hrst-automation.html")]),
+    ("WHO WE SERVE", [("I/DD & Residential", "who-we-serve/idd-residential.html"),
+                      ("Home Health", "who-we-serve/home-health.html"),
+                      ("State-Directed Programs", "who-we-serve/state-directed.html")]),
+    ("COMPANY", [("Our Story", "about/our-story.html"), ("Trust & Compliance", "trust/index.html"),
+                 ("Careers", "about/careers.html"), ("Contact", "about/contact.html")]),
+]
+
+
+def render_chrome_nav(base, path):
+    links = ""
+    for label, target in CHROME_LINKS:
+        on = " class=\"on\"" if path.startswith(target.split("/")[0]) else ""
+        links += f'<a href="{base}{target}"{on}>{esc(label)}</a>'
+    return (f'<header class="nav"><a class="brand" href="{base}index.html">'
+            f'<span class="mark"></span>Impruvon</a>'
+            f'<nav class="links">{links}</nav>'
+            f'<div class="right"><a class="login" href="{base}login/index.html">Log in</a>'
+            f'<a class="pill" href="{base}{DEMO}">Book a demo</a></div></header>')
+
+
+def render_chrome_foot(base):
+    cols = ""
+    for head, items in FOOT_COLS:
+        links = "".join(f'<a href="{base}{t}">{esc(l)}</a>' for l, t in items)
+        cols += f'<div class="col"><h4>{esc(head)}</h4>{links}</div>'
+    return (f'<footer class="foot"><div class="fbrand">'
+            f'<div class="row"><span class="mark"></span><b>Impruvon</b></div>'
+            f'<p>Medication safety for residential and community-based care.</p></div>{cols}</footer>')
+
+
 # ---------------------------------------------------------------- page shell
 def render_nav(base, active):
     items = ""
@@ -176,50 +258,34 @@ def page(path, title, h1, kicker="", intro="", blocks=(), notes=(), crumbs=()):
         notes_html = ('<aside class="notes" id="notes"><h4>Prototype notes</h4><ul>' +
                       "".join(f"<li>{esc(n)}</li>" for n in notes) + "</ul></aside>")
 
+    url = "/" + path.replace("index.html", "")
     doc = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>{esc(title)} — Impruvon (structure prototype)</title>
+<title>{esc(title)} — Impruvon (prototype)</title>
 <link rel="stylesheet" href="{base}assets/style.css">
 </head><body>
-<div class="protobar">
-  <span class="pb-name">Impruvon — structure prototype</span>
-  <span class="pb-warn">Wireframe. No visual design yet.</span>
-  <span class="pb-actions">
-    <button id="notesToggle" type="button">Show notes</button>
-    <a href="{base}sitemap.html">Sitemap</a>
-  </span>
+<div class="annot">
+  <span class="aurl">PROTOTYPE · {esc(title.upper())} · {esc(url)}</span>
+  <span class="aleg"><span class="swatch"></span>Yellow = needs client confirmation before build</span>
+  <span class="aleg"><button id="notesToggle" type="button">Show notes</button>
+    <a href="{base}sitemap.html">Sitemap</a></span>
 </div>
-<header class="site">
-  <a class="logo" href="{base}index.html">Impruvon</a>
-  <nav class="mainnav">{render_nav(base, path)}</nav>
-  <div class="navcta">
-    <a class="quiet" href="{base}login/index.html">Log in</a>
-    <a class="quiet" href="{base}about/contact.html">Talk to sales</a>
-    <a class="btn btn-sm" href="{base}{DEMO}">Book a demo</a>
-  </div>
-</header>
+{render_chrome_nav(base, path)}
 <main>
-  {crumb_html}
-  <div class="pagehead">
-    {f'<div class="kicker">{esc(kicker)}</div>' if kicker else ''}
-    <h1>{esc(h1)}</h1>
-    {f'<p class="intro">{esc(intro)}</p>' if intro else ''}
-  </div>
   {notes_html}
+  <div class="sec"><div class="sec-inner">
+    {crumb_html}
+    {f'<div class="kicker">{esc(kicker)}</div>' if kicker else ''}
+    <h1 class="h2 h2-wide" style="font-size:52px;line-height:60px;margin-bottom:20px">{esc(h1)}</h1>
+    {f'<p class="lede" style="max-width:70ch">{esc(intro)}</p>' if intro else ''}
+  </div></div>
   {body}
 </main>
-<footer class="site">
-  <div class="fcols">{render_footer(base)}</div>
-  <div class="fbar">
-    <span>© 2026 Impruvon Health — structure prototype for review</span>
-    <span><a href="{base}sitemap.html">Sitemap</a> · <a href="{base}{DEMO}">Book a demo</a></span>
-  </div>
-</footer>
+{render_chrome_foot(base)}
 <script src="{base}assets/proto.js"></script>
 </body></html>"""
-
     full = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     with open(full, "w", encoding="utf-8") as f:
@@ -259,7 +325,7 @@ def build_pages():
          ],
          blocks=[
              {"t": "cta", "h": "", "p": "", "buttons": [("Book a demo", DEMO), ("Talk to sales", "about/contact.html")]},
-             {"t": "media", "kind": "product", "label": "Hero product visual: evening med pass — resident list, medication detail, barcode verified, five rights, 'Mark as given'"},
+             {"t": "media", "kind": "hero", "label": ""},
              {"t": "text", "h": "Trusted by providers, pharmacies and state agencies",
               "p": ["Logo bar: Charles Lea Center · Vista Care · MA EOHHS · Coastal Autism Academy · StationMD"]},
              PROOF,
@@ -889,138 +955,6 @@ def build_pages():
          ])
 
 
-CSS = """
-*,*::before,*::after{box-sizing:border-box}
-:root{--ink:#1b1f23;--mut:#5c6670;--line:#d8dcdf;--bg:#fff;--soft:#f5f6f7;--acc:#1d6fd0;--warn:#8a5a00}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
-a{color:var(--acc)}
-img{max-width:100%}
-
-.protobar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:#1b1f23;color:#fff;padding:8px 20px;font-size:13px;position:sticky;top:0;z-index:60}
-.protobar .pb-name{font-weight:700}
-.protobar .pb-warn{color:#ffcf7a}
-.protobar .pb-actions{margin-left:auto;display:flex;gap:14px;align-items:center}
-.protobar a{color:#9dc7ff}
-.protobar button{font:inherit;background:#fff;color:#1b1f23;border:0;border-radius:4px;padding:4px 10px;cursor:pointer}
-
-header.site{display:flex;flex-wrap:wrap;gap:16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
-header.site .logo{font-weight:700;font-size:19px;color:var(--ink);text-decoration:none}
-.mainnav{display:flex;flex-wrap:wrap;gap:4px 18px;flex:1}
-.navitem{position:relative}
-.navitem>a{color:var(--ink);text-decoration:none;font-size:15px;padding:6px 2px;display:inline-block}
-.navitem>a.on{border-bottom:2px solid var(--ink);font-weight:600}
-.navitem .sub{display:none;position:absolute;top:100%;left:0;z-index:20;background:#fff;border:1px solid var(--line);border-radius:6px;padding:6px;min-width:230px;box-shadow:0 8px 20px rgba(0,0,0,.08)}
-.navitem:hover .sub,.navitem:focus-within .sub{display:block}
-.navitem .sub a{display:block;padding:7px 10px;font-size:14px;color:var(--ink);text-decoration:none;border-radius:4px}
-.navitem .sub a:hover{background:var(--soft)}
-.navcta{display:flex;gap:12px;align-items:center}
-.navcta .quiet{color:var(--mut);font-size:14px;text-decoration:none}
-
-main{max-width:900px;margin:0 auto;padding:28px 20px 64px}
-.crumbs{font-size:13px;color:var(--mut);margin-bottom:18px}
-.crumbs a{color:var(--mut)}
-.pagehead{margin:0 0 28px}
-.kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);font-weight:700;margin-bottom:10px}
-h1{font-size:34px;line-height:1.18;margin:0 0 12px;letter-spacing:-.02em}
-.intro{font-size:18px;color:var(--mut);margin:0;max-width:62ch}
-h2{font-size:20px;margin:0 0 10px;letter-spacing:-.01em}
-h3{font-size:16px;margin:0 0 6px}
-p{margin:0 0 12px;max-width:70ch}
-
-.block{border-top:1px solid var(--line);padding:24px 0}
-.ticks{margin:0;padding:0;list-style:none}
-.ticks li{padding:8px 0 8px 22px;border-bottom:1px solid var(--line);position:relative;max-width:70ch}
-.ticks li::before{content:"";position:absolute;left:0;top:15px;width:9px;height:9px;border:2px solid var(--mut);border-radius:2px}
-
-.cards{display:grid;gap:12px}
-.cards-2{grid-template-columns:repeat(2,1fr)}
-.cards-3{grid-template-columns:repeat(3,1fr)}
-.cards-4{grid-template-columns:repeat(4,1fr)}
-.card{display:block;border:1px solid var(--line);border-radius:6px;padding:16px;text-decoration:none;color:var(--ink);background:#fff}
-a.card:hover{border-color:var(--acc);background:#f7fbff}
-.card p{font-size:14px;color:var(--mut);margin:0 0 10px}
-.card .go{font-size:13px;color:var(--acc);font-weight:600}
-
-.ph{border:1px dashed #b6bec6;border-radius:6px;background:repeating-linear-gradient(135deg,#fafbfc,#fafbfc 10px,#f2f4f6 10px,#f2f4f6 20px);min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:22px;text-align:center}
-.ph-tag{font-size:10px;letter-spacing:.16em;font-weight:700;color:#7c8791;border:1px solid #c6ced5;border-radius:3px;padding:2px 7px;background:#fff}
-.ph-label{font-size:14px;color:var(--mut);max-width:56ch}
-
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.stat{border:1px solid var(--line);border-radius:6px;padding:14px}
-.stat strong{display:block;font-size:26px;letter-spacing:-.02em}
-.stat span{font-size:13px;color:var(--mut)}
-.src{font-size:12px;color:var(--warn);margin-top:12px}
-
-blockquote{margin:0;border-left:3px solid var(--line);padding-left:16px}
-blockquote p{font-size:18px;margin:0 0 8px}
-cite{font-size:13px;color:var(--mut);font-style:normal}
-
-details{border-bottom:1px solid var(--line);padding:10px 0}
-summary{cursor:pointer;font-weight:600}
-details p{margin:8px 0 0;color:var(--mut)}
-
-.tablewrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
-th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
-th{background:var(--soft);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
-
-.linklist ul{margin:0;padding:0;list-style:none}
-.linklist li{padding:7px 0;border-bottom:1px solid var(--line)}
-
-.cta{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:22px;margin-top:24px}
-.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
-.btn{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;padding:11px 18px;border-radius:5px;font-size:15px;font-weight:600}
-.btn-2{background:#fff;color:var(--ink);border:1px solid var(--ink)}
-.btn-sm{padding:8px 14px;font-size:14px}
-
-.notes{display:none;background:#fffbf0;border:1px solid #e8d5a3;border-left:4px solid #d9a441;border-radius:5px;padding:14px 18px;margin:0 0 24px}
-.notes h4{margin:0 0 8px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--warn)}
-.notes ul{margin:0;padding-left:18px}
-.notes li{font-size:14px;margin-bottom:6px;color:#4a4133}
-body.shownotes .notes{display:block}
-
-footer.site{border-top:1px solid var(--line);padding:32px 20px;background:var(--soft)}
-.fcols{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px}
-.fcols h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:0 0 8px}
-.fcols ul{margin:0;padding:0;list-style:none}
-.fcols li{margin-bottom:5px}
-.fcols a{font-size:14px;color:var(--ink);text-decoration:none}
-.fcols a:hover{text-decoration:underline}
-.fbar{max-width:900px;margin:24px auto 0;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;font-size:13px;color:var(--mut)}
-
-@media (max-width:760px){
-  .cards-2,.cards-3,.cards-4{grid-template-columns:1fr}
-  h1{font-size:27px}
-  main{padding:20px 16px 48px}
-  .navitem .sub{display:none}
-  header.site{gap:10px}
-  .mainnav{gap:2px 14px;order:3;width:100%}
-  .navitem>a{font-size:14px}
-  .navcta{margin-left:auto}
-  .navcta .quiet{font-size:13px}
-}
-:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-"""
-
-JS = """
-(function(){
-  var KEY='impruvon-proto-notes';
-  var btn=document.getElementById('notesToggle');
-  function apply(on){
-    document.body.classList.toggle('shownotes',on);
-    if(btn) btn.textContent = on ? 'Hide notes' : 'Show notes';
-  }
-  var on=false;
-  try{ on = localStorage.getItem(KEY)==='1'; }catch(e){}
-  apply(on);
-  if(btn) btn.addEventListener('click',function(){
-    on=!on; apply(on);
-    try{ localStorage.setItem(KEY,on?'1':'0'); }catch(e){}
-  });
-})();
-"""
-
 README = """# Impruvon — website structure prototype
 
 A clickable, link-complete prototype of the Impruvon website. **Wireframe only — no visual
@@ -1065,6 +999,7 @@ def main():
     with open(os.path.join(ROOT, "README.md"), "w", encoding="utf-8") as f:
         f.write(README)
     build_pages()
+    paper_home.write(OUT, render_chrome_nav, render_chrome_foot, esc, DEMO)
     n = sum(len([x for x in fs if x.endswith(".html")]) for _, _, fs in os.walk(OUT))
     print(f"built {n} pages -> {OUT}")
 

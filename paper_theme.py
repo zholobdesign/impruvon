@@ -1,4 +1,10 @@
+"""Design language extracted from the Paper file 'Impruvon' / page 'Sitemap'.
 
+Token values, chrome and section patterns are transcribed from the artboards,
+not invented here. Keep this file the single source of visual truth.
+"""
+
+CSS = """
 *,*::before,*::after{box-sizing:border-box}
 :root{
   --color-surface:#FFFFFF; --color-surface-sunk:#F1F1F1; --color-surface-deep:#2C3E50;
@@ -257,3 +263,22 @@ body.shownotes .notes{display:block}
   .nav .links{gap:16px;order:3;width:100%}
 }
 :focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}
+"""
+
+JS = """
+(function(){
+  var KEY='impruvon-proto-notes';
+  var btn=document.getElementById('notesToggle');
+  function apply(on){
+    document.body.classList.toggle('shownotes',on);
+    if(btn) btn.textContent = on ? 'Hide notes' : 'Show notes';
+  }
+  var on=false;
+  try{ on = localStorage.getItem(KEY)==='1'; }catch(e){}
+  apply(on);
+  if(btn) btn.addEventListener('click',function(){
+    on=!on; apply(on);
+    try{ localStorage.setItem(KEY,on?'1':'0'); }catch(e){}
+  });
+})();
+"""
