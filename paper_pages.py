@@ -1207,80 +1207,32 @@ PAGES[DEMO] = dict(title="Book a Demo", notes=[
 ])
 
 
-PAGES["compare/index.html"] = dict(title="Compare",
-    badge="OUTSIDE HEADER AND FOOTER · NO COMPETITOR NAMES", notes=[
-    "Transcribed from the artboard “Impruvon — Compare”.",
-    "One comparison page for all competitors, not a page per competitor (team decision).",
-    "The competitor columns are deliberately empty. The rule on the artboard: if a row cannot be proven with a citation, the cell stays empty. An empty cell is honest; an unsupported “no” is a legal risk and a gift to a competitor.",
-    "The page ends by naming who Impruvon is wrong for. That is what makes the rest of it credible.",
+PAGES["resources/index.html"] = dict(title="Resources", notes=[
+    "Restructured to the client's instruction: Case Studies, Blogs, Events, Webinars. The earlier reader-track split (Supporting DSPs / Guides for administrators) and the single filtered hub from the Paper file are both retired; their URLs redirect here.",
+    "Card content on the four listing pages is placeholder. Three of the four sections have no material at all — only Case Studies has anything real, and even that is two gated PDFs we have not been given.",
+    "Launch rule: publish a section only once it has something in it. An empty Webinars page reads worse than no Webinars page.",
 ], sections=[
-    {"t": "head", "h1": "How to choose an eMAR for residential care.",
-     "lede": "A buyer's guide, not a sales page. Eight questions worth asking any vendor, including us."},
-    {"t": "twocol", "h": "What should you actually compare?", "body": [
-        "Most platforms in this space are all-in-one systems where medication is one module among dozens. A medication specialist goes deeper on the med pass itself. Neither is automatically right for you. The questions below tell you which one fits how your homes actually run."]},
-    {"t": "numlist", "h": "Eight questions to ask any vendor.", "cols": [
-        [("01", "Who gives the medication in your homes, and was the product designed for them?"),
-         ("02", "What happens physically to the medication between the pharmacy and the person?"),
-         ("03", "How long does it take to pull a month of records for a state reviewer?"),
-         ("04", "Does the record include treatments, vitals and daily documentation, or only doses?")],
-        [("05", "How many of your pharmacies are already connected, and does data flow both ways?"),
-         ("06", "Can you keep your current EHR?"),
-         ("07", "What happens when your state changes its documentation requirements?"),
-         ("08", "How long until your least tech-confident staff member can run a med pass alone?")],
-    ]},
-    {"t": "flagtable", "h": "How the options compare.",
-     "note": "Competitor columns are deliberately empty. Rule: if a row cannot be proven with a citation, the cell stays empty. An empty cell is honest; an unsupported “no” is a legal risk and a gift to a competitor.",
-     "cols": ["IMPRUVON", "VENDOR A", "VENDOR B", "OTHER PLATFORMS"], "rows": [
-        ("Purpose-built for residential and community-based care", "Yes"),
-        ("Medication is the whole product, not one module", "Yes"),
-        ("Smart medication storage hardware", "Yes"),
-        ("Guided med pass designed for non-clinical staff", "Yes"),
-        ("Treatments, vitals and documentation in the medication record", "Yes"),
-        ("Two-way pharmacy integration", "Yes"),
-        ("Works with your existing EHR", "Yes"),
-        ("No change to medication packaging", "Yes"),
-     ]},
-    {"t": "head", "h1": "When we're not the right fit.",
-     "lede": "If you need one system for billing, EVV, case management and medication together, an all-in-one platform will serve you better. We do one thing.",
-     "cta": ("Book a demo", DEMO)},
-])
-
-
-PAGES["resources/index.html"] = dict(title="Resources",
-    badge="URL MUST CHANGE ON FILTERING, OTHERWISE CRAWLERS SEE ONE PAGE", notes=[
-    "Headline, filters and card grid transcribed from the artboard “Impruvon — Resources”. The three-track split above them is a structural change we are proposing, not something on the artboard.",
-    "Why split: a DSP looking up “what do I do when a resident refuses a med” and a DoN looking up “medication audit checklist” are different readers with different next steps. One dated feed serves neither, and the CTA has to differ by track.",
-    "Filtering must change the URL, otherwise search engines only ever see one page.",
-    "No real materials exist yet. The cards are the content plan, not published work. Launch condition on the artboard: at least three real items, otherwise publish only case studies and keep this hub dark.",
-], sections=[
-    {"t": "head", "h1": "Medication safety, explained.",
-     "lede": "Reports, articles, webinars and events for the people responsible for medication in community-based care."},
-    {"t": "tracks", "h": "Three tracks, three different readers.", "items": [
-        {"who": "FOR DSPs AND CAREGIVERS", "title": "Supporting DSPs",
-         "text": "How-to guides, short videos and real stories for the people who actually give the medications.",
-         "cta": "Open the track", "link": "resources/caregivers/index.html"},
-        {"who": "FOR DoNs, QIDPs AND EXECUTIVE DIRECTORS", "title": "Guides for administrators",
-         "text": "Audit preparation, compliance by state, staffing and the cost of medication errors.",
-         "cta": "Open the track", "link": "resources/guides/index.html"},
-        {"who": "FOR BUYERS COMPARING VENDORS", "title": "Case studies",
+    {"t": "head", "kicker": "RESOURCES",
+     "h1": "Medication safety, explained.",
+     "lede": "Case studies, articles, events and webinars for the people responsible for medication in community-based care."},
+    {"t": "tracks", "h": "Four places to start.", "items": [
+        {"who": "PROOF", "title": "Case Studies",
          "text": "What changed at real organisations, with numbers, names and a source.",
-         "cta": "Open the track", "link": CASES},
+         "cta": "See case studies", "link": CASES},
+        {"who": "ARTICLES", "title": "Blogs",
+         "text": "How-to guides and plain answers on medication safety, audits and staffing.",
+         "cta": "Read the blog", "link": "resources/blog/index.html"},
+        {"who": "IN PERSON", "title": "Events",
+         "text": "Conferences, booths and state association meetings where you can find us.",
+         "cta": "See events", "link": "resources/events/index.html"},
+        {"who": "ON DEMAND", "title": "Webinars",
+         "text": "Recorded sessions and live walkthroughs for compliance and leadership teams.",
+         "cta": "See webinars", "link": "resources/webinars/index.html"},
     ]},
-    {"t": "filters", "items": [("SETTING", "All settings"), ("ROLE", "All roles")]},
-    {"t": "rescards",
-     "note": "No real materials exist yet. The cards below are the content plan, not published work. Condition for launch: at least three real items, otherwise publish only case studies and keep this hub dark.",
-     "items": [
-        {"tags": ["REPORT", "COMPLIANCE"], "title": "[Annual medication safety report, community-based care]", "cta": "Download"},
-        {"tags": ["BLOG", "COMPLIANCE"], "title": "How to prepare for a medication audit", "cta": "Read"},
-        {"tags": ["BLOG", "I/DD"], "title": "Paper MAR vs eMAR: what actually changes", "cta": "Read"},
-        {"tags": ["WEBINAR", "LEADERSHIP"], "title": "[Webinar title]", "meta": "[Date] · [Duration] · On demand", "cta": "Watch"},
-        {"tags": ["EVENT", "STATE-DIRECTED"], "title": "[Conference or booth, name]", "meta": "[Date] · [City, State]", "cta": "Meet us there"},
-        {"tags": ["BLOG", "DIRECT SUPPORT"], "title": "The five rights of medication administration, in practice", "cta": "Read"},
-        {"tags": ["BLOG", "LEADERSHIP"], "title": "What to look for in an eMAR for group homes", "cta": "Read"},
-        {"tags": ["BLOG", "COMPLIANCE"], "title": "How to reduce medication errors in residential care", "cta": "Read"},
-        {"tags": ["REPORT", "STATE-DIRECTED"], "title": "[State briefing summary, Massachusetts]", "cta": "Download"},
-     ]},
-    {"t": "closing", "light": True, "h": "See how it works on your setup."},
+    {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
+     "note": "CONTENT PENDING · THREE OF THE FOUR SECTIONS ARE EMPTY",
+     "body": [("Only Case Studies has material, and both of those live as gated PDF downloads on impruvon.com that we have not been given. Blogs, Events and Webinars have no items at all. Every card on the four listing pages is a placeholder.", "")]},
+    {"t": "closing", "h": "See how it works on your setup.", "cta": ("Book a demo", DEMO)},
 ])
 
 
@@ -1493,15 +1445,15 @@ SITEMAP_GROUPS = [
                       ("Home Health", "who-we-serve/home-health.html"),
                       ("Foster Care", "who-we-serve/foster-care.html"),
                       ("State-Directed Programs", "who-we-serve/state-directed.html")]),
-    ("Decide", [("Compare", "compare/index.html"),
+    ("Decide", [
                 ("Trust & Compliance", "trust/index.html")]),
     ("Resources", [("Resources hub", "resources/index.html"),
-                   ("Supporting DSPs", "resources/caregivers/index.html"),
-                   ("Guide article template", "resources/caregivers/five-rights.html"),
-                   ("Guides for administrators", "resources/guides/index.html"),
-                   ("Administrator article template", "resources/guides/medication-audit-checklist.html"),
                    ("Case Studies", CASES),
-                   ("Case study template", "resources/case-studies/charles-lea.html")]),
+                   ("Case study template", "resources/case-studies/charles-lea.html"),
+                   ("Blogs", "resources/blog/index.html"),
+                   ("Blog article template", "resources/blog/five-rights.html"),
+                   ("Events", "resources/events/index.html"),
+                   ("Webinars", "resources/webinars/index.html")]),
     ("Company", [("Company", "about/index.html"), ("Our Story", "about/our-story.html"),
                  ("Our Commitment", "about/our-commitment.html"), ("Careers", "about/careers.html"),
                  ("Contact", "about/contact.html")]),
@@ -1565,47 +1517,81 @@ def write_sitemap(out, nav, foot):
 
 PROPOSED = "NOT IN THE PAPER FILE · PROPOSED TRACK STRUCTURE"
 
-PAGES["resources/caregivers/index.html"] = dict(title="Supporting DSPs", badge=PROPOSED, notes=[
-    "Proposed page. There is no artboard for it — the Paper file has Resources as a single filtered hub.",
-    "Why it exists: a DSP is not a buyer, but this track is proof to the decision-maker that Impruvon helps their staff succeed, which answers the biggest hidden objection — “will non-medical staff actually use it?” It works twice: organic traffic, and evidence for the champion.",
-    "The URL folder is /caregivers/ because foster parents and home health aides are not DSPs, and the folder has to hold all five settings. The H1 still speaks to DSPs, who are the primary reader.",
-    "Primary CTA here is NOT Book a demo — this reader cannot buy. It is “Send this to your administrator”, with the demo CTA left to the footer.",
-    "⚠ Stories about people served involve a vulnerable population: written consent, first names or pseudonyms, a separate photo release and a HIPAA review before anything is published.",
+PAGES["resources/blog/index.html"] = dict(title="Blogs", notes=[
+    "Listing page for the Blogs section. Every card is a placeholder — no articles exist yet.",
+    "The first card links to the article template so the page structure can be walked. The rest are empty slots.",
+    "Topics under the placeholders come from the semantic core: these are the terms a DSP or a director actually searches.",
 ], sections=[
-    {"t": "head", "kicker": "RESOURCES · SUPPORTING DSPs",
-     "h1": "Supporting DSPs and caregivers.",
-     "lede": "Straight answers for the people who actually give the medications. No jargon, no login, no cost."},
-    {"t": "cards", "h": "How-to guides.", "cols": 3, "bg": "sec-sunk", "items": [
-        {"title": "What are the five rights of medication administration?", "text": "The check behind every safe pass.", "link": "resources/caregivers/five-rights.html", "cta": "Read"},
-        {"title": "A resident refused their medication — what now?", "text": "What to do, and what to document."},
-        {"title": "How to count narcotics at shift change", "text": "The count, the discrepancy, the escalation."},
-        {"title": "Documenting a PRN and whether it worked", "text": "Reason, dose, effect — and why the effect matters."},
-        {"title": "Your first med pass: what to expect", "text": "For new hires, start to finish."},
-        {"title": "Preparing for a medication audit, shift by shift", "text": "What an auditor looks at, in plain terms."},
+    {"t": "head", "kicker": "RESOURCES · BLOGS",
+     "h1": "Blogs.",
+     "lede": "Plain answers on medication safety, audits and staffing in community-based care."},
+    {"t": "cards", "h": "Latest articles.", "cols": 3, "bg": "sec-sunk", "items": [
+        {"title": "What are the five rights of medication administration?",
+         "text": "The one live article. Everything else on this page is a placeholder.",
+         "link": "resources/blog/five-rights.html", "cta": "Read"},
+        {"title": "[Article title]", "kick": "[Date]", "text": "[One-line summary]"},
+        {"title": "[Article title]", "kick": "[Date]", "text": "[One-line summary]"},
+        {"title": "[Article title]", "kick": "[Date]", "text": "[One-line summary]"},
+        {"title": "[Article title]", "kick": "[Date]", "text": "[One-line summary]"},
+        {"title": "[Article title]", "kick": "[Date]", "text": "[One-line summary]"},
     ]},
-    {"t": "cards", "h": "User stories.", "cols": 3, "items": [
-        {"title": "“My first week on the floor”", "text": "A new DSP on learning the pass without a clinical background."},
-        {"title": "“I take my own meds now”", "text": "A person served who moved to supervised self-administration."},
-        {"title": "“We stopped keeping a binder”", "text": "One house's move from paper MAR to a live record."},
-    ]},
-    {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
-     "note": "CONSENT REQUIRED BEFORE ANY USER STORY IS PUBLISHED",
-     "body": [("Stories about people served involve a vulnerable population. Every one needs written consent, first names or pseudonyms, a separate photo release and a HIPAA review. Set up the release template before the first interview, not after.", False)]},
-    {"t": "softcards", "cols": 2, "h": "Short video tutorials.", "items": [
-        ("60 to 90 seconds each", "One task per video: a guided pass, a narcotic count, a refusal, a PRN."),
-        ("Transcript on the page", "Without a transcript AI search cannot cite the video, and a DSP on a quiet shift cannot read it."),
-    ]},
-    {"t": "closing2", "h": "Working somewhere that still runs on paper?",
-     "buttons": [("Send this to your administrator", "about/contact.html"),
-                 ("Get new guides by email", "about/contact.html")]},
+    {"t": "flagprose", "dashed": True,
+     "note": "PLACEHOLDER CARDS · NO ARTICLES EXIST YET",
+     "body": [("Planned first topics, from the semantic core: how to prepare for a medication audit; paper MAR vs eMAR, what actually changes; what to look for in an eMAR for group homes; how to reduce medication errors in residential care; the five rights in practice.", "")]},
+    {"t": "closing", "h": "See how it works on your setup.", "cta": ("Book a demo", DEMO)},
 ])
 
 
-PAGES["resources/caregivers/five-rights.html"] = dict(title="Five Rights", badge=PROPOSED, notes=[
+PAGES["resources/events/index.html"] = dict(title="Events", notes=[
+    "Listing page for the Events section. Every card is a placeholder — no events have been supplied.",
+    "Each event needs a name, dates, city and state, and a booth or session number if there is one. Without dates the page cannot be published: a stale events page is read as an abandoned company.",
+    "Past events should either drop off automatically or move to a separate archive. That behaviour has to be built, not left to someone remembering.",
+], sections=[
+    {"t": "head", "kicker": "RESOURCES · EVENTS",
+     "h1": "Where to find us.",
+     "lede": "Conferences, booths and state association meetings."},
+    {"t": "cards", "h": "Upcoming.", "cols": 3, "bg": "sec-sunk", "items": [
+        {"title": "[Event name]", "kick": "[Date] · [City, State]", "text": "[Booth or session number]"},
+        {"title": "[Event name]", "kick": "[Date] · [City, State]", "text": "[Booth or session number]"},
+        {"title": "[Event name]", "kick": "[Date] · [City, State]", "text": "[Booth or session number]"},
+    ]},
+    {"t": "flagprose", "dashed": True,
+     "note": "PLACEHOLDER CARDS · NO EVENTS SUPPLIED",
+     "body": [("Nothing in the client material lists a single event. This section cannot go live until there is at least one with a confirmed date, and it needs an owner who removes events once they have passed.", "")]},
+    {"t": "closing", "h": "Not going to be there? See it on a call instead.", "cta": ("Book a demo", DEMO)},
+])
+
+
+PAGES["resources/webinars/index.html"] = dict(title="Webinars", notes=[
+    "Listing page for the Webinars section. Every card is a placeholder — no webinars have been recorded or scheduled.",
+    "Each item needs a title, a date, a running time and whether it is live or on demand. On-demand recordings need a transcript on the page, otherwise search and AI answer engines cannot cite them.",
+    "A registration form makes this the second-strongest lead source on the site after the demo. That form does not exist yet.",
+], sections=[
+    {"t": "head", "kicker": "RESOURCES · WEBINARS",
+     "h1": "Webinars.",
+     "lede": "Recorded sessions and live walkthroughs for compliance and leadership teams."},
+    {"t": "cards", "h": "On demand.", "cols": 3, "bg": "sec-sunk", "items": [
+        {"title": "[Webinar title]", "kick": "[Date] · [Duration] · On demand", "text": "[One-line summary]"},
+        {"title": "[Webinar title]", "kick": "[Date] · [Duration] · On demand", "text": "[One-line summary]"},
+        {"title": "[Webinar title]", "kick": "[Date] · [Duration] · On demand", "text": "[One-line summary]"},
+    ]},
+    {"t": "cards", "h": "Live and upcoming.", "cols": 3, "items": [
+        {"title": "[Webinar title]", "kick": "[Date] · [Time] · Live", "text": "[Who it is for]"},
+        {"title": "[Webinar title]", "kick": "[Date] · [Time] · Live", "text": "[Who it is for]"},
+        {"title": "[Webinar title]", "kick": "[Date] · [Time] · Live", "text": "[Who it is for]"},
+    ]},
+    {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
+     "note": "PLACEHOLDER CARDS · NO WEBINARS EXIST · REGISTRATION FORM NOT BUILT",
+     "body": [("Nothing in the client material references a webinar, live or recorded. The section is built so it is ready, but it should stay unpublished until there is at least one recording with a transcript.", "")]},
+    {"t": "closing", "h": "See how it works on your setup.", "cta": ("Book a demo", DEMO)},
+])
+
+
+PAGES["resources/blog/five-rights.html"] = dict(title="Five Rights", badge=PROPOSED, notes=[
     "Article template for the caregiver track. Structure: answer first, H2s as questions, a real FAQ in HTML, three to five internal links, one CTA, an updated date and JSON-LD.",
     "Targets “five rights of medication administration” from the semantic core — a TOFU term a DSP actually searches at 18:00 from a phone.",
 ], sections=[
-    {"t": "arthead", "crumbs": ["Resources", "Supporting DSPs", "Five rights"],
+    {"t": "arthead", "crumbs": ["Resources", "Blogs", "Five rights"],
      "h1": "What are the five rights of medication administration?",
      "lede": "Right person, right medication, right dose, right route, right time. Check all five, every single pass — and here is what each one means when you are standing in front of someone.",
      "meta": ["Updated [date]", "4 min read", "For DSPs and caregivers"]},
@@ -1626,7 +1612,7 @@ PAGES["resources/caregivers/five-rights.html"] = dict(title="Five Rights", badge
     {"t": "links", "h": "Related.", "items": [
         ("How eMAR+ guides each pass", "platform/emar.html"),
         ("How MedBox enforces the check physically", "platform/medbox.html"),
-        ("All caregiver guides", "resources/caregivers/index.html"),
+        ("All caregiver guides", "resources/blog/index.html"),
     ]},
     {"t": "closing2", "h": "Still running this on paper?",
      "buttons": [("Send this to your administrator", "about/contact.html"),
@@ -1634,26 +1620,7 @@ PAGES["resources/caregivers/five-rights.html"] = dict(title="Five Rights", badge
 ])
 
 
-PAGES["resources/guides/index.html"] = dict(title="Guides for Administrators", badge=PROPOSED, notes=[
-    "Proposed page. There is no artboard for it.",
-    "This is the half of the content plan a caregiver hub cannot absorb: these articles target the champion (DoN, QIDP) and the executive director, and this reader can start a purchase — so the CTA here is Book a demo.",
-], sections=[
-    {"t": "head", "kicker": "RESOURCES · FOR ADMINISTRATORS",
-     "h1": "Guides for administrators.",
-     "lede": "Audit preparation, compliance, staffing and cost — for the people who answer to the state and to the board."},
-    {"t": "cards", "h": "Guides.", "cols": 3, "bg": "sec-sunk", "items": [
-        {"title": "How do you prepare for a medication audit?", "text": "What an auditor asks for, and how to have it ready.", "link": "resources/guides/medication-audit-checklist.html", "cta": "Read"},
-        {"title": "Paper MAR vs eMAR", "text": "What each can and cannot prove."},
-        {"title": "How to reduce medication errors in group homes", "text": "The interventions that actually move the number."},
-        {"title": "What DSP turnover really costs", "text": "Training, agency cover, risk — in dollars."},
-        {"title": "Barcode medication administration, explained", "text": "How it works and where it fails."},
-        {"title": "Choosing an eMAR for I/DD providers", "text": "The questions to ask every vendor."},
-    ]},
-    {"t": "closing", "light": True, "h": "See how it works on your setup."},
-])
-
-
-PAGES["resources/guides/medication-audit-checklist.html"] = dict(title="Medication Audit Checklist", badge=PROPOSED, notes=[
+PAGES["resources/blog/medication-audit-checklist.html"] = dict(title="Medication Audit Checklist", badge=PROPOSED, notes=[
     "Article template for the administrator track — same structure as the caregiver article, different reader and a different CTA.",
 ], sections=[
     {"t": "arthead", "crumbs": ["Resources", "Guides", "Medication audit checklist"],
@@ -1685,7 +1652,7 @@ PAGES["resources/guides/medication-audit-checklist.html"] = dict(title="Medicati
         ("How eMAR+ produces 1-click regulatory reports", "platform/emar.html"),
         ("HRST automation", "platform/hrst-automation.html"),
         ("Trust & compliance", "trust/index.html"),
-        ("All administrator guides", "resources/guides/index.html"),
+        ("All administrator guides", "resources/blog/index.html"),
     ]},
     {"t": "closing", "light": True, "h": "See it on a real med pass."},
 ])

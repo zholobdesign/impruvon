@@ -687,7 +687,7 @@ CSS += """
 """
 
 CSS += """
-.tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
 .track{display:flex;flex-direction:column;justify-content:space-between;gap:22px;border:1px solid var(--color-line);
   border-radius:18px;padding:34px 32px;background:var(--color-surface)}
 .track .who{font-size:12px;font-weight:500;letter-spacing:.1em;line-height:16px;color:var(--color-accent-hover)}
@@ -728,4 +728,19 @@ CSS += """
 .statbox{display:flex;flex-wrap:wrap;gap:32px 24px}
 .statbox .fstat b{color:var(--color-accent)}
 .statbox .fstat span{color:var(--color-ink-muted)}
+"""
+
+CSS += """
+.newshead{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.newshead .go{font-size:16px;font-weight:500;color:var(--color-accent-hover)}
+.newsgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.newscard{display:flex;flex-direction:column;justify-content:space-between;gap:22px;
+  background:var(--color-surface);border:1px solid var(--color-line);border-radius:16px;padding:28px 26px}
+.newscard .ntag{font-size:11px;font-weight:500;letter-spacing:.12em;line-height:16px;color:var(--color-accent);margin-bottom:12px}
+.newscard h3{font-size:20px;letter-spacing:-.01em;line-height:28px}
+.newscard .nmeta{font-size:14px;line-height:22px;color:var(--color-ink-faint);margin-top:8px}
+.newscard .go{font-size:15px;font-weight:500;color:var(--color-accent-hover)}
+.newsflag{background:var(--flag-bg);border:1px dashed #D9B84A;border-radius:12px;padding:18px 22px;
+  font-size:12px;font-weight:500;letter-spacing:.1em;line-height:20px;color:var(--flag-ink)}
+@media (max-width:900px){ .newsgrid{grid-template-columns:1fr} }
 """

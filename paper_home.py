@@ -87,6 +87,13 @@ WHY = [
     "SOC2 and HIPAA compliant, ready for immediate deployment",
 ]
 
+# SECTION: LATEST NEWS — not in the client's draft; added on the agency's instruction
+NEWS = [
+    ("CASE STUDY", "[Headline]", "[Date]", "resources/case-studies/index.html", "Read the case study"),
+    ("BLOG", "[Article title]", "[Date]", "resources/blog/index.html", "Read"),
+    ("EVENT", "[Event name]", "[Date] · [City, State]", "resources/events/index.html", "See the event"),
+]
+
 NOTES = [
     "Built from the client's “IMPRUVON — Home Page Draft Copy”. All ten sections follow their order and their "
     "wording; section comments in paper_home.py name the heading each block came from.",
@@ -99,6 +106,7 @@ NOTES = [
     "the two figures overlap and should be one number or two clearly different ones.",
     "Pharmacy Integration and EHR Integration are two cards here but one page on the site (/platform/integrations). "
     "Both cards land there. Splitting them back into two pages is a separate decision.",
+    "The Latest news band above the closing CTA is not in the client's draft — it was added so the Resources section has a route from the homepage. Every card in it is a placeholder; the band should not ship until at least three real items exist.",
     "Sections dropped against the previous build, because the client's draft does not include them: the homepage "
     "FAQ, the DSP/staff block, the two case-study cards, and the separate “Request a state briefing” band. "
     "State-Directed is now reached through its Who We Serve card.",
@@ -122,6 +130,12 @@ def write(out, nav, foot, esc, demo):
     results = "".join(f'<div class="scard"><b>{esc(v)}</b><span>{esc(t)}</span></div>' for v, t in RESULTS)
 
     commits = "".join(f'<div class="softcard"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in COMMITMENTS)
+
+    news = "".join(
+        f'<a class="newscard" href="{b}{href}"><div><div class="ntag">{esc(tag)}</div>'
+        f'<h3>{esc(title)}</h3><div class="nmeta">{esc(meta)}</div></div>'
+        f'<div class="go">{esc(cta)} &rarr;</div></a>'
+        for tag, title, meta, href, cta in NEWS)
 
     why = "".join(f'<div class="check">{CHECK_SVG}<span>{esc(t)}</span></div>' for t in WHY)
 
@@ -251,8 +265,18 @@ def write(out, nav, foot, esc, demo):
   <div class="checks">{why}</div>
 </div></section>
 
+<!-- SECTION: LATEST NEWS (added by Toggle, not in the client's draft) -->
+<section class="sec sec-sunk" id="s10"><div class="sec-inner stack-44">
+  <div class="newshead">
+    <h2 class="h2">Latest from Impruvon.</h2>
+    <a class="go" href="{b}resources/index.html">All resources &rarr;</a>
+  </div>
+  <div class="newsgrid">{news}</div>
+  <div class="newsflag">PLACEHOLDER CARDS &middot; NOT IN THE CLIENT&rsquo;S HOME PAGE DRAFT &middot; DO NOT SHIP THIS BAND UNTIL THERE ARE THREE REAL ITEMS</div>
+</div></section>
+
 <!-- CLOSING CTA BAND -->
-<section class="sec sec-deep" id="s10"><div class="sec-inner closing closing-ondeep">
+<section class="sec sec-deep" id="s11"><div class="sec-inner closing closing-ondeep">
   <h2>Eliminate the Guesswork of Medication Management.</h2>
   <div class="line"><span>See how Impruvon makes safe, compliant, connected care achievable for your team
     &mdash; from the first med pass to the next audit.</span></div>

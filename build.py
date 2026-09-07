@@ -23,12 +23,12 @@ NAV = [
         ("Foster Care", "who-we-serve/foster-care.html"),
         ("State-Directed Programs", "who-we-serve/state-directed.html"),
     ]),
-    ("Compare", "compare/index.html", []),
     ("Trust", "trust/index.html", []),
     ("Resources", "resources/index.html", [
-        ("Supporting DSPs", "resources/caregivers/index.html"),
-        ("Guides for administrators", "resources/guides/index.html"),
-        ("Customer stories", "resources/customers/index.html"),
+        ("Case Studies", "resources/case-studies/index.html"),
+        ("Blogs", "resources/blog/index.html"),
+        ("Events", "resources/events/index.html"),
+        ("Webinars", "resources/webinars/index.html"),
     ]),
     ("About", "about/index.html", [
         ("Our story", "about/our-story.html"),
@@ -196,9 +196,10 @@ CHROME_LINKS = [
         ("State-Directed Programs", "who-we-serve/state-directed.html"),
     ]),
     ("Resources", "resources/index.html", [
-        ("Supporting DSPs", "resources/caregivers/index.html"),
-        ("Guides for administrators", "resources/guides/index.html"),
-        ("Case studies", "resources/case-studies/index.html"),
+        ("Case Studies", "resources/case-studies/index.html"),
+        ("Blogs", "resources/blog/index.html"),
+        ("Events", "resources/events/index.html"),
+        ("Webinars", "resources/webinars/index.html"),
     ]),
     ("Company", "about/index.html", [
         ("Our Story", "about/our-story.html"),
@@ -482,7 +483,6 @@ def build_pages():
             blocks.append({"t": "list", "h": "Proven results", "items": proof})
         blocks += [
             {"t": "links", "h": "Related", "items": [
-                ("Compare Impruvon with other platforms", "compare/index.html"),
                 ("Trust, security & compliance", "trust/index.html"),
                 ("Who we serve", "who-we-serve/index.html")]},
             {"t": "cta", "h": f"See {name} in a demo.", "p": "Fifteen minutes, your workflow, your questions.",
@@ -597,35 +597,11 @@ def build_pages():
              ] + proof_block + [
                  {"t": "links", "h": "Related", "items": [
                      ("eMAR+", "platform/emar.html"), ("MedBox", "platform/medbox.html"),
-                     ("Compare platforms", "compare/index.html"), ("Trust & compliance", "trust/index.html")]},
+                     ("Trust & compliance", "trust/index.html")]},
                  STATE_CTA if is_state else DEMO_CTA,
              ])
 
     # ---------- COMPARE / PRICING / TRUST
-    page("compare/index.html", "Compare", "Not another everything-platform. The medication-safety specialist.",
-         kicker="Compare",
-         intro="All-in-one EHRs treat medication as one module and stay software-only. Impruvon is purpose-built for I/DD residential care, specialises completely in medication safety, and is the only platform with hardware.",
-         crumbs=[("Home", "index.html"), ("Compare", None)],
-         notes=["Team decision: ONE comparison page with a table of all competitors, plus teaser blocks on product and vertical pages — not a page per competitor.",
-                "Highest-intent traffic in the funnel ('Therap alternatives'). It has to be honest to be credible: state where competitors are genuinely strong."],
-         blocks=[
-             {"t": "table", "h": "How Impruvon compares", "head": ["", "Impruvon", "Therap", "iCareManager", "eVero", "ECP"],
-              "rows": [
-                  ["Purpose-built for I/DD residential", "Yes", "Partly", "Partly", "Partly", "No"],
-                  ["Medication safety as the specialty", "Yes", "One module", "One module", "One module", "One module"],
-                  ["Smart medication hardware", "MedBox", "None", "None", "None", "None"],
-                  ["Guided med pass for non-clinical staff", "Yes", "Limited", "Limited", "Limited", "Limited"],
-                  ["Automated HRST integration", "Yes", "No", "No", "No", "No"],
-                  ["Pharmacy partners", "75+", "—", "—", "—", "—"],
-                  ["State-directed deployment", "Massachusetts", "—", "—", "—", "—"],
-              ]},
-             {"t": "text", "h": "Where the difference actually shows up",
-              "p": ["Competitors are everything-platforms: medication is one module among many. That is a reasonable choice if your problem is 'we need one system for everything'.",
-                    "It is the wrong choice if your problem is 'a med error can seriously harm someone who can't advocate for themselves, and my staff are non-clinical and stretched thin'.",
-                    "PENDING: legal review of competitor claims before publishing. Every cell needs a dated source."]},
-             DEMO_CTA,
-         ])
-
     page("trust/index.html", "Trust & compliance", "Built to pass the procurement review.",
          kicker="Trust",
          intro="The questions your IT, compliance and legal teams ask — answered before they ask them.",
@@ -917,7 +893,6 @@ def build_pages():
                  "A 15-minute call walking your own workflow, not a generic tour",
                  "A written follow-up with the answers to anything we couldn't confirm live"]},
              {"t": "links", "h": "Not ready yet?", "items": [
-                 ("Compare Impruvon with what you have", "compare/index.html"),
                  ("Read Trust & compliance", "trust/index.html"),
                  ("Browse guides for administrators", "resources/guides/index.html")]}])
 
@@ -945,7 +920,7 @@ def build_pages():
          blocks=[
              {"t": "table", "h": "All pages", "head": ["Page", "URL", "Type"], "rows": rows},
              {"t": "text", "h": "Conversion logic", "p": [
-                 "One primary conversion for the whole site: Book a demo. Every product, vertical, compare and trust page ends with it.",
+                 "One primary conversion for the whole site: Book a demo. Every product, vertical and trust page ends with it.",
                  "State agencies get a second door: Request a state briefing, which routes to the same form with a different enquiry type.",
                  "Caregiver pages deliberately do not push the demo — that reader cannot buy. They push 'Send this to your administrator' instead.",
                  "Contact is separate from Book a demo so support and press traffic never pollutes the sales pipeline."]},
@@ -974,7 +949,7 @@ where each button leads and why.
 ## Structure
 
 Home · Platform (eMAR+, MedBox, Pharmacy, EHR, HRST) · Who we serve (5 verticals) ·
-Compare · Pricing · Trust · Resource Center (Supporting DSPs, Guides, Customer stories) ·
+Trust · Resources (Case Studies, Blogs, Events, Webinars) ·
 About (Story, Commitment, Careers, Contact) · Book a demo · Log in · Sitemap
 
 ## Build
@@ -1020,6 +995,11 @@ def main():
             f'<a href="{target}">{label}</a>.</body></html>')
 
     redirect('pricing/index.html', '../book-a-demo/index.html', '/book-a-demo')
+    redirect('compare/index.html', '../book-a-demo/index.html', '/book-a-demo')
+    redirect('resources/caregivers/index.html', '../blog/index.html', '/resources/blog')
+    redirect('resources/caregivers/five-rights.html', '../blog/five-rights.html', '/resources/blog/five-rights')
+    redirect('resources/guides/index.html', '../blog/index.html', '/resources/blog')
+    redirect('resources/guides/medication-audit-checklist.html', '../blog/medication-audit-checklist.html', '/resources/blog/medication-audit-checklist')
     redirect('platform/pharmacy-integration.html', 'integrations.html', '/platform/integrations')
     redirect('platform/ehr-integration.html', 'integrations.html', '/platform/integrations')
     redirect('resources/customers/index.html', '../case-studies/', '/resources/case-studies')

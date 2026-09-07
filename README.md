@@ -13,7 +13,7 @@ where each button leads and why.
 ## Structure
 
 Home · Platform (eMAR+, MedBox, Pharmacy, EHR, HRST) · Who we serve (5 verticals) ·
-Compare · Pricing · Trust · Resource Center (Supporting DSPs, Guides, Customer stories) ·
+Trust · Resources (Case Studies, Blogs, Events, Webinars) ·
 About (Story, Commitment, Careers, Contact) · Book a demo · Log in · Sitemap
 
 ## Build
