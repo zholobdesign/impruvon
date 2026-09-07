@@ -631,3 +631,26 @@ a.bcard:hover{border-color:var(--color-accent)}
 a.track:hover{border-color:var(--color-accent)}
 .artmeta{display:flex;gap:24px;flex-wrap:wrap;font-size:15px;line-height:22px;color:var(--color-ink-faint)}
 @media (max-width:900px){ .tracks{grid-template-columns:1fr} }
+
+/* ---------- homepage, client draft copy ---------- */
+.hero .sub-2{margin-top:16px}
+.sechead{display:flex;flex-direction:column;gap:18px}
+.lede-wide{max-width:1000px}
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.eyebrow-line{font-size:13px;font-weight:500;letter-spacing:.12em;line-height:16px;color:var(--color-accent)}
+
+.caplist{display:flex;flex-direction:column;border-top:1px solid var(--color-line)}
+.caprow{display:flex;gap:40px;align-items:flex-start;padding:30px 0;
+  border-bottom:1px solid var(--color-line)}
+.caprow .cname{width:280px;flex-shrink:0;font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:30px}
+.caprow .cbody{flex:1;min-width:320px;display:flex;flex-direction:column;gap:12px}
+.caprow .cbody p{font-size:17px;line-height:28px;color:var(--color-ink-muted)}
+.caprow .go{font-size:16px;font-weight:500;line-height:20px;color:var(--color-accent-hover)}
+
+.closing-ondeep h2{color:var(--color-surface)}
+.closing-ondeep .line span{color:var(--color-ink-ondeep)}
+.closing-ondeep .btns{display:flex;gap:14px;flex-wrap:wrap;padding-top:8px}
+.pill-ondeep{color:var(--color-ink-ondeep);border-color:#EAF1F259}
+@media (max-width:1240px){ .g5{grid-template-columns:repeat(3,minmax(0,1fr))} }
+@media (max-width:900px){ .g5{grid-template-columns:1fr} .caprow{gap:16px;flex-direction:column}
+  .caprow .cname{width:100%} .caprow .cbody{min-width:0} }
