@@ -24,7 +24,6 @@ NAV = [
         ("State-Directed Programs", "who-we-serve/state-directed.html"),
     ]),
     ("Compare", "compare/index.html", []),
-    ("Pricing", "pricing/index.html", []),
     ("Trust", "trust/index.html", []),
     ("Resources", "resources/index.html", [
         ("Supporting DSPs", "resources/caregivers/index.html"),
@@ -196,7 +195,6 @@ CHROME_LINKS = [
         ("Foster Care", "who-we-serve/foster-care.html"),
         ("State-Directed Programs", "who-we-serve/state-directed.html"),
     ]),
-    ("Pricing", "pricing/index.html", []),
     ("Resources", "resources/index.html", [
         ("Supporting DSPs", "resources/caregivers/index.html"),
         ("Guides for administrators", "resources/guides/index.html"),
@@ -628,32 +626,6 @@ def build_pages():
              DEMO_CTA,
          ])
 
-    page("pricing/index.html", "Pricing", "What Impruvon costs, and what it replaces.",
-         kicker="Pricing",
-         intro="A pricing page without numbers: how the model works, what drives it, and what you should have ready for a quote.",
-         crumbs=[("Home", "index.html"), ("Pricing", None)],
-         notes=["⚠️ TO CONFIRM WITH CLIENT: the client's original structure had no pricing page. Our recommendation is to keep this page but publish no numbers.",
-                "Reason: buyers search 'eMAR pricing'. With no page you lose that traffic to competitors and to review sites. With a no-numbers page you capture it and route it to Book a demo.",
-                "If the client says no, delete this page and redirect /pricing to Book a demo."],
-         blocks=[
-             {"t": "list", "h": "How pricing works", "items": [
-                 "Priced per individual served, per month — not per staff seat, so turnover doesn't change your bill",
-                 "MedBox hardware priced separately, per home",
-                 "Implementation, onboarding and training included with a named partner",
-                 "Pharmacy and EHR integrations included — no charge per connection",
-                 "State-directed programs: low or no cost to the provider (PENDING: confirm)"]},
-             {"t": "list", "h": "What to have ready for an accurate quote", "items": [
-                 "Number of individuals served and number of homes/sites",
-                 "Which states you operate in",
-                 "Your current pharmacy partner(s) and EHR",
-                 "Whether you want MedBox in all homes or a subset"]},
-             {"t": "faq", "h": "Pricing questions", "items": [
-                 ("Why aren't prices listed?", "Because the honest number depends on your size, states and how much hardware you deploy. We'd rather give you a real figure in fifteen minutes than a misleading one here."),
-                 ("Is there a setup fee?", "PENDING — confirm with client."),
-                 ("What contract length?", "PENDING — confirm with client.")]},
-             DEMO_CTA,
-         ])
-
     page("trust/index.html", "Trust & compliance", "Built to pass the procurement review.",
          kicker="Trust",
          intro="The questions your IT, compliance and legal teams ask — answered before they ask them.",
@@ -973,7 +945,7 @@ def build_pages():
          blocks=[
              {"t": "table", "h": "All pages", "head": ["Page", "URL", "Type"], "rows": rows},
              {"t": "text", "h": "Conversion logic", "p": [
-                 "One primary conversion for the whole site: Book a demo. Every product, vertical, compare, pricing and trust page ends with it.",
+                 "One primary conversion for the whole site: Book a demo. Every product, vertical, compare and trust page ends with it.",
                  "State agencies get a second door: Request a state briefing, which routes to the same form with a different enquiry type.",
                  "Caregiver pages deliberately do not push the demo — that reader cannot buy. They push 'Send this to your administrator' instead.",
                  "Contact is separate from Book a demo so support and press traffic never pollutes the sales pipeline."]},
@@ -1047,6 +1019,7 @@ def main():
             '<body style="font:16px system-ui;padding:40px">Moved to '
             f'<a href="{target}">{label}</a>.</body></html>')
 
+    redirect('pricing/index.html', '../book-a-demo/index.html', '/book-a-demo')
     redirect('platform/pharmacy-integration.html', 'integrations.html', '/platform/integrations')
     redirect('platform/ehr-integration.html', 'integrations.html', '/platform/integrations')
     redirect('resources/customers/index.html', '../case-studies/', '/resources/case-studies')

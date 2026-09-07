@@ -6,6 +6,7 @@ the vocabulary mirrors the patterns that actually appear on the artboards.
 import io, os, html
 
 DEMO = "book-a-demo/index.html"
+CASES = "resources/case-studies/index.html"
 ASSET_V = ""  # set by build.py from the CSS hash
 
 
@@ -78,8 +79,9 @@ def s_flagstats(b, base):
     cells = "".join(f'<div class="fstat"><b>{esc(v)}</b><span>{esc(l)}</span></div>' for v, l in b["items"])
     h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
     note = f'<p class="fstat-note">{esc(b["note"])}</p>' if b.get("note") else ""
+    box = "flagbox" if b.get("note") else "statbox"
     return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner stack-44">{h}'
-            f'<div class="flagbox">{cells}{note}</div></div></section>')
+            f'<div class="{box}">{cells}{note}</div></div></section>')
 
 
 def s_audience(b, base):
@@ -592,8 +594,9 @@ def s_contactform(b, base):
     fields += ('<div class="fld"><label>Message</label>'
                '<div class="input" style="height:120px"></div></div>')
     rows = "".join(f'<div class="row"><b>{esc(k)}</b><span>{esc(v)}</span></div>' for k, v in b["contacts"])
+    addr = f'<p class="addr">{esc(b["address"])}</p>' if b.get("address") else ""
     side = (f'<div class="contactside"><div class="note">{esc(b["note"])}</div>'
-            f'<div><h3>{esc(b["org"])}</h3><p class="addr">{esc(b["address"])}</p></div>'
+            f'<div><h3>{esc(b["org"])}</h3>{addr}</div>'
             f'<div class="rule"></div><div style="display:flex;flex-direction:column;gap:12px">{rows}</div></div>')
     return (f'<section class="sec sec-sunk"><div class="sec-inner formwrap">'
             f'<div class="form" style="background:var(--color-surface);border:0">{fields}'
@@ -701,7 +704,7 @@ PAGES = {}
 PAGES["platform/index.html"] = dict(title="Platform", notes=[
     "Transcribed from the artboard “Impruvon — Platform”.",
     "Hub page: its job is routing. Each pillar is a standalone page so it can rank on buyer terms and hold depth.",
-    "The yellow Results block is flagged because the figures are sourced to an I/DD-specific elevator pitch — scope and external-use clearance needed before publishing.",
+    "The Results figures are the client's own, published in their home page draft. They come from a June 2026 I/DD deck; the client chose to use them site-wide and the question is closed.",
 ], sections=[
     {"t": "head", "kicker": "PLATFORM", "h1": "From medication management to clinical workflow.",
      "lede": "Most platforms tell you what already happened. Impruvon is built to guide what happens next.",
@@ -721,7 +724,7 @@ PAGES["platform/index.html"] = dict(title="Platform", notes=[
     {"t": "flagstats", "h": "Results at a glance.", "items": [
         ("48%", "Reduction in medication errors"), ("39%", "Improvement in compliance rates"),
         ("69%", "Better audit-ready documentation"), ("50,000+", "Medication errors eliminated to date")],
-     "note": "Figures are sourced to an I/DD-specific elevator pitch. Confirm scope and external-use clearance before publishing."},
+    },
     {"t": "audience", "h": "Built for the setting you work in.", "items": [
         ("I/DD & Residential Providers", "Purpose-built for the demands of group homes, ICFs and HCBS waiver programs.", "who-we-serve/idd-residential.html"),
         ("Behavioral & Mental Health", "Built for the documentation and complexity of psychiatric care.", "who-we-serve/behavioral-mental-health.html"),
@@ -1057,7 +1060,7 @@ PAGES["who-we-serve/behavioral-mental-health.html"] = dict(title="Behavioral & M
     {"t": "flagstats", "h": "Proven results.", "items": [
         ("48%", "reduction in medication errors"), ("39%", "improvement in compliance rates"),
         ("69%", "improvement in audit-ready documentation")],
-     "note": "Sourced from the I/DD elevator pitch, used here on a behavioural health page. Keep, or drop and lead with the quote."},
+    },
     {"t": "quote", "bg": "sec-sunk",
      "text": "The overall system, reduction in documentation errors and medication errors are the biggest outcomes. They're the outcomes that we needed to see, and we've seen that since implementing Impruvon.",
      "by": "Chelsea Curran, Executive Director, Coastal Autism Academy"},
@@ -1243,40 +1246,6 @@ PAGES["compare/index.html"] = dict(title="Compare",
 ])
 
 
-PAGES["pricing/index.html"] = dict(title="Pricing", notes=[
-    "Transcribed from the artboard “Impruvon — Pricing”.",
-    "A pricing page with no numbers. It exists because buyers search for eMAR pricing — with no page that traffic goes to competitors and review sites; with this page it converts.",
-    "Every line describing the model is a draft. Four questions settle the whole page: how the subscription is counted, whether MedBox is sold or leased, whether implementation is one-time, and whether support is included.",
-], sections=[
-    {"t": "head", "h1": "How Impruvon is priced.",
-     "lede": "There are no numbers on this page, because a six-home provider and a statewide network pay very differently. What we can tell you is exactly what the price is built from, so nothing on the call is a surprise."},
-    {"t": "sunkcards", "bg": "sec-sunk", "h": "What you pay for.", "items": [
-        ("Software subscription", "An annual subscription to eMAR+, priced by the number of individuals you serve. Everything in the platform is included: guided med passes, clinical workflows, reporting and dashboards."),
-        ("MedBox hardware", "Smart medication storage is optional and priced separately, per unit. You choose how many homes to equip, and when."),
-        ("Implementation", "A one-time setup covering configuration, pharmacy connection, EHR integration and staff training."),
-        ("Support", "In-person and virtual customer support, included with your subscription."),
-    ]},
-    {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
-     "note": "EVERY LINE ABOVE IS A DRAFT · FOUR QUESTIONS, ONE TEN-MINUTE CALL",
-     "body": [("1 · Is the subscription counted per resident, per home, per user or another way   2 · Is MedBox sold or leased   3 · Is implementation one-time or part of the subscription   4 · Is support included or separate", True)]},
-    {"t": "softcards", "cols": 3, "h": "What doesn't cost extra.",
-     "flag": "Confirm there is no separate charge for connecting a pharmacy.", "items": [
-        ("Barcode scanning", "In-app barcode scanning. No external scanners required."),
-        ("Pharmacy integration", "No changes to your pharmacy relationships or medication packaging."),
-        ("Platform updates", "Included."),
-    ]},
-    {"t": "faqcards", "bg": "sec-sunk", "h": "Questions about pricing.",
-     "after": "Get a price for your setup.", "items": [
-        ("Why aren't there prices on this page?", "Because a six-home provider and a statewide network pay very differently, and a single number here would be wrong for both."),
-        ("Is there a minimum?", "[___]", "flag"),
-        ("Is there a contract term?", "[___]", "flag"),
-        ("Do state-directed programs cost the provider anything?", "[___] · Asked on the State-Directed page too, where we promise a single network standard.", "flag"),
-    ]},
-])
-
-
-CASES = "resources/case-studies/index.html"
-
 PAGES["resources/index.html"] = dict(title="Resources",
     badge="URL MUST CHANGE ON FILTERING, OTHERWISE CRAWLERS SEE ONE PAGE", notes=[
     "Headline, filters and card grid transcribed from the artboard “Impruvon — Resources”. The three-track split above them is a structural change we are proposing, not something on the artboard.",
@@ -1378,14 +1347,14 @@ PAGES["resources/case-studies/charles-lea.html"] = dict(title="Case Study Templa
 ])
 
 
-PAGES["about/our-story.html"] = dict(title="Our Story", badge="WAITING ON CEO SIGN-OFF", notes=[
+PAGES["about/our-story.html"] = dict(title="Our Story", notes=[
     "Transcribed from the artboard “Impruvon — Our Story”.",
-    "The founder's account discloses a personal loss in his family. The client flagged this section themselves. The wording is reproduced exactly as supplied and must not be edited by us — not by a single word — until the CEO and leadership confirm the exact text and the level of detail.",
+    "The founder's account discloses a personal loss in his family. The client confirmed it is the same story already published on their existing site and signed off by the CEO, and cleared it to proceed as sent. The wording stays exactly as supplied and is not edited by us.",
 ], sections=[
     {"t": "head", "h1": "Every preventable error started with a system that wasn't built to prevent it.",
      "lede": "Impruvon exists because one family learned that lesson the hardest way possible."},
     {"t": "storyflag",
-     "note": "THE CLIENT FLAGGED THIS SECTION THEMSELVES · IT DISCLOSES A PERSONAL LOSS IN THE FOUNDER'S FAMILY · EXACT WORDING AND LEVEL OF DETAIL TO BE CONFIRMED WITH THE CEO AND LEADERSHIP · NOT TO BE EDITED BY US, NOT BY A SINGLE WORD",
+     "note": "SIGNED OFF BY THE CEO · SAME ACCOUNT AS THE ONE ALREADY PUBLISHED ON THE EXISTING SITE · WORDING STAYS EXACTLY AS SUPPLIED AND IS NOT EDITED BY US",
      "body": [
         ("Founder Justin Amoyal lost his brother Ben from a preventable overdose while living in a supported residential setting. Not because anyone failed to care, but because the systems around him were never engineered to catch it in time.", "lead"),
         ("That loss became a question that stayed with us. Hospitals had spent decades building infrastructure to stop medication errors before they reach a patient. Why hadn't community-based care been given the same tools?", "body"),
@@ -1429,15 +1398,16 @@ PAGES["about/our-commitment.html"] = dict(title="Our Commitment", notes=[
         ("48%", "Reduction in medication errors"), ("39%", "Improvement in compliance rates"),
         ("50,000+", "Medication errors eliminated to date"),
         ("1,800%", "Projected ROI in the Massachusetts state-directed model")],
-     "note": "Flagged by the client. Figures come from an I/DD-specific deck and need confirmation of scope and permission for external use. The word “projected” was added by us and must stay: the same figure appears elsewhere as an achieved result and as “ROI > 1500%”."},
+    },
     {"t": "closing", "light": True, "h": "See how we serve your organization.",
      "cta": ("Who we serve", "who-we-serve/index.html")},
 ])
 
 
-PAGES["about/contact.html"] = dict(title="Contact", badge="BLOCKS THE RELEASE OF THE WHOLE SITE", notes=[
+PAGES["about/contact.html"] = dict(title="Contact", notes=[
     "Transcribed from the artboard “Impruvon — Contact”.",
-    "None of the contact details exist in any client material. On a B2B site selling compliance to state agencies, a contact page without an address or a phone number damages trust more than anything else on the site. This is the item that blocks release.",
+    "The client supplied support@impruvon.com and info@impruvon.com, and confirmed there is no physical address. A phone number was not supplied and is not being chased.",
+    "Press and media has no address of its own, so it routes to info@ until the client asks for a separate one.",
     "Pharmacy partnership is a fifth enquiry type added during design: 75+ pharmacies are a stated asset, but there was no route for a pharmacy to reach out.",
 ], sections=[
     {"t": "head", "h1": "Let's talk.", "lede": "Tell us what you need, and we'll get you to the right team."},
@@ -1445,15 +1415,15 @@ PAGES["about/contact.html"] = dict(title="Contact", badge="BLOCKS THE RELEASE OF
         {"title": "Book a demo", "text": "See the platform in action.", "link": DEMO},
         {"title": "Customer support", "text": "Get help with your Impruvon account."},
         {"title": "Pharmacy partnership", "text": "Connect your pharmacy to the Impruvon network.", "new": "NEW · FIFTH TYPE"},
-        {"title": "Press and media", "text": "Media inquiries and press resources."},
+        {"title": "Press and media", "text": "Media inquiries and press resources. Routed to info@ for now."},
         {"title": "General inquiry", "text": "Everything else."},
     ]},
     {"t": "contactform",
      "fields": [["Name", "Organization"], ["Role", "State or region"], ["Inquiry type"]],
-     "note": "NONE OF THESE DETAILS EXIST IN ANY CLIENT MATERIAL · A CONTACT PAGE WITHOUT AN ADDRESS OR A PHONE NUMBER, ON A B2B SITE SELLING COMPLIANCE TO STATE AGENCIES, DAMAGES TRUST MORE THAN ANYTHING ELSE ON THE SITE",
-     "org": "Impruvon Health", "address": "[Street address] · [City, State ZIP]",
-     "contacts": [("General", "[hello@impruvon.com]"), ("Support", "[support@impruvon.com]"),
-                  ("Press", "[press@impruvon.com]"), ("Phone", "[(000) 000-0000]")]},
+     "note": "NO PHYSICAL ADDRESS AND NO PHONE NUMBER, BY THE CLIENT'S DECISION · EVERY ENQUIRY TYPE RESOLVES TO ONE OF THE TWO ADDRESSES BELOW",
+     "org": "Impruvon Health", "address": "",
+     "contacts": [("General", "info@impruvon.com"), ("Support", "support@impruvon.com"),
+                  ("Press", "info@impruvon.com")]},
 ])
 
 
@@ -1523,7 +1493,7 @@ SITEMAP_GROUPS = [
                       ("Home Health", "who-we-serve/home-health.html"),
                       ("Foster Care", "who-we-serve/foster-care.html"),
                       ("State-Directed Programs", "who-we-serve/state-directed.html")]),
-    ("Decide", [("Compare", "compare/index.html"), ("Pricing", "pricing/index.html"),
+    ("Decide", [("Compare", "compare/index.html"),
                 ("Trust & Compliance", "trust/index.html")]),
     ("Resources", [("Resources hub", "resources/index.html"),
                    ("Supporting DSPs", "resources/caregivers/index.html"),
@@ -1539,17 +1509,12 @@ SITEMAP_GROUPS = [
 ]
 
 BLOCKERS = [
-    "Contact details — address, phone, support and press email. Blocks release of the whole site.",
-    "Our Story — the founder's account of a personal loss needs CEO and leadership sign-off, word for word.",
     "States — Massachusetts only, or Massachusetts and Missouri.",
-    "Results figures — 48/39/69% come from an I/DD deck; confirm scope and permission for external use.",
     "The $371M / 1,800% figure — “projected” must stay everywhere, and the “ROI > 1500%” edition must go.",
-    "Charles Lea — the period the 23,000+ covers, plus a written sign-off on the name, numbers and quote.",
-    "Vista Care — named everywhere but has no story, numbers or approved quote.",
-    "Pricing — how the subscription is counted, MedBox sold or leased, implementation, support.",
+    "Charles Lea and Vista Care — both case studies exist only as gated PDFs on impruvon.com. Neither the text nor the period the 23,000+ covers is in any material we hold.",
+    "Vista Care — the Liz Olive quote is cleared, but the 75% across 18 sites in 6 states still has nothing behind it.",
     "Careers — an ATS feed, or the page does not ship.",
-    "Resources — at least three real materials, or publish only case studies.",
-    "Resources structure — the three-track split (caregivers / administrators / case studies) is our proposal, not on the artboards. Confirm before build.",
+    "Resources — the client chose Case Studies / Blogs / Events / Webinars. Three of the four have no material at all.",
     "Caregiver stories — a written consent and photo release template is needed before the first interview.",
     "State briefing — confirm the conversion exists and who handles it.",
 ]

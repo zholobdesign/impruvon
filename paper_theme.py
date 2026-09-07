@@ -723,3 +723,9 @@ CSS += """
 @media (max-width:900px){ .g5{grid-template-columns:1fr} .caprow{gap:16px;flex-direction:column}
   .caprow .cname{width:100%} .caprow .cbody{min-width:0} }
 """
+
+CSS += """
+.statbox{display:flex;flex-wrap:wrap;gap:32px 24px}
+.statbox .fstat b{color:var(--color-accent)}
+.statbox .fstat span{color:var(--color-ink-muted)}
+"""
