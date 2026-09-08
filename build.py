@@ -387,7 +387,7 @@ def build_pages():
               "by": "Direct Support Professional — I/DD residential group home, Washington D.C."},
              {"t": "cards", "h": "Proof, with names on it", "cols": 3, "items": [
                  {"title": "23,000+ medications, zero errors", "text": "Charles Lea Center", "link": "resources/customers/charles-lea.html", "cta": "Read the case study"},
-                 {"title": "75% fewer medication errors", "text": "Vista Care — 18 sites, 6 states", "link": "resources/customers/index.html", "cta": "Read the case study"},
+                 {"title": "75% fewer medication errors", "text": "Vista Care — error rate from 8% to 2%", "link": "resources/customers/index.html", "cta": "Read the case study"},
                  {"title": "$371M projected savings", "text": "Massachusetts state-directed model", "link": "who-we-serve/state-directed.html", "cta": "See the state model"},
              ]},
              {"t": "faq", "items": [
@@ -524,7 +524,7 @@ def build_pages():
           "The only platform with automated HRST integration",
           "Real-time analytics across every resident, in every location"],
          [("23,000+ medications administered with zero errors — Charles Lea Center", "resources/customers/charles-lea.html"),
-          ("75% reduction in medication errors across 18 sites in 6 states — Vista Care", "resources/customers/index.html")],
+          ("75% reduction in medication error rate, from 8% to 2% — Vista Care", "resources/case-studies/vista-care.html")],
          "Photo: DSP and resident in a group home, tablet in hand"),
         ("who-we-serve/behavioral-mental-health.html", "Behavioral & Mental Health",
          "Passing your audit and being defensible aren't the same thing.",
@@ -763,7 +763,7 @@ def build_pages():
          blocks=[
              {"t": "cards", "h": "Stories", "cols": 3, "items": [
                  {"title": "Charles Lea Center", "text": "23,000+ medications administered with zero errors.", "link": "resources/customers/charles-lea.html", "cta": "Read the story"},
-                 {"title": "Vista Care", "text": "75% reduction in medication errors across 18 sites in 6 states."},
+                 {"title": "Vista Care", "text": "75% reduction in medication error rate, from 8% to 2%, across 285 sites."},
                  {"title": "Coastal Autism Academy", "text": "Documentation and medication errors down after implementation."},
                  {"title": "Massachusetts EOHHS", "text": "$371M projected four-year savings; ~1,800% ROI in the state model.", "link": "who-we-serve/state-directed.html", "cta": "See the state model"},
              ]},
@@ -930,7 +930,7 @@ def build_pages():
                  "Clearance for the Shannon Childress quote, and for the Results-at-a-Glance figures.",
                  "Founder story and leadership names for About.",
                  "Address, phone and support/press email addresses.",
-                 "Whether Missouri can be claimed alongside Massachusetts for state-directed."]},
+                 "Massachusetts is the state that can be named. A second state contract exists but has not been announced."]},
          ])
 
 

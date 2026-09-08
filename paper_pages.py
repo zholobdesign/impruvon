@@ -526,9 +526,10 @@ def s_results(b, base):
     q = ""
     if b.get("quote"):
         text, name, title, warn = b["quote"]
-        q = (f'<div class="quoteflag"><div class="q">&ldquo;{esc(text)}&rdquo;</div>'
-             f'<div class="by"><b>{esc(name)}</b><span>{esc(title)}</span></div>'
-             f'<div class="warn">{esc(warn)}</div></div>')
+        w = f'<div class="warn">{esc(warn)}</div>' if warn else ""
+        cls = "quoteflag" if warn else "quoteflag clean"
+        q = (f'<div class="{cls}"><div class="q">&ldquo;{esc(text)}&rdquo;</div>'
+             f'<div class="by"><b>{esc(name)}</b><span>{esc(title)}</span></div>{w}</div>')
     return (f'<section class="sec sec-deep"><div class="sec-inner stack-44">'
             f'<div><div style="font-size:12px;font-weight:500;letter-spacing:.12em;color:var(--color-seafoam);'
             f'margin-bottom:16px">{esc(b["label"])}</div>'
@@ -985,7 +986,7 @@ PAGES["who-we-serve/idd-residential.html"] = dict(title="I/DD & Residential", no
     {"t": "center", "text": "Representing 2 to 3% of the U.S. population, adults with intellectual and developmental disabilities suffer higher rates and greater severity of polypharmacy-related adverse events than those without I/DD, a risk escalating alongside rising polypharmacy trends in young adults."},
     {"t": "scards", "h": "Proven results.", "items": [
         ("23,000+", "medications administered with zero errors, Charles Lea Center"),
-        ("75%", "reduction in medication errors across 18 sites in 6 states, Vista Care"),
+        ("75%", "reduction in medication error rate, from 8% to 2%, Vista Care"),
         ("20–25 min", "saved per resident, per medication pass"),
     ]},
     {"t": "quote", "light": True,
@@ -1119,7 +1120,7 @@ PAGES["who-we-serve/state-directed.html"] = dict(title="State-Directed Programs"
      "lede": "Every medication error avoided is a hospitalization, an ER visit and a claim that never happens.",
      "cta": ("Request a state briefing", BRIEF)},
     {"t": "flagprose", "side": "What is a state-directed eMAR?",
-     "note": "MASSACHUSETTS ONLY, OR MASSACHUSETTS AND MISSOURI · CONFIRM",
+     "note": "CONFIRMED BY THE CLIENT · MASSACHUSETTS IS THE ONE THAT CAN BE NAMED · A SECOND STATE CONTRACT EXISTS BUT HAS NOT BEEN PUBLICLY ANNOUNCED AND STAYS OFF THE SITE UNTIL IT IS",
      "body": [("A state-directed eMAR is one medication platform adopted across a state's provider network, so documentation, oversight and reporting follow a single standard. Impruvon currently serves as the state-directed eMAR in Massachusetts, in partnership with the Massachusetts Executive Office of Health and Human Services.", False)]},
     {"t": "twocol", "bg": "", "h": "Oversight is a rear-view mirror.", "body": [
         "Every state agency knows the playbook: more oversight, more reporting requirements, more audits. But by the time a violation is caught, the adverse drug event has already happened. The ER visit billed, the hospitalization underway, the incident report filed.",
@@ -1131,7 +1132,7 @@ PAGES["who-we-serve/state-directed.html"] = dict(title="State-Directed Programs"
      "note": "Three external statistics with no attribution. State agencies and MCOs check sources — the sources are public, only the citations are missing."},
     {"t": "twocol", "bg": "sec-deep", "h": "Prevention isn't softer than enforcement.", "body": [
         "Every adverse drug event prevented is a hospitalization, an ER visit and a transport cost that never has to be recovered, and a fraudulent or erroneous claim that never gets filed. Prevention is cheaper, faster, and it protects the individual before the harm, not after."]},
-    {"t": "flagprose", "h": "Massachusetts.", "dashed": True, "bg": "",
+    {"t": "flagprose", "h": "Massachusetts.", "bg": "",
      "note": "THE WORD “PROJECTED” IS MANDATORY EVERYWHERE THIS FIGURE APPEARS · THE SAME NUMBER ALSO SITS ON OUR COMMITMENT AS AN ACHIEVED RESULT, NEXT TO “ROI > 1500%” · PICK ONE EDITION",
      "body": [("In partnership with the Massachusetts Executive Office of Health and Human Services, Impruvon's financial model projected $371M in savings over four years for approximately 25,000 individuals with I/DD, mental health and co-occurring conditions, a projected return of roughly 1,800%, driven primarily by fewer emergency visits and adverse drug events.", False),
               ("Impruvon currently serves as the state-directed eMAR in Massachusetts.", True)]},
@@ -1237,27 +1238,173 @@ PAGES["resources/index.html"] = dict(title="Resources", notes=[
 
 
 PAGES[CASES] = dict(title="Case Studies", notes=[
-    "Transcribed from the artboard “Impruvon — Case Studies”.",
-    "Two cards, and only one of them is real. Vista Care is named as a customer everywhere else on the site, but there is no story, no numbers and no approved quote — so the card is shown with the link disabled rather than filled with invented content.",
-    "Publishing rule from the artboard: every case study needs written customer sign-off on the name, the numbers and the quote. Without sign-off the provider is described generically and no logo is shown.",
+    "Four case studies. Three are built from the approved PDFs the client sent: Vista Care, Better Community Living and Burton Center. Every number, quote and name on those three pages comes straight out of those documents.",
+    "Charles Lea is the exception. It is the case study the rest of the site leans on hardest, and it is the one we still have no approved document for — the 23,000+ figure has no time period and the Shannon Childress quote has no source.",
+    "Ordering is by strength of proof, not by date. Vista Care leads because it is the only one with a before-and-after error rate.",
 ], sections=[
-    {"t": "head", "h1": "Proof, from providers like yours.",
-     "lede": "What changed after the switch — in error rates, audit results and staff hours."},
-    {"t": "caserows", "rule": ("PUBLISHING RULE",
-        "Every case study needs a written customer sign-off on the name, the numbers and the quote. Without sign-off the provider is described generically — “a South Carolina I/DD provider” — and the logo is not shown."),
-     "items": [
-        {"metric": "23,000+", "metric_label": "medications administered with zero errors",
+    {"t": "head", "kicker": "RESOURCES · CASE STUDIES",
+     "h1": "Proof, from providers like yours.",
+     "lede": "What changed after the switch, in error rates, audit results and staff hours."},
+    {"t": "caserows", "items": [
+        {"metric": "75%", "metric_label": "reduction in medication error rate, from 8% to 2%",
+         "tags": ["I/DD & MENTAL HEALTH", "MULTI-STATE"],
+         "title": "Vista Care cut its medication error rate by three quarters across six states",
+         "text": "A multi-state provider replaced a digital copy of its paper MAR with a real workflow, and could finally tell the difference between a documentation gap and an actual error.",
+         "cta": "Read the case study", "link": "resources/case-studies/vista-care.html"},
+        {"metric": "97.3%", "metric_label": "documentation rate, up from 64.8% in four months",
+         "tags": ["I/DD & RESIDENTIAL", "MASSACHUSETTS MAP"],
+         "title": "Better Community Living scaled from 6 sites to 16 and raised documentation at the same time",
+         "text": "A Massachusetts MAP provider left a decade of paper behind, at exactly the stage of a rollout where documentation usually dips.",
+         "cta": "Read the case study", "link": "resources/case-studies/better-community.html"},
+        {"metric": "Zero", "metric_label": "medication errors in the Q1 2026 compliance audit",
          "tags": ["I/DD & RESIDENTIAL", "SOUTH CAROLINA"],
-         "title": "Charles Lea Center replaced paper MARs across every residential site",
-         "text": "A provider supporting adults with I/DD moved from paper to eMAR+ and MedBox, and rebuilt how errors are caught before they reach a person.",
-         "cta": "Read the case study", "link": "resources/case-studies/charles-lea.html"},
-        {"metric": "[metric]", "metric_label": "headline result to be supplied by the client",
-         "tags": ["MULTI-STATE PROVIDER", "PAGE NOT BUILT"], "flag": True,
-         "title": "Vista Care",
-         "text": "Named as a customer, but there is no story, no numbers and no approved quote yet. Card is shown here so the layout holds two cases; the link stays disabled until the client sends the material and signs off on publishing the name.",
-         "cta": "Link disabled"},
+         "title": "Burton Center got its first clean audit in years across 28 sites",
+         "text": "Barcode scanning put the 5 Rights into every dose, and coordinators stopped driving to homes to check a paper record.",
+         "cta": "Read the case study", "link": "resources/case-studies/burton-center.html"},
+        {"metric": "23,000+", "metric_label": "medications administered with zero errors",
+         "tags": ["I/DD & RESIDENTIAL", "SOUTH CAROLINA"], "flag": True,
+         "title": "Charles Lea Center",
+         "text": "The one case study we still have no approved document for. The figure has no time period attached and the quote attributed to Shannon Childress has no source. The page below is a template, not a finished case study.",
+         "cta": "See the template", "link": "resources/case-studies/charles-lea.html"},
+    ]},
+    {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
+     "note": "ONE DOCUMENT STILL MISSING",
+     "body": [("Vista Care, Better Community and Burton Center are built from approved PDFs. Charles Lea is not, and it is the case study the home page, the I/DD page and the eMAR+ page all quote. Either the approved document arrives, or the 23,000+ figure comes off those three pages.", "")]},
+    {"t": "closing", "h": "See what the numbers look like on your caseload.", "cta": ("Book a demo", DEMO)},
+])
+
+
+PAGES["resources/case-studies/vista-care.html"] = dict(title="Vista Care", notes=[
+    "Built from the approved PDF “Vista Care Case Study, Digital v4 ACTIVE”. Every figure, quote and name here is taken from that document.",
+    "The site previously carried “75% reduction in medication errors across 18 sites in 6 states”, which came from the copy doc. The approved case study says 285 sites in 4 states for the 2,327,850 administrations, and Vista Care itself operates across six states. The 18-sites figure is wrong and has been corrected everywhere it appeared.",
+], sections=[
+    {"t": "casehead", "crumbs": ["Resources", "Case studies", "Vista Care"],
+     "h1": "A 75% cut in the medication error rate, from 8% to 2%.",
+     "lede": "How Vista Care reduced med errors, boosted staff accountability and gained full organisational visibility.",
+     "meta": [("ORGANIZATION", "Vista Care Inc."), ("SETTING", "I/DD, developmental and mental health"),
+              ("STATES", "Wisconsin, Illinois, Colorado, Utah, Nevada, South Dakota"),
+              ("USING", "eMAR+ and MedBox")]},
+    {"t": "labelsplit", "label": "LIFE BEFORE IMPRUVON", "h": "A digital copy of a paper MAR is still a paper MAR.",
+     "body": ["Vista Care largely mirrored paper MAR workflows in a digital format. Medication processes varied by region and pharmacy integration, resulting in limited standardisation and minimal built-in safeguards.",
+              "The system lacked a true workflow, making it difficult to distinguish documentation gaps from actual medication errors. Limited visibility into medication accuracy made oversight reactive rather than proactive."],
+     "bullets": [
+        "Initials were the only proof of administration, with few safeguards against wrong dose, wrong time or wrong person.",
+        "Performance could not be compared across states, so there was no meaningful, actionable data.",
+        "Vista Care could not quantify its own medication error rate, or confidently tell the story of medication accuracy."]},
+    {"t": "numsteps", "label": "IMPLEMENTATION", "h": "Region by region, software before hardware.",
+     "items": [
+        ("Adoption-first phased rollout", "Impruvon went in region by region, letting Vista Care build confidence before scaling across states. eMAR+ launched first and MedBoxes followed later, to reduce operational strain and support smoother DSP adoption."),
+        ("Hands-on support", "Dedicated Impruvon team members ran onboarding, training and weekly check-ins, which helped separate user error from system issues and refine the workflows."),
+        ("Diverse workforce enablement", "Training was built for a wide range of users, from new DSPs to experienced staff, so it worked across a highly varied workforce."),
      ]},
-    {"t": "closing", "light": True, "h": "See what the numbers look like on your caseload."},
+    {"t": "results", "label": "IMPACT AT A GLANCE", "h": "What changed.", "items": [
+        ("75%", "reduction in medication error rate, from 8% to 2% across states", False),
+        ("0.5%", "medication error rate in Illinois specifically", False),
+        ("100%", "real-time visibility on medication administration org-wide", False),
+        ("2,327,850", "medications administered across 285 sites in 4 states", False),
+     ], "quote": ("It was a partnership approach that initiated right out of the gate. Everybody was aligned on the mission: getting people supported the right meds at the right time and making sure that the DSPs were set up for success.",
+                  "Kimber Bruhn", "National Director of Quality and Nursing Services, Vista Care Inc.", "")},
+    {"t": "quote", "bg": "sec-sunk",
+     "text": "The workflow sets DSPs up for success, and it also sets the individual up for success. If someone manages their own medications, they can self-administer with the same level of support and structure. Whether a DSP is administering medication or an individual is self-administering, both pathways lead to success.",
+     "by": "Kelli Anderson, Executive Director of Illinois, Vista Care Inc."},
+    {"t": "twocol", "h": "Accountability you can trace.",
+     "body": ["Transferring responsibility is simple now. The Impruvon system creates clear accountability for staff responsible for medication administration. In the previous system, Vista Care could not distinguish whether someone logged in to administer medication, write a note or complete another task.",
+              "With Impruvon there is stronger quality assurance oversight, and the system ensures staff complete the required three medication checks every time."]},
+    {"t": "quote",
+     "text": "Operational excellence is hard to achieve, but Impruvon has gotten us one step closer. By making medication administration compliant by design, they have taken the guesswork out of the hands of our staff.",
+     "by": "Kelli Anderson, Executive Director of Illinois, Vista Care Inc."},
+    {"t": "closing2", "h": "Run the same numbers on your programs.",
+     "buttons": [("Book a demo", DEMO), ("See all case studies", CASES)]},
+])
+
+
+PAGES["resources/case-studies/better-community.html"] = dict(title="Better Community Living", notes=[
+    "Built from the approved PDF “Better Community Case Study, Digital v4 APPROVED”. Every figure, quote and name here is taken from that document.",
+    "This case study contains the single strongest fact on the whole site that appears nowhere else: Impruvon is available to Massachusetts MAP providers at no cost through the State. That belongs on the State-Directed page and arguably in the Massachusetts section of the site, not buried in one case study.",
+    "Documentation rate is defined in the source as the percentage of medication administrations logged digitally in Impruvon at the time of the pass. The definition has to travel with the number wherever it is used.",
+], sections=[
+    {"t": "casehead", "crumbs": ["Resources", "Case studies", "Better Community Living"],
+     "h1": "Documentation from 64.8% to 97.3%, while doubling the number of live sites.",
+     "lede": "How Better Community Living modernised medication administration and made MAP compliance second nature.",
+     "meta": [("ORGANIZATION", "Better Community Living"), ("SETTING", "I/DD, 21 residential group homes"),
+              ("STATE", "Massachusetts, MAP provider"), ("USING", "eMAR+ with pharmacy integration")]},
+    {"t": "labelsplit", "label": "LIFE BEFORE IMPRUVON", "h": "A decade of careful work on paper.",
+     "body": ["In the agency's early days the team built its own paper MARs by hand in Excel. Later the iCentrix system generated printable med sheets — a meaningful time-saver, but still a fundamentally paper-based workflow.",
+              "Internal auditing consumed the administrative team. Every box on every paper MAR had to be checked, sent back for correction, re-filed and tracked, with paperwork sometimes lost along the way."],
+     "bullets": [
+        "Paper MARs were duplicated for medication counts, producing thick stacks of paperwork at every home.",
+        "Missed signatures and handwritten data opened up the risk of medication errors.",
+        "Pages were not organised by administration time, so staff had to flip through every sheet to find what was due.",
+        "A time entered in the wrong box could turn an 8:00 PM medication into an 8:00 AM error."]},
+    {"t": "twocol", "h": "Why Impruvon.",
+     "body": ["Two factors decided it. Many direct support professionals were less digitally confident, and prior technology rollouts had been a lift for some staff. And the system had to be MAP-compliant to operate in Massachusetts at all.",
+              "Impruvon is a MAP-compliant eMAR, purpose-built to align with Massachusetts' regulatory standards and to keep compliance inside the workflow rather than in memory and paperwork. Just as important for a DDS-funded agency, Impruvon is available to Massachusetts MAP providers at no cost through the State, which removes the financial barrier to modernising medication administration."]},
+    {"t": "quote", "bg": "sec-sunk",
+     "text": "Compliance is very challenging in Massachusetts — there are a lot of rules, regulations, and technicalities. Knowing that Impruvon was MAP-compliant is part of what drew the decision to move forward.",
+     "by": "Cristina Pierce, RN Supervisor and MAP Consultant/Trainer, Better Community Living"},
+    {"t": "numsteps", "label": "IMPLEMENTATION", "h": "One home, three months, then one a month.",
+     "items": [
+        ("Adoption-first phased rollout", "Better Community began with a single home in early 2026 and deliberately took three months to perfect it, giving staff, managers and the clinical team time to define their roles. From there the agency rolled out roughly one home per month, and the pace grew with staff proficiency."),
+        ("In-person, hands-on training", "Impruvon representatives came onsite to train staff during the first go-lives, and home managers got quick answers to their questions. Those first homes have sustained documentation at or near 100% ever since."),
+        ("Visibility for leadership from day one", "As each home went live, supervisors could see exactly what staff see in real time. Questions that once required phone calls and photos of paper MARs are resolved on the spot, and the nursing team supports every home remotely."),
+     ]},
+    {"t": "results", "label": "THE RESULTS", "h": "Life at Better Community today.", "items": [
+        ("33%", "increase in documentation rate, from 64.8% to 97.3% between April and July 2026", False),
+        ("5 of 16", "sites reached a 99.8–100% documentation rate in July, with 9 more above 95%", False),
+        ("39,094", "medications administered through Impruvon in a four-month rollout", False),
+     ], "quote": ("So much of my time was spent going through the paper MARs. Some individuals may have 30 paper MARs, and I had to check every box — did somebody sign, did they log the data — then send it back, and sometimes it got lost in transport.",
+                  "Dakota Martinez", "Training and Medical Coordinator, Better Community Living", "")},
+    {"t": "twocol", "h": "Beyond the numbers.",
+     "body": ["That climb came at exactly the stage of a rollout where documentation typically dips as new staff learn a system.",
+              "Pharmacy integration matches labels to the system automatically and surfaces pending refill orders before pickup, so incorrect instructions are corrected before a medication ever reaches the home. Staff are prompted to record vital signs, blood glucose and bowel movements during the med pass, and documentation of all three has measurably improved."]},
+    {"t": "quote", "bg": "sec-sunk",
+     "text": "Our labels automatically match what we have in Impruvon because they're coming directly from the pharmacy. When the pharmacy gets a refill from the doctor, it shows in the system before staff even pick up the medication. If an instruction on the label isn't correct, you already know ahead of time and can get it fixed.",
+     "by": "Dakota Martinez, Training and Medical Coordinator, Better Community Living"},
+    {"t": "quote",
+     "text": "I was surprised at how well the staff adjusted. Staff that don't like to work with any form of technology adjusted to it well and eventually grew to love it.",
+     "by": "Cristina Pierce, RN Supervisor and MAP Consultant/Trainer, Better Community Living"},
+    {"t": "closing2", "h": "Run the same numbers on your programs.",
+     "buttons": [("Book a demo", DEMO), ("See all case studies", CASES)]},
+])
+
+
+PAGES["resources/case-studies/burton-center.html"] = dict(title="Burton Center", notes=[
+    "Built from the approved PDF “Burton Center Case Study, Digital v2 APPROVED”. Every figure, quote and name here is taken from that document.",
+    "Burton Center is in South Carolina, the same state as Charles Lea. Until the Charles Lea document arrives, this is the South Carolina I/DD case study the site can actually stand behind.",
+], sections=[
+    {"t": "casehead", "crumbs": ["Resources", "Case studies", "Burton Center"],
+     "h1": "Zero medication errors, and the first clean audit in years.",
+     "lede": "How Burton Center embedded the 5 Rights into every dose and connected coordinators across 28 sites.",
+     "meta": [("ORGANIZATION", "Burton Center"), ("SETTING", "I/DD, residential, day and employment services"),
+              ("STATE", "South Carolina, six county areas"), ("USING", "eMAR+ with barcode scanning")]},
+    {"t": "labelsplit", "label": "LIFE BEFORE IMPRUVON", "h": "A coordinator can't be at every site at once.",
+     "body": ["Medication administration ran on paper MARs, with staff marking each entry square by hand. A coordinator reviewed those records in person — weekly at some homes, monthly at others. Staffing shortages were covered with agency workers trained on that same paper process.",
+              "Comfort with technology varied. Staff, described as creatures of habit, expressed natural reluctance to shift away from long-familiar routines."],
+     "bullets": [
+        "Reliance on one entrenched, offline process limited real-time oversight.",
+        "Closing the loop on a missed dose meant a phone call, or a drive to the home to read the paper record.",
+        "Limited oversight and an error-prone documentation process held back both quality of care and staff confidence."]},
+    {"t": "numsteps", "label": "IMPLEMENTATION", "h": "Five to ten sites at a time, scanners after.",
+     "items": [
+        ("Residential rollout began October 2025", "Phased by site, five to ten at a time, which minimised onboarding risk and let adoption happen at a real pace."),
+        ("Scanners added after software adoption", "Barcode scanning went in once the eMAR was established, so staff learned one thing at a time."),
+        ("Real-time notifications replaced manual follow-up", "Coordinators and leaders get alerts to phone and email instead of chasing paper records site by site."),
+     ]},
+    {"t": "results", "label": "IMPACT AT A GLANCE", "h": "From contract to date.", "items": [
+        ("Zero", "medication errors in the Q1 2026 internal compliance audit, the first clean result in years", False),
+        ("95%", "PRN effectiveness check completion rate", False),
+        ("91%", "barcode scanning rate, in compliance with the 5 Rights", False),
+        ("350,000+", "medication administrations and 30,000 pharmacy orders across 28 sites", False),
+     ], "quote": ("I just recently had an Alliant survey and had zero med errors, and that was the first time in years I've had no med errors. I was extremely proud of that.",
+                  "Scarlet Lawton", "Community Training Home Coordinator, Burton Center", "")},
+    {"t": "twocol", "h": "Sites under a 1% error rate more than doubled in two quarters.",
+     "body": ["Burton Center has scaled Impruvon into daily medication operations across 28 sites. Coordinators maintain a 95% PRN effectiveness check completion rate and 91% barcode scanning compliance, keeping the 5 Rights met at nearly every point of care.",
+              "Under conditions from hurricanes, continuous mobile connectivity through power outages helped DSPs support clients and weather the storm without disruption."]},
+    {"t": "quote", "bg": "sec-sunk",
+     "text": "Impruvon really helped us — it cuts out the middleman. I cannot be at all my sites at the same time. The fact that I get that notification in my email made my life so much easier. I like that I can pull it up anywhere. If I'm at home, if I'm on vacation, I can pull up my phone and see what's going on.",
+     "by": "Scarlet Lawton, Community Training Home Coordinator, Burton Center"},
+    {"t": "closing2", "h": "Run the same numbers on your programs.",
+     "buttons": [("Book a demo", DEMO), ("See all case studies", CASES)]},
 ])
 
 
@@ -1449,7 +1596,10 @@ SITEMAP_GROUPS = [
                 ("Trust & Compliance", "trust/index.html")]),
     ("Resources", [("Resources hub", "resources/index.html"),
                    ("Case Studies", CASES),
-                   ("Case study template", "resources/case-studies/charles-lea.html"),
+                   ("Vista Care", "resources/case-studies/vista-care.html"),
+                   ("Better Community Living", "resources/case-studies/better-community.html"),
+                   ("Burton Center", "resources/case-studies/burton-center.html"),
+                   ("Charles Lea, template", "resources/case-studies/charles-lea.html"),
                    ("Blogs", "resources/blog/index.html"),
                    ("Blog article template", "resources/blog/five-rights.html"),
                    ("Events", "resources/events/index.html"),
@@ -1461,10 +1611,8 @@ SITEMAP_GROUPS = [
 ]
 
 BLOCKERS = [
-    "States — Massachusetts only, or Massachusetts and Missouri.",
     "The $371M / 1,800% figure — “projected” must stay everywhere, and the “ROI > 1500%” edition must go.",
-    "Charles Lea and Vista Care — both case studies exist only as gated PDFs on impruvon.com. Neither the text nor the period the 23,000+ covers is in any material we hold.",
-    "Vista Care — the Liz Olive quote is cleared, but the 75% across 18 sites in 6 states still has nothing behind it.",
+    "Charles Lea — the only case study still without an approved PDF. The 23,000+ figure has no time period and the Shannon Childress quote has no source. Vista Care, Better Community and Burton Center are all now fully sourced.",
     "Careers — an ATS feed, or the page does not ship.",
     "Resources — the client chose Case Studies / Blogs / Events / Webinars. Three of the four have no material at all.",
     "Caregiver stories — a written consent and photo release template is needed before the first interview.",

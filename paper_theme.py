@@ -744,3 +744,11 @@ CSS += """
   font-size:12px;font-weight:500;letter-spacing:.1em;line-height:20px;color:var(--flag-ink)}
 @media (max-width:900px){ .newsgrid{grid-template-columns:1fr} }
 """
+
+CSS += """
+/* a sourced quote inside a results block: same shape, none of the warning styling */
+.quoteflag.clean{background:#EAF1F212;border:0;border-left:4px solid var(--color-seafoam);border-radius:0 16px 16px 0}
+.quoteflag.clean .q{color:var(--color-surface)}
+.quoteflag.clean .by b{color:var(--color-surface)}
+.quoteflag.clean .by span{color:#EAF1F2C7}
+"""
