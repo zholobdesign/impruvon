@@ -752,3 +752,7 @@ CSS += """
 .quoteflag.clean .by b{color:var(--color-surface)}
 .quoteflag.clean .by span{color:#EAF1F2C7}
 """
+
+CSS += """
+.fstat-src{flex-basis:100%;font-size:14px;line-height:22px;color:var(--color-ink-faint)}
+"""

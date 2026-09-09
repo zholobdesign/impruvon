@@ -31,7 +31,7 @@ AUDIENCE = [
      "Continuity of care for every child, at every placement change.",
      "who-we-serve/foster-care.html"),
     ("State-Directed Programs",
-     "Prevention infrastructure for state agencies and Medicaid health plans.",
+     "Prevention infrastructure for state agencies and health plans.",
      "who-we-serve/state-directed.html"),
 ]
 
@@ -97,11 +97,8 @@ NEWS = [
 NOTES = [
     "Built from the client's “IMPRUVON — Home Page Draft Copy”. All ten sections follow their order and their "
     "wording; section comments in paper_home.py name the heading each block came from.",
-    "PENDING: the H1 is the same line as the Platform overview page. Two pages sharing one headline compete for "
-    "the same search term — one of them should change.",
-    "PENDING: “Deployed across more than 50% of U.S. states”, “Zero Compromises” and “The only platform fully "
-    "integrating with state-mandated HRST” are published here as written. All three still need a source the "
-    "client can stand behind if a buyer or a competitor checks them.",
+    "Resolved in the client review of 8 Sept 2026: the Platform page took its own headline (“I/DD care is complex. Your tools shouldn't be.”) and the home page keeps this one.",
+    "“Deployed across more than 50% of U.S. states” means customers in more than half the states, not state contracts — confirmed by the client. The wording still reads as though it meant contracts; “Customers in more than half of U.S. states” would say what they actually mean. “Zero Compromises” and “The only platform fully integrating with state-mandated HRST” are still unsourced.",
     "PENDING: the stat bar reads 25K+ nursing hours and 75K+ care hours. If care hours include nursing hours, "
     "the two figures overlap and should be one number or two clearly different ones.",
     "Pharmacy Integration and EHR Integration are two cards here but one page on the site (/platform/integrations). "

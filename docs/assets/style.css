@@ -677,3 +677,5 @@ a.track:hover{border-color:var(--color-accent)}
 .quoteflag.clean .q{color:var(--color-surface)}
 .quoteflag.clean .by b{color:var(--color-surface)}
 .quoteflag.clean .by span{color:#EAF1F2C7}
+
+.fstat-src{flex-basis:100%;font-size:14px;line-height:22px;color:var(--color-ink-faint)}

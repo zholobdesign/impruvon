@@ -338,8 +338,8 @@ DEMO_CTA = {"t": "cta", "h": "See it on a real med pass.",
             "buttons": [("Book a demo", DEMO), ("Talk to sales", "about/contact.html")]}
 
 STATE_CTA = {"t": "cta", "h": "Standardise medication safety across your network.",
-             "p": "For state agencies and Medicaid health plans.",
-             "buttons": [("Request a state briefing", DEMO), ("Trust & compliance", "trust/index.html")]}
+             "p": "For state agencies and health plans.",
+             "buttons": [("Request a meeting", DEMO), ("Trust & compliance", "trust/index.html")]}
 
 
 # ---------------------------------------------------------------- pages
@@ -506,7 +506,7 @@ def build_pages():
                  {"title": "Behavioral & Mental Health", "text": "Built for the documentation and complexity of psychiatric care.", "link": "who-we-serve/behavioral-mental-health.html"},
                  {"title": "Home Health", "text": "Real-time visibility into care delivered outside the facility.", "link": "who-we-serve/home-health.html"},
                  {"title": "Foster Care", "text": "Continuity of care for every child, at every placement change.", "link": "who-we-serve/foster-care.html"},
-                 {"title": "State-Directed Programs", "text": "Prevention infrastructure for state agencies and Medicaid health plans.", "link": "who-we-serve/state-directed.html"},
+                 {"title": "State-Directed Programs", "text": "Prevention infrastructure for state agencies and health plans.", "link": "who-we-serve/state-directed.html"},
              ]},
              DEMO_CTA,
          ])
@@ -877,7 +877,7 @@ def build_pages():
          crumbs=[("Home", "index.html"), ("Book a demo", None)],
          notes=["The single conversion point of the whole site. Every page links here.",
                 "Form fields exist to qualify and to route: organisation type and states decide whether this is a provider deal or a state-directed conversation.",
-                "State-directed traffic can land here too — the 'Request a state briefing' CTA points to this page with a pre-selected enquiry type."],
+                "State-directed traffic can land here too — the 'Request a meeting' CTA points to this page with a pre-selected enquiry type."],
          blocks=[
              {"t": "list", "h": "Form fields", "items": [
                  "Name · work email · phone",
@@ -921,7 +921,7 @@ def build_pages():
              {"t": "table", "h": "All pages", "head": ["Page", "URL", "Type"], "rows": rows},
              {"t": "text", "h": "Conversion logic", "p": [
                  "One primary conversion for the whole site: Book a demo. Every product, vertical and trust page ends with it.",
-                 "State agencies get a second door: Request a state briefing, which routes to the same form with a different enquiry type.",
+                 "State agencies get a second door: Request a meeting, which routes to the same form with a different enquiry type.",
                  "Caregiver pages deliberately do not push the demo — that reader cannot buy. They push 'Send this to your administrator' instead.",
                  "Contact is separate from Book a demo so support and press traffic never pollutes the sales pipeline."]},
              {"t": "text", "h": "What still needs the client", "p": [

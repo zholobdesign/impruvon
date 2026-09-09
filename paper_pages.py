@@ -79,6 +79,8 @@ def s_flagstats(b, base):
     cells = "".join(f'<div class="fstat"><b>{esc(v)}</b><span>{esc(l)}</span></div>' for v, l in b["items"])
     h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
     note = f'<p class="fstat-note">{esc(b["note"])}</p>' if b.get("note") else ""
+    if b.get("source"):
+        note = f'<p class="fstat-src">Source: {esc(b["source"])}</p>'
     box = "flagbox" if b.get("note") else "statbox"
     return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner stack-44">{h}'
             f'<div class="{box}">{cells}{note}</div></div></section>')
@@ -707,7 +709,7 @@ PAGES["platform/index.html"] = dict(title="Platform", notes=[
     "Hub page: its job is routing. Each pillar is a standalone page so it can rank on buyer terms and hold depth.",
     "The Results figures are the client's own, published in their home page draft. They come from a June 2026 I/DD deck; the client chose to use them site-wide and the question is closed.",
 ], sections=[
-    {"t": "head", "kicker": "PLATFORM", "h1": "From medication management to clinical workflow.",
+    {"t": "head", "kicker": "PLATFORM", "h1": "I/DD care is complex. Your tools shouldn't be.",
      "lede": "Most platforms tell you what already happened. Impruvon is built to guide what happens next.",
      "cta": ("Book a demo", DEMO)},
     {"t": "twocol", "h": "What is Impruvon?", "body": [
@@ -732,8 +734,8 @@ PAGES["platform/index.html"] = dict(title="Platform", notes=[
         ("Home Health", "Real-time visibility into care delivered outside the facility.", "who-we-serve/home-health.html"),
         ("Foster Care", "Continuity of care for every child, at every placement change.", "who-we-serve/foster-care.html")],
      "band": ("State-Directed Programs",
-              "Prevention infrastructure for state agencies and Medicaid health plans.",
-              "Request a state briefing", "who-we-serve/state-directed.html")},
+              "Prevention infrastructure for state agencies and health plans.",
+              "Request a meeting", "who-we-serve/state-directed.html")},
     PROOF_BAR,
     {"t": "closing", "h": "See the platform in action."},
 ])
@@ -937,15 +939,15 @@ PAGES["who-we-serve/index.html"] = dict(title="Who We Serve", notes=[
      "lede": "Impruvon is a provider platform built for the specific regulatory and staffing realities of several distinct care settings, adaptable to the workflows of every setting we serve.",
      "cta": ("Book a demo", DEMO)},
     {"t": "twocol", "h": "What settings does Impruvon serve?", "body": [
-        "Impruvon is used by I/DD and residential providers, behavioral and mental health programs, home health agencies, foster care agencies, and state agencies and Medicaid health plans. What they share: medication is given by a non-clinical workforce, in dispersed settings, under state compliance requirements."]},
+        "Impruvon is used by I/DD and residential providers, behavioral and mental health programs, home health agencies, foster care agencies, and state agencies and health plans. What they share: medication is given by a non-clinical workforce, in dispersed settings, under state compliance requirements."]},
     {"t": "audience", "bg": "", "h": "Explore how Impruvon is purpose-built for the setting you work in.", "items": [
         ("I/DD & Residential Providers", "Purpose-built for the demands of group homes, ICFs and HCBS waiver programs.", "who-we-serve/idd-residential.html"),
         ("Behavioral & Mental Health", "Built for the documentation and complexity of psychiatric care.", "who-we-serve/behavioral-mental-health.html"),
         ("Home Health", "Real-time visibility into care delivered outside the facility.", "who-we-serve/home-health.html"),
         ("Foster Care", "Continuity of care for every child, at every placement change.", "who-we-serve/foster-care.html")],
      "band": ("State-Directed Programs",
-              "Prevention infrastructure for state agencies and Medicaid health plans.",
-              "Request a state briefing", "who-we-serve/state-directed.html")},
+              "Prevention infrastructure for state agencies and health plans.",
+              "Request a meeting", "who-we-serve/state-directed.html")},
     {"t": "twocol", "bg": "sec-deep", "h": "The safeguard goes in the workflow, not in the person.", "body": [
         "Different settings, one problem: medication is given by people who aren't clinicians, in places without a pharmacy down the hall, under rules that demand proof. Impruvon was built from the ground up for those workflow rhythms, staffing and budget constraints, and regulatory requirements."]},
     {"t": "nbar", "items": [
@@ -1113,15 +1115,16 @@ BRIEF = "request-a-state-briefing/index.html"
 PAGES["who-we-serve/state-directed.html"] = dict(title="State-Directed Programs", notes=[
     "Transcribed from the artboard “Impruvon — State-Directed Programs”.",
     "This is the highest-value page on the site: it is the network-scale entry point, and it converts to a state briefing rather than a product demo.",
-    "Three yellow blocks mark the three things that must be settled before publishing: which states can be claimed, citations for the national statistics, and consistent use of the word “projected” on the $371M figure.",
+    "Client review, 8 Sept 2026: Massachusetts only until Missouri can be named publicly; the CTA is now Request a meeting; the national statistics are sourced to the Institute of Medicine; “Medicaid” is out of the description; “not a product demo” is off the closing band; and the Massachusetts $371M / 1,800% section was removed at the client's request.",
+    "The 1,800% projected ROI figure still appears on Our Commitment. If it came off this page because it is not defensible, it has to come off there too — one decision, both places.",
 ], sections=[
     {"t": "head", "kicker": "WHO WE SERVE · STATE-DIRECTED PROGRAMS",
      "h1": "Your most at-risk populations carry your most preventable costs.",
      "lede": "Every medication error avoided is a hospitalization, an ER visit and a claim that never happens.",
-     "cta": ("Request a state briefing", BRIEF)},
-    {"t": "flagprose", "side": "What is a state-directed eMAR?",
-     "note": "CONFIRMED BY THE CLIENT · MASSACHUSETTS IS THE ONE THAT CAN BE NAMED · A SECOND STATE CONTRACT EXISTS BUT HAS NOT BEEN PUBLICLY ANNOUNCED AND STAYS OFF THE SITE UNTIL IT IS",
-     "body": [("A state-directed eMAR is one medication platform adopted across a state's provider network, so documentation, oversight and reporting follow a single standard. Impruvon currently serves as the state-directed eMAR in Massachusetts, in partnership with the Massachusetts Executive Office of Health and Human Services.", False)]},
+     "cta": ("Request a meeting", BRIEF)},
+    {"t": "twocol", "bg": "", "h": "What is a state-directed eMAR?", "body": [
+        "A state-directed eMAR is one medication platform adopted across a state's provider network, so documentation, oversight and reporting follow a single standard.",
+        "Impruvon currently serves as the state-directed eMAR in Massachusetts, in partnership with the Massachusetts Executive Office of Health and Human Services."]},
     {"t": "twocol", "bg": "", "h": "Oversight is a rear-view mirror.", "body": [
         "Every state agency knows the playbook: more oversight, more reporting requirements, more audits. But by the time a violation is caught, the adverse drug event has already happened. The ER visit billed, the hospitalization underway, the incident report filed.",
         "And no amount of enforcement fixes the underlying reality: a community-based workforce that is non-clinical, high-turnover, and stretched across thousands of homes your auditors will never see."]},
@@ -1129,13 +1132,9 @@ PAGES["who-we-serve/state-directed.html"] = dict(title="State-Directed Programs"
         ("1.5 million", "Americans injured by medication errors each year"),
         ("~800,000", "preventable drug-related injuries annually in long-term care settings alone"),
         ("~$21 billion", "in direct medical costs across all care settings annually")],
-     "note": "Three external statistics with no attribution. State agencies and MCOs check sources — the sources are public, only the citations are missing."},
+     "source": "Institute of Medicine (IOM), Preventing Medication Errors report."},
     {"t": "twocol", "bg": "sec-deep", "h": "Prevention isn't softer than enforcement.", "body": [
         "Every adverse drug event prevented is a hospitalization, an ER visit and a transport cost that never has to be recovered, and a fraudulent or erroneous claim that never gets filed. Prevention is cheaper, faster, and it protects the individual before the harm, not after."]},
-    {"t": "flagprose", "h": "Massachusetts.", "bg": "",
-     "note": "THE WORD “PROJECTED” IS MANDATORY EVERYWHERE THIS FIGURE APPEARS · THE SAME NUMBER ALSO SITS ON OUR COMMITMENT AS AN ACHIEVED RESULT, NEXT TO “ROI > 1500%” · PICK ONE EDITION",
-     "body": [("In partnership with the Massachusetts Executive Office of Health and Human Services, Impruvon's financial model projected $371M in savings over four years for approximately 25,000 individuals with I/DD, mental health and co-occurring conditions, a projected return of roughly 1,800%, driven primarily by fewer emergency visits and adverse drug events.", False),
-              ("Impruvon currently serves as the state-directed eMAR in Massachusetts.", True)]},
     {"t": "sunkcards", "bg": "sec-sunk", "h": "One platform. Statewide visibility.", "items": [
         ("Enable every provider in your network", "Guided workflows make safe administration the default for a non-clinical workforce, so quality doesn't depend on which agency an individual happens to be served by."),
         ("Real-time, centralized oversight", "Enterprise dashboards and automated audit tooling replace after-the-fact record requests with live, statewide visibility into medication administration."),
@@ -1149,28 +1148,28 @@ PAGES["who-we-serve/state-directed.html"] = dict(title="State-Directed Programs"
         ("How does it work with providers who already have an EHR?", "Impruvon connects with existing EHR systems rather than replacing them."),
         ("Where is Impruvon already state-directed?", "Massachusetts, in partnership with the Executive Office of Health and Human Services, covering approximately 25,000 individuals."),
     ]},
-    {"t": "closing", "light": True, "h": "Request a state briefing.",
-     "sub": "A working session for state and MCO teams, not a product demo.",
-     "cta": ("Request a state briefing", BRIEF)},
+    {"t": "closing", "light": True, "h": "Request a meeting.",
+     "sub": "A working session for state and MCO teams.",
+     "cta": ("Request a meeting", BRIEF)},
 ])
 
 
-PAGES[BRIEF] = dict(title="Request a State Briefing",
+PAGES[BRIEF] = dict(title="Request a Meeting",
     badge="CONVERSION FOUND IN THE COPY, NEVER DISCUSSED ON A CALL · CONFIRM IT EXISTS AND WHO HANDLES IT",
     notes=[
     "Transcribed from the artboard “Impruvon — Request a State Briefing”.",
     "A second conversion, separate from Book a demo, because a state administrator is not buying a product — they are evaluating infrastructure. The form asks different questions and routes to a different team.",
     "Flagged: this CTA appears in the copy but was never discussed on a call. Confirm it exists and who handles it before the site goes live.",
 ], sections=[
-    {"t": "head", "h1": "Request a state briefing.",
-     "lede": "A working session for state agencies and Medicaid health plans. Not a product demo."},
+    {"t": "head", "h1": "Request a meeting.",
+     "lede": "A working session for state agencies and health plans."},
     {"t": "dotcards", "bg": "sec-sunk", "cols": 1, "h": "What we cover.", "items": [
         "How the Massachusetts state-directed program is structured",
         "What real-time, centralized oversight looks like at network scale",
         "What statewide deployment involves: provider and pharmacy outreach, enrollment, training, reporting and audit optimization, legacy system integration",
         "Security and compliance questions",
     ]},
-    {"t": "form", "cta": ("Request a state briefing", BRIEF), "fields": [
+    {"t": "form", "cta": ("Request a meeting", BRIEF), "fields": [
         ["Name", "Work email"],
         ["Agency or health plan", "Role"],
         ["State", "Approximate individuals served"],
@@ -1607,7 +1606,7 @@ SITEMAP_GROUPS = [
     ("Company", [("Company", "about/index.html"), ("Our Story", "about/our-story.html"),
                  ("Our Commitment", "about/our-commitment.html"), ("Careers", "about/careers.html"),
                  ("Contact", "about/contact.html")]),
-    ("Convert", [("Book a Demo", DEMO), ("Request a State Briefing", BRIEF), ("Log in", "login/index.html")]),
+    ("Convert", [("Book a Demo", DEMO), ("Request a Meeting", BRIEF), ("Log in", "login/index.html")]),
 ]
 
 BLOCKERS = [
@@ -1616,7 +1615,7 @@ BLOCKERS = [
     "Careers — an ATS feed, or the page does not ship.",
     "Resources — the client chose Case Studies / Blogs / Events / Webinars. Three of the four have no material at all.",
     "Caregiver stories — a written consent and photo release template is needed before the first interview.",
-    "State briefing — confirm the conversion exists and who handles it.",
+    "Request a meeting — the URL is still /request-a-state-briefing. Confirm whether it moves to /request-a-meeting before launch.",
 ]
 
 
