@@ -46,17 +46,17 @@ CAPABILITIES = [
      "right time — with support for supervised self-administration.",
      "platform/medbox.html"),
     ("Pharmacy Integration",
-     "24/7 bidirectional connectivity with 75+ pharmacy partners nationally: orders, refills, and "
-     "discontinuations flow in real time, eliminating faxes and manual entry.",
-     "platform/integrations.html"),
+     "Continuous, 24/7 bidirectional data sync across 75+ pharmacy partners and your EHR eliminates "
+     "double-documentation and accelerates care delivery.",
+     "platform/pharmacy-integration.html"),
     ("HRST Automation",
      "The only platform fully integrating with state-mandated HRST requirements — complete inputs in a single "
      "click, with medications, diagnoses, and allergies pulled straight from the pharmacy.",
      "platform/hrst-automation.html"),
     ("EHR Integration",
-     "Connects with your existing EHR systems to eliminate duplicate documentation and multi-system logins. "
-     "Staff work in one place; data flows where it needs to go.",
-     "platform/integrations.html"),
+     "Impruvon integrates directly with your existing EHRs, pharmacy management systems, and telehealth "
+     "platforms, creating a single source of truth for your care team.",
+     "platform/ehr-integration.html"),
 ]
 
 # SECTION: RESULTS AT A GLANCE — WHAT OUR CUSTOMERS EXPERIENCE
@@ -101,8 +101,8 @@ NOTES = [
     "“Deployed across more than 50% of U.S. states” means customers in more than half the states, not state contracts — confirmed by the client. The wording still reads as though it meant contracts; “Customers in more than half of U.S. states” would say what they actually mean. “Zero Compromises” and “The only platform fully integrating with state-mandated HRST” are still unsourced.",
     "PENDING: the stat bar reads 25K+ nursing hours and 75K+ care hours. If care hours include nursing hours, "
     "the two figures overlap and should be one number or two clearly different ones.",
-    "Pharmacy Integration and EHR Integration are two cards here but one page on the site (/platform/integrations). "
-    "Both cards land there. Splitting them back into two pages is a separate decision.",
+    "Resolved 9 Sept 2026: pharmacy and EHR are two pages again, /platform/pharmacy-integration and "
+    "/platform/ehr-integration, and the two cards here point to one each.",
     "The Latest news band above the closing CTA is not in the client's draft — it was added so the Resources section has a route from the homepage. Every card in it is a placeholder; the band should not ship until at least three real items exist.",
     "Sections dropped against the previous build, because the client's draft does not include them: the homepage "
     "FAQ, the DSP/staff block, the two case-study cards, and the separate “Request a state briefing” band. "
@@ -162,9 +162,6 @@ def write(out, nav, foot, esc, demo):
     <h1>From Medication Management to Clinical Workflow &mdash; Precision You Can Count On.</h1>
     <p class="sub">Impruvon simplifies medication and treatment management for community-based care teams
       &mdash; with guided workflows that enhance compliance, reduce errors, and ensure safer, more efficient care.</p>
-    <p class="sub sub-2">Purpose-built for residential and community-based care &mdash; not retrofitted from
-      hospitals or skilled nursing &mdash; Impruvon makes the safe choice the automatic choice on every shift,
-      for every member of your team, from day one.</p>
     <div class="btns">
       <a class="pill pill-lg" href="{b}{demo}">Book a Demo</a>
       <a class="pill pill-ghost" href="{b}platform/index.html">Explore the Platform</a>
@@ -209,8 +206,10 @@ def write(out, nav, foot, esc, demo):
 <section class="sec sec-sunk" id="s04"><div class="sec-inner stack-44">
   <div class="sechead">
     <h2 class="h2">One Platform. Many Realities. Zero Compromises.</h2>
-    <p class="lede">Deployed across more than 50% of U.S. states, purpose-built for the regulatory and staffing
-      realities of each care setting we serve.</p>
+    <p class="lede">Purpose-built for residential and community-based care &mdash; not retrofitted from hospitals
+      or skilled nursing &mdash; Impruvon makes the safe choice the automatic choice on every shift, for every
+      member of your team, from day one. Deployed across more than 50% of U.S. states, purpose-built for the
+      regulatory and staffing realities of each care setting we serve.</p>
   </div>
   <div class="grid g5">{aud}</div>
   <div><a class="pill" href="{b}who-we-serve/index.html">See How We Serve Your Organization</a></div>

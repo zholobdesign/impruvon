@@ -712,16 +712,19 @@ PAGES["platform/index.html"] = dict(title="Platform", notes=[
     {"t": "head", "kicker": "PLATFORM", "h1": "I/DD care is complex. Your tools shouldn't be.",
      "lede": "Most platforms tell you what already happened. Impruvon is built to guide what happens next.",
      "cta": ("Book a demo", DEMO)},
-    {"t": "twocol", "h": "What is Impruvon?", "body": [
+    {"t": "twocol", "h": "Why Impruvon?", "body": [
+        "Medication management is the single operational process that touches every resident, every caregiver, every shift, every day. When that process lacks visibility, your organization absorbs the risk. When it's standardized, monitored, and managed in real time, safety, compliance, and performance all improve. That's the difference Impruvon delivers."]},
+    {"t": "twocol", "bg": "sec-sunk", "h": "What is Impruvon?", "body": [
         "Impruvon is a fully compliant eMAR platform, purpose-built for residential and community-based care, that transforms medication administration from a manual compliance activity into a proactive safety and quality system: real-time visibility, automated compliance oversight, standardized workflows, early risk detection, and audit-ready documentation, all in one connected ecosystem.",
         "Our integrated software-hardware platform connects guided workflows, smart medication storage and real-time pharmacy integration, giving providers complete visibility and control without changing the pharmacies, packaging or EHR systems they already use."]},
     {"t": "chain", "caption": "EVERY STEP LANDS IN ONE RECORD", "steps": [
         ("Pharmacy", "75+ partners", False), ("MedBox", "hardware", True),
         ("eMAR+", "software", True), ("EHR / HRST", "your systems", False)]},
-    {"t": "cards", "h": "Four pillars, one platform.", "cols": 2, "items": [
+    {"t": "cards", "h": "Our platform, your workflows.", "cols": 2, "items": [
         {"title": "eMAR+", "text": "Guided smart med pass, in-app barcode scanning, PRN reason and effectiveness tracking, narcotic counting, with treatments, vitals and daily documentation in the same record.", "link": "platform/emar.html", "cta": "See eMAR+"},
         {"title": "MedBox", "text": "Smart medication storage with precise, individual-level dispensing, whether staff are administering or individuals are self-administering with supervision.", "link": "platform/medbox.html", "cta": "See MedBox"},
-        {"title": "Integrations", "text": "24/7 bidirectional pharmacy integration with 75+ partners, plus your existing EHR.", "link": "platform/integrations.html", "cta": "See integrations"},
+        {"title": "Pharmacy Integration", "text": "Continuous, 24/7 bidirectional data sync across 75+ pharmacy partners and your EHR eliminates double-documentation and accelerates care delivery.", "link": "platform/pharmacy-integration.html", "cta": "See pharmacy integration"},
+        {"title": "EHR and Other System Integrations", "text": "Impruvon integrates directly with your existing EHRs, pharmacy management systems, and telehealth platforms, creating a single source of truth for your care team.", "link": "platform/ehr-integration.html", "cta": "See EHR integrations"},
         {"title": "HRST Automation", "text": "Complete all of your HRST inputs with a single click.", "link": "platform/hrst-automation.html", "cta": "See HRST automation"},
     ]},
     {"t": "flagstats", "h": "Results at a glance.", "items": [
@@ -759,19 +762,11 @@ PAGES["platform/medbox.html"] = dict(title="MedBox", badge="SEPARATE PAGE TO BE 
 ], sections=[
     {"t": "splithero", "kicker": "PLATFORM · MEDBOX",
      "h1": "Right meds. Right people. Right time. Every time.",
-     "lede": "Locking meds away keeps them secure. MedBox keeps them accurate.",
+     "lede": "Locking meds away keeps them secure. MedBox keeps them accurate. That's the difference MedBox is built to deliver.",
      "cta": ("See MedBox in a demo", DEMO),
      "photo": "REAL PHOTO OF THE DEVICE IN A HOME, NOT A RENDER ON WHITE"},
     {"t": "twocol", "h": "Beyond basic access control.", "body": [
         "Smart MedBoxes replace key cabinets, unsecured closets and paper pass logs with precise, individual-level dispensing, providing access to only the correct medications, at the correct times, whether staff are administering or individuals are self-administering with supervision."]},
-    {"t": "cards", "h": "MedBox key features.", "cols": 3, "bg": "sec-sunk", "items": [
-        {"title": "Packaging agnostic", "text": "Up to 64 blister cards or 36 strip packs. Capacity may vary by packaging."},
-        {"title": "Double-locking drawers", "text": "For narcotic storage."},
-        {"title": "Controlled drawer", "text": "For topicals, injectables and more."},
-        {"title": "Cellular and Wi-Fi connectivity"},
-        {"title": "Backup battery and emergency access key"},
-        {"title": "Compact footprint", "text": "11.5\" H × 11\" W × 14\" D"},
-    ]},
     {"t": "spectable", "h": "Specifications.", "rows": [
         ("Capacity", "Up to 64 blister cards or 36 strip packs, varies by packaging"),
         ("Dimensions", "11.5\" H × 11\" W × 14\" D"),
@@ -782,13 +777,9 @@ PAGES["platform/medbox.html"] = dict(title="MedBox", badge="SEPARATE PAGE TO BE 
         ("Additional storage", "Controlled drawer for topicals and injectables"),
         ("Packaging", "Agnostic"),
     ]},
-    {"t": "duo", "items": [
-        ("Emergency Kit (E-Kit).",
-         "Centralized, real-time tracked emergency medication storage with automated restocking. No pharmacy delays when minutes matter.", False),
-        ("Empowerment built in.",
-         "MedBox supports supervised self-administration, giving individuals dignity and independence while care teams retain the oversight needed to keep them safe.", True),
-    ]},
-    {"t": "steps", "h": "MedBox is part of the platform, not a separate product.",
+    {"t": "twocol", "h": "Empowerment built in.", "body": [
+        "MedBox supports supervised self-administration, giving individuals dignity and independence while care teams retain the oversight needed to keep them safe."]},
+    {"t": "steps", "h": "MedBox works with eMAR+ to ensure right meds, to the right person, at the right time.",
      "link": ("See eMAR+", "platform/emar.html"), "items": [
         ("01", "The app tells MedBox what is due."),
         ("02", "MedBox gives access to only those medications."),
@@ -817,15 +808,18 @@ PAGES["platform/emar.html"] = dict(title="eMAR+", notes=[
      "cta": ("See eMAR+ in a demo", DEMO)},
     {"t": "twocol", "h": "Why not just any eMAR?", "body": [
         "Most eMARs digitize the paper MAR and stop there. The Impruvon eMAR+ is your partner in proactive resident and operational excellence, pairing guided medication management with the clinical workflows that surround it, so the safe choice is the automatic choice on every shift."]},
-    {"t": "bigfeat", "h": "Medication management.", "items": [
-        ("Guided smart med pass", "Step-by-step prompts walk any caregiver through every administration."),
-        ("In-app barcode scanning", "No external scanners required."),
-    ], "bullets": [
-        ["Guided self-administration, supervised independence with safety guardrails",
-         "PRN reason and effectiveness tracking", "Narcotic counting", "Smart reminders and alerts"],
-        ["Role-specific interfaces, every team member sees exactly what they need",
-         "Real-time pharmacy integration", "HRST automation"],
-    ]},
+    {"t": "numlist", "h": "Medication management.", "cols": [[
+        ("01", "Guided smart med pass, step-by-step prompts walk any caregiver through every administration"),
+        ("02", "In-app barcode scanning, no external scanners required"),
+        ("03", "Guided self-administration, supervised independence with safety guardrails"),
+        ("04", "PRN reason and effectiveness tracking"),
+        ("05", "Narcotic counting"),
+     ], [
+        ("06", "Smart reminders and alerts"),
+        ("07", "Role-specific interfaces, every team member sees exactly what they need"),
+        ("08", "Real-time pharmacy integration"),
+        ("09", "HRST automation"),
+     ]]},
     {"t": "numlist", "h": "Clinical workflow optimization.", "cols": [
         [("01", "Treatments (eTAR), vitals and bowel movement tracking"),
          ("02", "Automated treatment order processing"),
@@ -847,7 +841,7 @@ PAGES["platform/emar.html"] = dict(title="eMAR+", notes=[
     ]},
     {"t": "cards", "h": "eMAR+ doesn't work alone.", "cols": 2, "items": [
         {"title": "MedBox", "text": "Optional double-locking smart MedBoxes give access to only the correct medications, at the correct times. Every dispense lands in the same record.", "link": "platform/medbox.html", "cta": "See MedBox"},
-        {"title": "Pharmacy and EHR", "text": "Real-time pharmacy integration and connection to your existing EHR, so nothing is transcribed by hand.", "link": "platform/integrations.html", "cta": "See integrations"},
+        {"title": "Pharmacy and EHR", "text": "Real-time pharmacy integration and connection to your existing EHR, so nothing is transcribed by hand.", "link": "platform/pharmacy-integration.html", "cta": "See integrations"},
     ]},
     {"t": "statcards", "h": "Proven results.", "items": [
         ("23,000+", "medications administered with zero errors, Charles Lea Center",
@@ -865,7 +859,7 @@ PAGES["platform/emar.html"] = dict(title="eMAR+", notes=[
         ("What devices does it run on?", "Android, iOS and web browsers, with automated single sign-on."),
         ("Do we have to replace our EHR or change pharmacies?", "No. Impruvon connects with your existing EHR systems, and integration requires no changes to pharmacy or medication packaging."),
     ]},
-    {"t": "closing", "h": "See eMAR+ in a demo.", "cta": ("Book a demo", DEMO)},
+    {"t": "closing", "h": "See eMAR+ live.", "cta": ("Book a demo", DEMO)},
 ])
 
 
@@ -878,7 +872,7 @@ PAGES["platform/hrst-automation.html"] = dict(title="HRST Automation", notes=[
      "lede": "A screening tool filled out days late can only describe risk that's already changed.",
      "cta": ("See HRST automation in a demo", DEMO)},
     {"t": "twocol", "h": "What is HRST automation?", "body": [
-        "Impruvon integrates with state-mandated HRST medication and diagnosis requirements, ensuring compliance with automated data syncing, real-time risk updates and streamlined workflows. HRST Automation saves time, reduces manual effort, and transforms health risks into actionable insights."]},
+        "Impruvon is the only platform that fully integrates with state-mandated HRST medication and diagnosis requirements, ensuring compliance with automated data syncing, real-time risk updates, and streamlined workflows. HRST automation saves time, reduces manual effort, and transforms health risks into actionable insights."]},
     {"t": "softcards", "h": "Benefits of HRST automation.", "items": [
         ("Save time", "Complete all of your HRST inputs with a single click."),
         ("Automated accuracy", "Medications, diagnoses and allergies pulled from the source: the pharmacy filling your medications."),
@@ -892,14 +886,14 @@ PAGES["platform/hrst-automation.html"] = dict(title="HRST Automation", notes=[
 ])
 
 
-PAGES["platform/integrations.html"] = dict(title="Integrations", notes=[
+PAGES["platform/pharmacy-integration.html"] = dict(title="Pharmacy Integration", notes=[
     "Transcribed from the artboard “Impruvon — Integrations”. The artboard merges pharmacy and EHR into one page at /platform/integrations; the earlier separate URLs now redirect here.",
     "“Integration-friendly” is a wedge against competitors who are seen as closed, so this page exists to be found and linked, not buried as an anchor.",
 ], sections=[
     {"t": "head", "kicker": "PLATFORM · INTEGRATIONS",
      "h1": "Every hour a prescription sits unsynced is an hour of risk.",
      "lede": "Real-time connectivity closes that window, with no changes to your existing pharmacy relationships.",
-     "cta": ("See integrations in a demo", DEMO)},
+     "cta": ("Request a meeting", DEMO)},
     {"t": "twocol", "h": "What does Impruvon integrate with?", "body": [
         "24/7 bidirectional integration means new orders, refills and discontinuations flow directly between your pharmacy and your platform in real time. No more manual transcription from paper MARs or TARs, no more wasted time faxing documents, no more disputes over deliveries, and no changes to pharmacy or medication packaging needed."]},
     {"t": "dotcards", "h": "Benefits of pharmacy integration.", "items": [
@@ -911,22 +905,43 @@ PAGES["platform/integrations.html"] = dict(title="Integrations", notes=[
     {"t": "splitstat", "h": "Connected with 75+ pharmacy partners nationally.",
      "text": "Trusted by providers, state agencies and pharmacies across 20+ states, a statewide network effect that benefits everyone in it.",
      "stats": [("75+", "pharmacy partners"), ("20+", "states")]},
-    {"t": "prose", "h": "When systems don't talk to each other, no one has the full picture.",
-     "sub": "Not because anyone missed a step, but because the systems were never connected in the first place.",
-     "body": ["Impruvon connects with your existing EHR systems, eliminating the duplicate documentation and multi-system logins that burden care teams. Staff work in one place, and data flows where it needs to go."]},
-    {"t": "duo", "items": [
-        ("Beyond the EHR.",
-         "Telehealth integrations with platforms like StationMD ensure physicians conducting remote evaluations have access to accurate, real-time records, instead of relying on a DSP to report from memory.", False),
-        ("HRST is an integration too.",
-         "Medications, diagnoses and allergies pulled from the source: the pharmacy filling your medications.", False),
-    ]},
-    {"t": "faq", "h": "Questions we get about integrations.", "items": [
+    {"t": "faq", "h": "Questions we get about pharmacy integration.", "items": [
         ("Does it work with our pharmacy?", "We are connected with 75+ pharmacy partners nationally, across 20+ states. Tell us the name and we will confirm."),
         ("Do we have to change pharmacies or packaging?", "No changes to pharmacy or medication packaging needed, and no changes to your existing pharmacy relationships."),
-        ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR systems."),
+        ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR system."),
         ("What about telehealth?", "Telehealth integrations with platforms like StationMD give physicians running remote evaluations access to accurate, real-time records."),
     ]},
     {"t": "closing", "h": "See integrations in a demo."},
+])
+
+
+PAGES["platform/ehr-integration.html"] = dict(title="EHR and Other System Integrations", notes=[
+    "Split out of the old combined Integrations page at the client's request, 9 Sept 2026. Pharmacy integration is getting its own marketing push, so the two now have separate pages.",
+    "The client's note gave two different versions of the opening paragraph — the new “Impruvon integrates directly with your existing EHRs…” line with three bullets, and the older “Impruvon connects with your existing EHR systems…” line pasted underneath. The new version is used here; the older one is the sentence it replaces.",
+    "The list of supported EHRs is still missing. It is the first question a buyer asks on this page.",
+], sections=[
+    {"t": "head", "kicker": "PLATFORM · EHR AND OTHER SYSTEM INTEGRATIONS",
+     "h1": "When systems don't talk to each other, no one has the full picture.",
+     "lede": "Not because anyone missed a step, but because the systems were never connected in the first place.",
+     "cta": ("Request a meeting", DEMO)},
+    {"t": "twocol", "h": "One source of truth.", "body": [
+        "Impruvon integrates directly with your existing EHRs, pharmacy management systems, and telehealth platforms, creating a single source of truth for your care team."]},
+    {"t": "sunkcards", "bg": "sec-sunk", "h": "What that changes.", "items": [
+        ("Streamlined workflows", "Eliminates duplicate documentation and multi-system logins by letting staff work from one unified interface."),
+        ("Connected continuity of care", "Seamlessly syncs pharmacy orders with the eMAR, equips telehealth providers with real-time patient or resident data, and writes completed care tasks back to the primary EHR."),
+        ("Ecosystem efficiency", "Data flows automatically across systems, reducing administrative fatigue so care teams can focus on people outcomes."),
+    ]},
+    {"t": "twocol", "h": "Beyond the EHR.", "body": [
+        "Telehealth integrations with platforms like StationMD ensure physicians conducting remote evaluations have access to accurate, real-time records, instead of relying on a Direct Support Professional to report from memory."]},
+    {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
+     "note": "SUPPORTED EHR LIST STILL MISSING",
+     "body": [("No client material names a single EHR Impruvon connects to. Until that list exists the section reads as a promise rather than a fact, and it is the first thing a buyer checks.", "")]},
+    {"t": "faq", "h": "Questions we get about EHR integration.", "items": [
+        ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR system."),
+        ("What about telehealth?", "Telehealth integrations with platforms like StationMD give physicians running remote evaluations access to accurate, real-time records."),
+        ("Does data flow back to our primary system?", "Yes. Completed care tasks are written back to the primary EHR."),
+    ]},
+    {"t": "closing", "h": "Request a meeting.", "cta": ("Request a meeting", DEMO)},
 ])
 
 
@@ -1583,7 +1598,7 @@ PAGES["login/index.html"] = dict(title="Log in", notes=[
 SITEMAP_GROUPS = [
     ("Home", [("Homepage", "index.html")]),
     ("Platform", [("Platform", "platform/index.html"), ("eMAR+", "platform/emar.html"),
-                  ("MedBox", "platform/medbox.html"), ("Integrations", "platform/integrations.html"),
+                  ("MedBox", "platform/medbox.html"), ("Pharmacy Integration", "platform/pharmacy-integration.html"), ("EHR and Other Integrations", "platform/ehr-integration.html"),
                   ("HRST Automation", "platform/hrst-automation.html")]),
     ("Who We Serve", [("Who We Serve", "who-we-serve/index.html"),
                       ("I/DD & Residential", "who-we-serve/idd-residential.html"),

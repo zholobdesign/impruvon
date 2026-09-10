@@ -12,8 +12,8 @@ NAV = [
     ("Platform", "platform/index.html", [
         ("eMAR+", "platform/emar.html"),
         ("MedBox", "platform/medbox.html"),
-        ("Pharmacy integration", "platform/pharmacy-integration.html"),
-        ("EHR integration", "platform/ehr-integration.html"),
+        ("Pharmacy Integration", "platform/pharmacy-integration.html"),
+        ("EHR and Other Integrations", "platform/ehr-integration.html"),
         ("HRST automation", "platform/hrst-automation.html"),
     ]),
     ("Who we serve", "who-we-serve/index.html", [
@@ -185,7 +185,8 @@ CHROME_LINKS = [
     ("Platform", "platform/index.html", [
         ("eMAR+", "platform/emar.html"),
         ("MedBox", "platform/medbox.html"),
-        ("Integrations", "platform/integrations.html"),
+        ("Pharmacy Integration", "platform/pharmacy-integration.html"),
+        ("EHR and Other Integrations", "platform/ehr-integration.html"),
         ("HRST Automation", "platform/hrst-automation.html"),
     ]),
     ("Who We Serve", "who-we-serve/index.html", [
@@ -212,7 +213,8 @@ CHROME_LINKS = [
 
 FOOT_COLS = [
     ("PLATFORM", [("eMAR+", "platform/emar.html"), ("MedBox", "platform/medbox.html"),
-                  ("Integrations", "platform/integrations.html"),
+                  ("Pharmacy Integration", "platform/pharmacy-integration.html"),
+        ("EHR and Other Integrations", "platform/ehr-integration.html"),
                   ("HRST Automation", "platform/hrst-automation.html")]),
     ("WHO WE SERVE", [("I/DD & Residential", "who-we-serve/idd-residential.html"),
                       ("Home Health", "who-we-serve/home-health.html"),
@@ -1000,8 +1002,7 @@ def main():
     redirect('resources/caregivers/five-rights.html', '../blog/five-rights.html', '/resources/blog/five-rights')
     redirect('resources/guides/index.html', '../blog/index.html', '/resources/blog')
     redirect('resources/guides/medication-audit-checklist.html', '../blog/medication-audit-checklist.html', '/resources/blog/medication-audit-checklist')
-    redirect('platform/pharmacy-integration.html', 'integrations.html', '/platform/integrations')
-    redirect('platform/ehr-integration.html', 'integrations.html', '/platform/integrations')
+    redirect('platform/integrations.html', 'pharmacy-integration.html', '/platform/pharmacy-integration')
     redirect('resources/customers/index.html', '../case-studies/', '/resources/case-studies')
     paper_pages.write_sitemap(OUT, render_chrome_nav, render_chrome_foot)
     print('transcribed from Paper:', len(done)+1, 'pages')
