@@ -105,7 +105,7 @@ NOTES = [
     "/platform/ehr-integration, and the two cards here point to one each.",
     "The Latest news band above the closing CTA is not in the client's draft — it was added so the Resources section has a route from the homepage. Every card in it is a placeholder; the band should not ship until at least three real items exist.",
     "Sections dropped against the previous build, because the client's draft does not include them: the homepage "
-    "FAQ, the DSP/staff block, the two case-study cards, and the separate “Request a state briefing” band. "
+    "FAQ, the DSP/staff block, the two case-study cards, and the separate state-conversion band. "
     "State-Directed is now reached through its Who We Serve card.",
 ]
 

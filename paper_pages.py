@@ -805,7 +805,7 @@ PAGES["platform/emar.html"] = dict(title="eMAR+", notes=[
 ], sections=[
     {"t": "head", "kicker": "PLATFORM · eMAR+", "h1": "Beyond an eMAR. Care reimagined.",
      "lede": "A digital record of an error is still an error. Impruvon eMAR+ guides the right action before it happens.",
-     "cta": ("See eMAR+ in a demo", DEMO)},
+     "cta": ("See eMAR+ live", DEMO)},
     {"t": "twocol", "h": "Why not just any eMAR?", "body": [
         "Most eMARs digitize the paper MAR and stop there. The Impruvon eMAR+ is your partner in proactive resident and operational excellence, pairing guided medication management with the clinical workflows that surround it, so the safe choice is the automatic choice on every shift."]},
     {"t": "numlist", "h": "Medication management.", "cols": [[
@@ -911,7 +911,7 @@ PAGES["platform/pharmacy-integration.html"] = dict(title="Pharmacy Integration",
         ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR system."),
         ("What about telehealth?", "Telehealth integrations with platforms like StationMD give physicians running remote evaluations access to accurate, real-time records."),
     ]},
-    {"t": "closing", "h": "See integrations in a demo."},
+    {"t": "closing", "h": "Request a meeting.", "cta": ("Request a meeting", DEMO)},
 ])
 
 
