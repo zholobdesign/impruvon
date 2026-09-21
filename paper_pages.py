@@ -16,6 +16,8 @@ def esc(s):
 
 # ------------------------------------------------------------------ blocks
 def _link(base, target):
+    if target.startswith(("http://", "https://", "mailto:", "#")):
+        return target
     return base + target
 
 
@@ -34,8 +36,9 @@ def s_head(b, base):
 
 def s_twocol(b, base):
     paras = "".join(f'<p class="twocol-p">{esc(p)}</p>' for p in b["body"])
+    lab = f'<div class="solab">{esc(b["label"])}</div>' if b.get("label") else ""
     return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner twocol">'
-            f'<h2 class="twocol-h">{esc(b["h"])}</h2><div class="twocol-body">{paras}</div>'
+            f'<div>{lab}<h2 class="twocol-h">{esc(b["h"])}</h2></div><div class="twocol-body">{paras}</div>'
             f'</div></section>')
 
 
@@ -383,8 +386,10 @@ def s_sunkcards(b, base):
             continue
         cls = "sunkcard wide" if kind == "wide" else "sunkcard"
         out += f'<div class="{cls}"><h3>{esc(item[0])}</h3><p>{esc(item[1])}</p></div>'
-    h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
-    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}'
+    lab = f'<div class="solab">{esc(b["label"])}</div>' if b.get("label") else ""
+    h = f'<div>{lab}<h2 class="h2">{esc(b["h"])}</h2></div>' if b.get("h") else ""
+    intro = f'<p class="lede lede-wide">{esc(b["intro"])}</p>' if b.get("intro") else ""
+    return (f'<section class="sec {b.get("bg","")}"><div class="sec-inner stack-44">{h}{intro}'
             f'<div class="grid g2">{out}</div></div></section>')
 
 
@@ -612,9 +617,13 @@ def s_joblist(b, base):
                    '<span>[Team] &middot; [Location] &middot; [Type]</span></div><i>&rarr;</i></div>'
                    for _ in range(b.get("count", 3)))
     h = f'<h2 class="h2">{esc(b["h"])}</h2>' if b.get("h") else ""
+    cta = ""
+    if b.get("cta"):
+        lbl, tgt = b["cta"]
+        cta = f'<a class="pill pill-lg jobcta" href="{_link(base, tgt)}">{esc(lbl)}</a>'
     return (f'<section class="sec {b.get("bg","sec-sunk")}"><div class="sec-inner stack-44">{h}'
             f'<div class="joblist"><div class="note">{esc(b["note"])}</div>'
-            f'<div style="display:flex;flex-direction:column;gap:12px">{jobs}</div></div></div></section>')
+            f'<div style="display:flex;flex-direction:column;gap:12px">{jobs}</div>{cta}</div></div></section>')
 
 
 def s_stub(b, base):
@@ -732,12 +741,12 @@ PAGES["platform/index.html"] = dict(title="Platform", notes=[
         ("69%", "Better audit-ready documentation"), ("50,000+", "Medication errors eliminated to date")],
     },
     {"t": "audience", "h": "Built for the setting you work in.", "items": [
-        ("I/DD & Residential Providers", "Purpose-built for the demands of group homes, ICFs and HCBS waiver programs.", "who-we-serve/idd-residential.html"),
-        ("Behavioral & Mental Health", "Built for the documentation and complexity of psychiatric care.", "who-we-serve/behavioral-mental-health.html"),
-        ("Home Health", "Real-time visibility into care delivered outside the facility.", "who-we-serve/home-health.html"),
-        ("Foster Care", "Continuity of care for every child, at every placement change.", "who-we-serve/foster-care.html")],
+        ("I/DD & Residential Providers", "Purpose-built for the demands of group homes, IDD/ICFs and other residential facilities.", "who-we-serve/idd-residential.html"),
+        ("Behavioral & Mental Health", "Simplifies complex psychiatric documentation and compliance tracking.", "who-we-serve/behavioral-mental-health.html"),
+        ("Home Health", "Tracks field visits and remote care delivery in real time.", "who-we-serve/home-health.html"),
+        ("Foster Care", "Maintains continuous health records across every placement change.", "who-we-serve/foster-care.html")],
      "band": ("State-Directed Programs",
-              "Prevention infrastructure for state agencies and health plans.",
+              "Powers prevention infrastructure and compliance monitoring for agencies.",
               "Request a meeting", "who-we-serve/state-directed.html")},
     PROOF_BAR,
     {"t": "closing", "h": "See the platform in action."},
@@ -953,15 +962,13 @@ PAGES["who-we-serve/index.html"] = dict(title="Who We Serve", notes=[
     {"t": "head", "kicker": "WHO WE SERVE", "h1": "One platform. Many realities.",
      "lede": "Impruvon is a provider platform built for the specific regulatory and staffing realities of several distinct care settings, adaptable to the workflows of every setting we serve.",
      "cta": ("Book a demo", DEMO)},
-    {"t": "twocol", "h": "What settings does Impruvon serve?", "body": [
-        "Impruvon is used by I/DD and residential providers, behavioral and mental health programs, home health agencies, foster care agencies, and state agencies and health plans. What they share: medication is given by a non-clinical workforce, in dispersed settings, under state compliance requirements."]},
     {"t": "audience", "bg": "", "h": "Explore how Impruvon is purpose-built for the setting you work in.", "items": [
-        ("I/DD & Residential Providers", "Purpose-built for the demands of group homes, ICFs and HCBS waiver programs.", "who-we-serve/idd-residential.html"),
-        ("Behavioral & Mental Health", "Built for the documentation and complexity of psychiatric care.", "who-we-serve/behavioral-mental-health.html"),
-        ("Home Health", "Real-time visibility into care delivered outside the facility.", "who-we-serve/home-health.html"),
-        ("Foster Care", "Continuity of care for every child, at every placement change.", "who-we-serve/foster-care.html")],
+        ("I/DD & Residential Providers", "Purpose-built for the demands of group homes, IDD/ICFs and other residential facilities.", "who-we-serve/idd-residential.html"),
+        ("Behavioral & Mental Health", "Simplifies complex psychiatric documentation and compliance tracking.", "who-we-serve/behavioral-mental-health.html"),
+        ("Home Health", "Tracks field visits and remote care delivery in real time.", "who-we-serve/home-health.html"),
+        ("Foster Care", "Maintains continuous health records across every placement change.", "who-we-serve/foster-care.html")],
      "band": ("State-Directed Programs",
-              "Prevention infrastructure for state agencies and health plans.",
+              "Powers prevention infrastructure and compliance monitoring for agencies.",
               "Request a meeting", "who-we-serve/state-directed.html")},
     {"t": "twocol", "bg": "sec-deep", "h": "The safeguard goes in the workflow, not in the person.", "body": [
         "Different settings, one problem: medication is given by people who aren't clinicians, in places without a pharmacy down the hall, under rules that demand proof. Impruvon was built from the ground up for those workflow rhythms, staffing and budget constraints, and regulatory requirements."]},
@@ -978,29 +985,24 @@ PAGES["who-we-serve/idd-residential.html"] = dict(title="I/DD & Residential", no
     "The dark statement after the three failure cards is the argument the champion repeats to the executive director: one problem showing up four ways.",
 ], sections=[
     {"t": "head", "kicker": "WHO WE SERVE · I/DD & RESIDENTIAL",
-     "h1": "If your system was built for nurses in a hospital, you've digitized the risk, not removed it.",
-     "lede": "Impruvon is purpose-built for group homes, ICFs and HCBS waiver programs, and for the DSPs who actually give the medication.",
+     "h1": "“Doing Nothing” Isn't Just Paper MARs. It's also the Wrong eMAR.",
+     "lede": "Purpose-built for the demands of group homes, IDD/ICFs and other residential facilities.",
      "cta": ("Book a demo", DEMO)},
-    {"t": "twocol", "h": "What is the right eMAR for a group home?", "body": [
-        "The right eMAR for a group home is one your DSPs will actually use on a busy evening shift. Impruvon guides every med pass step by step, scans the barcode in the app, and keeps treatments, vitals and daily documentation in the same record. Charles Lea Center recorded 23,000+ medications administered with zero errors."]},
-    {"t": "pain", "h": "Both of the usual answers leave the same gap.",
-     "line": "Clinical, financial, compliance, staffing. That's not four problems. It's one problem showing up four ways.",
-     "items": [
-        ("More training on the paper process.", "A paper MAR can't catch an error before it happens."),
-        ("Or an eMAR retrofitted from acute care.", "It assumes a workforce you don't have, so your DSPs work around it, and the risk moves back onto your best people."),
-        ("Either way, the cost compounds quietly.", "The failed audit. The citation on your record. The med error that becomes an incident report, or a hospitalization. The referral source that stops calling. The DSP who burns out and walks, taking months of training with them."),
-     ]},
+    {"t": "twocol", "h": "Why is Impruvon the right eMAR for an IDD facility?", "body": [
+        "The right eMAR for an IDD facility is one your DSPs will actually use on a busy evening shift. Impruvon guides every med pass step by step, scans the barcode in the app, and keeps treatments, vitals, and daily documentation in the same record."]},
+    {"t": "twocol", "bg": "", "h": "Traditional eMARs don't fit.", "body": [
+        "Most providers believe they've addressed medication risk one of two ways: more training on the paper process they've always run, or an eMAR retrofitted from acute care or skilled nursing. Both leave the same gap. A paper MAR can't catch an error before it happens. And an eMAR designed for clinicians assumes a workforce you don't have — so your Direct Support Professionals work around it, and the risk moves back onto your best people.",
+        "Either way, the cost of the status quo compounds quietly: the failed audit. The citation on your record. The med error that becomes an incident report — or a hospitalization. The referral source that stops calling. The Direct Support Professional who burns out and walks, taking months of training with them. Clinical, financial, compliance, staffing — that's not four problems. It's one problem showing up four ways, and every year without the right system, you pay for all of them."]},
     {"t": "twocol", "bg": "sec-deep", "h": "Designed for the people delivering care.", "body": [
         "At the center is your workforce. DSPs are more than just staff on a schedule. They're the care your residents count on and the business you run. Some bring clinical backgrounds, many don't, and for many English is a second language. When tools assume everyone is a nurse, the burden lands on your best people and the risk lands on everyone.",
         "You can't train, budget, document or hire your way out of that separately. You engineer it out at the source, with a system designed for the people who actually use it."]},
-    {"t": "sunkcards", "h": "Built for the way you actually work.", "items": [
+    {"t": "sunkcards", "label": "IMPRUVON SOLUTION", "h": "Impruvon built for the way you actually work.", "items": [
         ("Guided med passes", "Barcode scanning, PRN tracking and narcotic counting remove guesswork at every step."),
         ("Real-time pharmacy integration", "Orders, refills and treatment changes flow directly into the platform, eliminating manual entry and transcription errors."),
         ("Smart MedBoxes", "Physical access control. Right medication, right person, right time."),
         ("HRST automation", "Eliminates duplicate data entry and predicts risk instead of reacting to it."),
         ("Real-time analytics dashboard", "Medication administration status across every resident, in every location, at all times. No end-of-shift reconstruction, no blind spots.", "wide"),
     ]},
-    {"t": "center", "text": "Representing 2 to 3% of the U.S. population, adults with intellectual and developmental disabilities suffer higher rates and greater severity of polypharmacy-related adverse events than those without I/DD, a risk escalating alongside rising polypharmacy trends in young adults."},
     {"t": "scards", "h": "Proven results.", "items": [
         ("23,000+", "medications administered with zero errors, Charles Lea Center"),
         ("75%", "reduction in medication error rate, from 8% to 2%, Vista Care"),
@@ -1011,9 +1013,9 @@ PAGES["who-we-serve/idd-residential.html"] = dict(title="I/DD & Residential", no
      "by": "DSP, I/DD residential / group home, Washington D.C."},
     {"t": "faqcards", "bg": "sec-sunk", "h": "Questions we get from I/DD providers.", "items": [
         ("Will our DSPs use it?", "Step-by-step prompts walk any caregiver through every administration, and role-specific interfaces mean each person sees exactly what they need. Easy to learn and use for DSPs and nurses alike."),
-        ("Does it handle narcotic counts and PRNs?", "Yes. Narcotic counting and PRN reason and effectiveness tracking are part of the med pass, not a separate system."),
         ("Do we have to change pharmacies or packaging?", "No changes to your existing pharmacy relationships or medication packaging."),
-        ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR systems."),
+        ("Do we have to replace our EHR?", "No. Impruvon connects with your existing EHR system."),
+        ("Can clients self-administer?", "Where clinically appropriate, supervised self-administration lets clients build toward managing their own medications, with oversight retained."),
     ]},
 ])
 
@@ -1026,14 +1028,15 @@ PAGES["who-we-serve/home-health.html"] = dict(title="Home Health", notes=[
      "h1": "Distance isn't the reason you have less visibility. Technology is.",
      "lede": "If care happens in a hundred different homes, your records shouldn't live in a hundred different places.",
      "cta": ("Book a demo", DEMO)},
-    {"t": "twocol", "h": "How does an eMAR work for home health?", "body": [
-        "In home health the medication record travels with the caregiver. Impruvon runs on the phone or tablet they already carry, guides each med pass step by step, and syncs at the point of care, so the office sees medication administration status across every person served, in every location, as it happens."]},
+    {"t": "twocol", "h": "Why is Impruvon the right eMAR for Home Health?", "body": [
+        "An Electronic Medication Administration Record (eMAR) for home health streamlines how DSPs and other caregivers manage, track, and document medications right at the point of care."]},
     {"t": "contrast", "h": "A quiet tradeoff most providers have accepted.",
      "left": [("Care delivered in the home means less oversight than care delivered in a facility. A caregiver supporting multiple people across multiple locations does their best, but the documentation trails behind them. A paper log in one home. A note texted at the end of a shift. A med change that reaches one location but not the next.", False),
               ("By the time information gets back to the office, it's already history.", True)],
      "right": [("The visibility gap isn't a geography problem. It's a technology problem, and it's solvable.", False),
                ("Stop asking for better reports at the end of the week. Start asking why you can't see every person served, in every home, right now.", True)]},
-    {"t": "sunkcards", "bg": "sec-sunk", "h": "Every home. Every person. One view.", "items": [
+    {"t": "sunkcards", "bg": "sec-sunk", "label": "IMPRUVON SOLUTION", "h": "Every home. Every person. One view.",
+     "intro": "Impruvon extends the same real-time guardrails that protect someone in a group home into every private residence you serve — and gives administrators a single window into all of them.", "items": [
         ("Real-time analytics dashboard", "Medication administration status across every person served, in every location, at all times. No end-of-shift reconstruction, no blind spots between visits."),
         ("Guided, step-by-step workflows", "Support every caregiver in the moment, clinical background or not, so the safe choice is the automatic choice in every home, on every visit."),
         ("One centralized record per person", "Documentation happens at the point of care and syncs instantly, so a caregiver walking into their third home of the day has the current picture, not last week's."),
@@ -1060,19 +1063,19 @@ PAGES["who-we-serve/behavioral-mental-health.html"] = dict(title="Behavioral & M
      "h1": "Passing your audit and being defensible aren't the same thing.",
      "lede": "One is a scheduled event you prepare for. The other is a standard you either live in, or don't.",
      "cta": ("Book a demo", DEMO)},
-    {"t": "twocol", "h": "What does medication management look like in behavioral health?", "body": [
+    {"t": "twocol", "h": "Why is Impruvon the right eMAR for Behavioral and Mental Health organizations?", "body": [
         "Behavioral and mental health providers manage some of the most complex psychiatric medication regimens in community-based care, under some of the heaviest documentation requirements, with a budget and workforce in constant flux. Impruvon keeps the eMAR, clinical tasks and vitals in one platform, so the record is current and defensible at any moment, not just before a review."]},
     {"t": "twocol", "bg": "", "h": "Compliance treated as an event.", "body": [
         "Most behavioral health providers treat compliance like an event: the audit is coming, so the team scrambles, pulling records from the eMAR, pharmacy records, the vitals log, the paper binder, reconstructing a defensible story from systems that were never designed to tell one together.",
         "Real scrutiny doesn't arrive on schedule. It arrives with an adverse event, a licensing review, a lawsuit. Exactly the moments when the gaps between your systems stop being invisible and start being liability."]},
     {"t": "twocol", "bg": "sec-deep", "h": "If you stay ready, you never have to get ready.", "body": [
-        "Audit readiness shouldn't be a fire drill. It should be the byproduct of how documentation happens every shift, on every med pass, automatically."]},
-    {"t": "sunkcards", "h": "Compliance built in, not bolted on.", "items": [
+        "Audit readiness should be an effortless, continuous standard — achieved naturally when accurate documentation is seamlessly built into every shift and medication pass."]},
+    {"t": "sunkcards", "label": "IMPRUVON SOLUTION", "h": "Compliance built in, not bolted on.", "items": [
         ("One platform", "eMAR, clinical tasks and vitals together. No documentation gaps between systems, no reconstruction before a review."),
         ("Guided med passes", "PRN tracking and narcotic counting remove guesswork from complex psychiatric regimens. The safe choice is the automatic choice, whoever is on shift."),
         ("Always current, always defensible", "Real-time digital documentation and an analytics dashboard replace error-prone paper processes."),
         ("Role-based interfaces", "Reduce training burden for a high-turnover workforce. New staff are safe and productive from day one."),
-        ("SOC 2 and HIPAA compliant", "Ready for immediate deployment."),
+        ("Real-time analytics dashboard", "Administrators see medication administration status across every resident, in every location, at all times. No end-of-shift reconstruction, no blind spots."),
         ("Supervised self-administration", "Helps clients build toward managing their own psychiatric medications where clinically appropriate. Independence with oversight."),
     ]},
     {"t": "flagstats", "h": "Proven results.", "items": [
@@ -1083,10 +1086,9 @@ PAGES["who-we-serve/behavioral-mental-health.html"] = dict(title="Behavioral & M
      "text": "The overall system, reduction in documentation errors and medication errors are the biggest outcomes. They're the outcomes that we needed to see, and we've seen that since implementing Impruvon.",
      "by": "Chelsea Curran, Executive Director, Coastal Autism Academy"},
     {"t": "faq", "h": "Questions we get from behavioral health providers.", "items": [
-        ("Are you SOC 2 and HIPAA compliant?", "Yes. SOC 2 and HIPAA compliant, ready for immediate deployment."),
         ("Does it handle complex psychiatric regimens?", "Guided med passes, PRN reason and effectiveness tracking, and narcotic counting are built into the med pass."),
         ("How does it help with a high-turnover workforce?", "Role-based interfaces reduce training burden. New staff are safe and productive from day one."),
-        ("Can clients self-administer?", "Where clinically appropriate, supervised self-administration lets clients build toward managing their own medications, with oversight retained."),
+        ("Can I add special notes for medication administration preferences?", "Yes. Individual preferences, such as “likes to take meds with apple sauce”, can be added."),
     ]},
     {"t": "closing", "light": True, "h": "See the platform in action."},
 ])
@@ -1100,13 +1102,13 @@ PAGES["who-we-serve/foster-care.html"] = dict(title="Foster Care", notes=[
      "h1": "A child's medication history shouldn't depend on a caseworker's memory.",
      "lede": "Every placement change is a handoff. Right now, it's also a gamble.",
      "cta": ("Book a demo", DEMO)},
-    {"t": "twocol", "h": "What makes medication management different in foster care?", "body": [
-        "Foster care agencies manage the same medication challenges as any I/DD or behavioral health provider: complex regimens, psychiatric medications, med errors, paper MARs, state compliance requirements. But they carry one risk those providers don't. The child moves. And every time they do, the medication record has to survive the move too."]},
+    {"t": "twocol", "h": "Why is Impruvon the right eMAR for Foster Care agencies?", "body": [
+        "Foster care agencies manage the same complex medication regimens and compliance risks as any behavioral health provider, plus one critical challenge: the child moves, and their record must survive the transition. Impruvon solves this by automatically following the child across placements — instantly transferring their full administration history, active schedules, and real-time logs to ensure zero lapse in tracking or documentation."]},
     {"t": "contrast", "h": "What arrives with the child, and what doesn't.",
-     "left": [("Most agencies treat what happens next as an unavoidable side effect of the system: a paper folder that arrives incomplete, a caseworker recalling doses from memory, a foster parent with no clinical training starting over with whatever information made the trip. Details fall through the cracks, and everyone does their best.", False)],
+     "left": [("When a child moves, most agencies treat what happens next as an unavoidable side effect of the system: a paper folder that arrives incomplete, a caseworker recalling doses from memory, a foster parent with no clinical training starting over with whatever information made the trip. Details fall through the cracks, and everyone does their best.", False)],
      "right": [("Information loss at placement transitions isn't bad luck. It's a design flaw. Every placement change is a predictable moment of risk, and a predictable moment can be engineered for.", False),
                ("A child's medication history shouldn't be the most fragile thing they carry between homes.", True)]},
-    {"t": "sunkcards", "bg": "sec-sunk", "h": "The record follows the child, not the paperwork.", "items": [
+    {"t": "sunkcards", "bg": "sec-sunk", "label": "IMPRUVON SOLUTION", "h": "The record follows the child, not the paperwork.", "items": [
         ("Records that follow the child across placements", "The receiving caregiver starts with the complete, current picture on day one, not a partial paper file."),
         ("Guided, simple workflows", "Foster parents aren't clinicians, and they shouldn't have to be. Step-by-step med passes make the safe choice the automatic choice in every home."),
         ("Real-time visibility for the agency", "Caseworkers and administrators see medication administration status across every child in care, without waiting on paper logs or phone calls."),
@@ -1119,7 +1121,7 @@ PAGES["who-we-serve/foster-care.html"] = dict(title="Foster Care", notes=[
     {"t": "faq", "h": "Questions we get from foster care agencies.", "items": [
         ("Do foster parents need clinical training?", "No. Step-by-step med passes guide any caregiver through every administration. Foster parents aren't clinicians and don't need to be."),
         ("What happens to the record when a child changes placement?", "The record is centralized and portable. The receiving caregiver starts with the complete, current picture on day one, not a partial paper file."),
-        ("Can older youth manage their own medication?", "Supervised self-administration helps older youth learn to manage their own medications before they age out."),
+        ("Can older youth manage their own medication?", "Supervised self-administration helps older youth learn to manage their own medications before they age out. This of course is dependent on the foster care agency's policies for self-administration."),
     ]},
     {"t": "closing", "light": True, "h": "See the platform in action."},
 ])
@@ -1134,7 +1136,7 @@ PAGES["who-we-serve/state-directed.html"] = dict(title="State-Directed Programs"
     "The 1,800% projected ROI figure still appears on Our Commitment. If it came off this page because it is not defensible, it has to come off there too — one decision, both places.",
 ], sections=[
     {"t": "head", "kicker": "WHO WE SERVE · STATE-DIRECTED PROGRAMS",
-     "h1": "Your most at-risk populations carry your most preventable costs.",
+     "h1": "Your most at-risk populations account for your most preventable costs.",
      "lede": "Every medication error avoided is a hospitalization, an ER visit and a claim that never happens.",
      "cta": ("Request a meeting", BRIEF)},
     {"t": "twocol", "bg": "", "h": "What is a state-directed eMAR?", "body": [
@@ -1150,7 +1152,15 @@ PAGES["who-we-serve/state-directed.html"] = dict(title="State-Directed Programs"
      "source": "Institute of Medicine (IOM), Preventing Medication Errors report."},
     {"t": "twocol", "bg": "sec-deep", "h": "Prevention isn't softer than enforcement.", "body": [
         "Every adverse drug event prevented is a hospitalization, an ER visit and a transport cost that never has to be recovered, and a fraudulent or erroneous claim that never gets filed. Prevention is cheaper, faster, and it protects the individual before the harm, not after."]},
-    {"t": "sunkcards", "bg": "sec-sunk", "h": "One platform. Statewide visibility.", "items": [
+    {"t": "twocol", "bg": "", "label": "IMPRUVON SOLUTION", "h": "Empowering providers, protecting compliance.", "body": [
+        "Impruvon partners with State agencies to deliver our leading eMAR platform directly to healthcare providers. By streamlining daily workflows, reducing medication errors, and ensuring continuous audit readiness, we empower staff to focus on what matters most — quality care."]},
+    {"t": "sunkcards", "bg": "sec-sunk", "h": "Everything included, zero added burden.",
+     "intro": "Our fully managed, all-inclusive package covers initial onboarding, comprehensive training, ongoing platform updates, and dedicated technical support.", "items": [
+        ("Seamless implementation", "Roll out the platform without hiring additional state or provider staff."),
+        ("Turnkey support", "End-to-end administration means your team and the providers' teams stay focused on core operations."),
+        ("Always prepared", "Real-time compliance tracking ensures complete inspection readiness at all times, making audits easier for your staff.", "wide"),
+    ]},
+    {"t": "sunkcards", "bg": "", "h": "One platform. Statewide visibility.", "items": [
         ("Enable every provider in your network", "Guided workflows make safe administration the default for a non-clinical workforce, so quality doesn't depend on which agency an individual happens to be served by."),
         ("Real-time, centralized oversight", "Enterprise dashboards and automated audit tooling replace after-the-fact record requests with live, statewide visibility into medication administration."),
         ("Reduce fraud, waste and abuse exposure", "Real-time digital documentation, physical access controls and narcotic counting create a verifiable record of every administration, closing the gaps where diversion and billing irregularities hide."),
@@ -1212,7 +1222,7 @@ PAGES[DEMO] = dict(title="Book a Demo", notes=[
         ("1M+", "medications administered"),
         ("50K+", "medication errors eliminated"),
         ("23,000+", "medications with zero errors at Charles Lea Center"),
-        ("SOC 2 and HIPAA compliant", "Ready for immediate deployment."),
+        ("Real-time analytics dashboard", "Administrators see medication administration status across every resident, in every location, at all times. No end-of-shift reconstruction, no blind spots."),
      ]},
     {"t": "faq", "bg": "sec-sunk", "h": "Before the call.", "items": [
         ("Who should join the call?", "Usually whoever owns medication compliance, plus the person who signs. Both get their questions answered in the same session."),
@@ -1232,16 +1242,16 @@ PAGES["resources/index.html"] = dict(title="Resources", notes=[
      "lede": "Case studies, articles, events and webinars for the people responsible for medication in community-based care."},
     {"t": "tracks", "h": "Four places to start.", "items": [
         {"who": "PROOF", "title": "Case Studies",
-         "text": "What changed at real organisations, with numbers, names and a source.",
+         "text": "Check out real-world examples of how we've helped clients solve complex challenges, and measurable results.",
          "cta": "See case studies", "link": CASES},
         {"who": "ARTICLES", "title": "Blogs",
-         "text": "How-to guides and plain answers on medication safety, audits and staffing.",
+         "text": "Read our collection of insightful articles, industry thought leadership, and opinion pieces designed to keep you informed on the latest trends and perspectives.",
          "cta": "Read the blog", "link": "resources/blog/index.html"},
         {"who": "IN PERSON", "title": "Events",
-         "text": "Conferences, booths and state association meetings where you can find us.",
+         "text": "See where you can find us at upcoming in-person conferences and events.",
          "cta": "See events", "link": "resources/events/index.html"},
         {"who": "ON DEMAND", "title": "Webinars",
-         "text": "Recorded sessions and live walkthroughs for compliance and leadership teams.",
+         "text": "View our library of recorded webinars, fireside chats and industry discussions, on demand.",
          "cta": "See webinars", "link": "resources/webinars/index.html"},
     ]},
     {"t": "flagprose", "bg": "sec-sunk", "dashed": True,
@@ -1258,7 +1268,7 @@ PAGES[CASES] = dict(title="Case Studies", notes=[
 ], sections=[
     {"t": "head", "kicker": "RESOURCES · CASE STUDIES",
      "h1": "Proof, from providers like yours.",
-     "lede": "What changed after the switch, in error rates, audit results and staff hours."},
+     "lede": "Check out real-world examples of how we've helped clients solve complex challenges, and measurable results."},
     {"t": "caserows", "items": [
         {"metric": "75%", "metric_label": "reduction in medication error rate, from 8% to 2%",
          "tags": ["I/DD & MENTAL HEALTH", "MULTI-STATE"],
@@ -1522,14 +1532,16 @@ PAGES["about/contact.html"] = dict(title="Contact", notes=[
     "The client supplied support@impruvon.com and info@impruvon.com, and confirmed there is no physical address. A phone number was not supplied and is not being chased.",
     "Press and media has no address of its own, so it routes to info@ until the client asks for a separate one.",
     "Pharmacy partnership is a fifth enquiry type added during design: 75+ pharmacies are a stated asset, but there was no route for a pharmacy to reach out.",
+    "Support and Login go to the client's own live URLs: impruvon.com/support and app.impruvonhealth.com/admin/login.",
 ], sections=[
     {"t": "head", "h1": "Let's talk.", "lede": "Tell us what you need, and we'll get you to the right team."},
     {"t": "routes", "items": [
         {"title": "Book a demo", "text": "See the platform in action.", "link": DEMO},
-        {"title": "Customer support", "text": "Get help with your Impruvon account."},
+        {"title": "Connect with our Support Team", "text": "Get help with your Impruvon account.", "link": "https://www.impruvon.com/support"},
         {"title": "Pharmacy partnership", "text": "Connect your pharmacy to the Impruvon network.", "new": "NEW · FIFTH TYPE"},
         {"title": "Press and media", "text": "Media inquiries and press resources. Routed to info@ for now."},
         {"title": "General inquiry", "text": "Everything else."},
+        {"title": "Login to Impruvon", "text": "Sign in to your Impruvon account.", "link": "https://app.impruvonhealth.com/admin/login"},
     ]},
     {"t": "contactform",
      "fields": [["Name", "Organization"], ["Role", "State or region"], ["Inquiry type"]],
@@ -1543,7 +1555,7 @@ PAGES["about/contact.html"] = dict(title="Contact", notes=[
 PAGES["about/careers.html"] = dict(title="Careers", notes=[
     "Transcribed from the artboard “Impruvon — Careers”.",
     "The four principles here are the first-person restatement of the four commitments — kept deliberately, not treated as a duplicate.",
-    "An ATS feed is required. If there is no feed or zero open roles, do not publish this page: an empty careers page hurts more than no careers page.",
+    "The client hosts roles on Pinpoint at impruvon.pinpointhq.com. Either embed that feed or link out to it; the placeholder rows below stand in for whatever the feed returns.",
 ], sections=[
     {"t": "head", "h1": "You can do more than provide care. You can redesign how it's delivered."},
     {"t": "pairsplit",
@@ -1556,7 +1568,8 @@ PAGES["about/careers.html"] = dict(title="Careers", notes=[
         ("04", "We empower every person, our co-workers included."),
     ]]},
     {"t": "joblist", "h": "Open roles.",
-     "note": "ATS FEED REQUIRED · IF THERE IS NO FEED OR ZERO OPEN ROLES, DO NOT PUBLISH THIS PAGE · AN EMPTY CAREERS PAGE HURTS MORE THAN NO CAREERS PAGE"},
+     "note": "ROLES ARE HOSTED ON PINPOINT AT impruvon.pinpointhq.com · EMBED THAT FEED HERE, OR LINK OUT TO IT",
+     "cta": ("View open positions", "https://impruvon.pinpointhq.com/")},
 ])
 
 
@@ -1686,7 +1699,7 @@ PAGES["resources/blog/index.html"] = dict(title="Blogs", notes=[
 ], sections=[
     {"t": "head", "kicker": "RESOURCES · BLOGS",
      "h1": "Blogs.",
-     "lede": "Plain answers on medication safety, audits and staffing in community-based care."},
+     "lede": "Read our collection of insightful articles, industry thought leadership, and opinion pieces designed to keep you informed on the latest trends and perspectives."},
     {"t": "cards", "h": "Latest articles.", "cols": 3, "bg": "sec-sunk", "items": [
         {"title": "What are the five rights of medication administration?",
          "text": "The one live article. Everything else on this page is a placeholder.",
@@ -1711,7 +1724,7 @@ PAGES["resources/events/index.html"] = dict(title="Events", notes=[
 ], sections=[
     {"t": "head", "kicker": "RESOURCES · EVENTS",
      "h1": "Where to find us.",
-     "lede": "Conferences, booths and state association meetings."},
+     "lede": "See where you can find us at upcoming in-person conferences and events."},
     {"t": "cards", "h": "Upcoming.", "cols": 3, "bg": "sec-sunk", "items": [
         {"title": "[Event name]", "kick": "[Date] · [City, State]", "text": "[Booth or session number]"},
         {"title": "[Event name]", "kick": "[Date] · [City, State]", "text": "[Booth or session number]"},
@@ -1731,7 +1744,7 @@ PAGES["resources/webinars/index.html"] = dict(title="Webinars", notes=[
 ], sections=[
     {"t": "head", "kicker": "RESOURCES · WEBINARS",
      "h1": "Webinars.",
-     "lede": "Recorded sessions and live walkthroughs for compliance and leadership teams."},
+     "lede": "View our library of recorded webinars, fireside chats and industry discussions, on demand."},
     {"t": "cards", "h": "On demand.", "cols": 3, "bg": "sec-sunk", "items": [
         {"title": "[Webinar title]", "kick": "[Date] · [Duration] · On demand", "text": "[One-line summary]"},
         {"title": "[Webinar title]", "kick": "[Date] · [Duration] · On demand", "text": "[One-line summary]"},

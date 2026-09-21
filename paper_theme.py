@@ -756,3 +756,10 @@ CSS += """
 CSS += """
 .fstat-src{flex-basis:100%;font-size:14px;line-height:22px;color:var(--color-ink-faint)}
 """
+
+CSS += """
+.solab{font-size:12px;font-weight:500;letter-spacing:.12em;line-height:16px;
+  color:var(--color-accent);margin-bottom:14px}
+.sec-deep .solab{color:var(--color-seafoam)}
+.joblist .jobcta{display:inline-flex;margin-top:18px}
+"""
